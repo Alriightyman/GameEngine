@@ -1,0 +1,55 @@
+BackgroundScreen Loaded!
+MainMenuScreen Loaded!
+MenuEntry - Play Game Loaded
+MenuEntry - Options Loaded
+MenuEntry - Exit Loaded
+LoadingScreen Loaded!
+Draw LoadingScreen...slow
+Draw LoadingScreen...slow
+Draw LoadingScreen...slow
+Draw LoadingScreen...slow
+Draw LoadingScreen...slow
+Draw LoadingScreen...slow
+Draw LoadingScreen...slow
+Draw LoadingScreen...slow
+Draw LoadingScreen...slow
+Draw LoadingScreen...slow
+Draw LoadingScreen...slow
+Draw LoadingScreen...slow
+Draw LoadingScreen...slow
+Draw LoadingScreen...slow
+Draw LoadingScreen...slow
+Draw LoadingScreen...slow
+Draw LoadingScreen...slow
+Draw LoadingScreen...slow
+Draw LoadingScreen...slow
+Draw LoadingScreen...slow
+Draw LoadingScreen...slow
+Draw LoadingScreen...slow
+Draw LoadingScreen...slow
+Draw LoadingScreen...slow
+Draw LoadingScreen...slow
+Draw LoadingScreen...slow
+Draw LoadingScreen...slow
+Draw LoadingScreen...slow
+Draw LoadingScreen...slow
+Draw LoadingScreen...slow
+BackgroundScreen Deleted
+Draw LoadingScreen...slow
+MenuEntry - Exit deleted
+MenuEntry - Options deleted
+MenuEntry - Play Game deleted
+Main Menu deleted
+Draw LoadingScreen...slow
+Draw LoadingScreen...slow
+Draw LoadingScreen...slow
+Draw LoadingScreen...slow
+Draw LoadingScreen...slow
+Draw LoadingScreen...slow
+Draw LoadingScreen...slow
+Draw LoadingScreen...slow
+Draw LoadingScreen...slow
+Draw LoadingScreen...slow
+Draw LoadingScreen...slow
+Draw LoadingScreen...slow
+LoadingScreen deleted
