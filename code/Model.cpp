@@ -25,7 +25,7 @@ namespace Engine
 	}
 
 
-	bool Model::Initialize(Graphics* graphics,char* modelFilename, std::wstring textureFilename1,std::wstring textureFilename2)
+	bool Model::Initialize(Graphics* graphics,std::wstring modelFilename, Texture* texture)
 	{
 		bool result;
 		// load the model data
@@ -40,11 +40,7 @@ namespace Engine
 		}
 
 		// Load the texture for this model.
-		result = LoadTextures(graphics, textureFilename1,textureFilename2);
-		if(!result)
-		{
-			return false;
-		}
+		m_Textures = texture;
 
 		return true;
 	}
@@ -215,29 +211,6 @@ namespace Engine
 	}
 
 
-	bool Model::LoadTextures(Graphics* graphics,std::wstring filename1,std::wstring filename2)
-	{
-		bool result;
-
-
-		// Create the texture object.
-		m_Textures = new Texture();
-		if(!m_Textures)
-		{
-			return false;
-		}
-
-		// Initialize the texture object.
-		result = m_Textures->Initialize(graphics, filename1,filename2);
-		if(!result)
-		{
-			return false;
-		}
-
-		return true;
-	}
-
-
 	void Model::ReleaseTextures()
 	{
 		// Release the texture object.
@@ -251,7 +224,7 @@ namespace Engine
 		return;
 	}
 
-	bool Model::LoadModel(char* filename)
+	bool Model::LoadModel(std::wstring filename)
 	{
 		std::ifstream fin;
 		char input;

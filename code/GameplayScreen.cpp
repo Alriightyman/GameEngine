@@ -42,10 +42,10 @@ namespace Engine
 		m_camera->SetPosition(0.0f,0.0f,-10.0f);
 
 		// create the model object
-		m_model.reset(new Model());
+//		m_model.reset(new Model());
 		// initialize the model object
-		if(!m_model->Initialize(m_ScreenManager->GetGraphicsDevice(),"Content/Models/Cube.txt",L"Content/Textures/stone01.dds",L"Content/Textures/dirt01.dds"))
-				debug.Print("Could not Initialize the model object.");
+//		if(!m_model->Initialize(m_ScreenManager->GetGraphicsDevice(),"Content/Models/Cube.txt",L"Content/Textures/stone01.dds",L"Content/Textures/dirt01.dds"))
+		m_model.reset( graphics->CreateModel(L"Content/Models/Cube.txt",graphics->CreateTexture(L"Content/Textures/stone01.dds",L"Content/Textures/dirt01.dds")));
 
 		m_lightShader = new LightShader();
 

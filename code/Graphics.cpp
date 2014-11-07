@@ -1,5 +1,13 @@
 #include "Graphics.h"
 #include "HelperUtilities.h"
+#include "Model.h"
+#include "Texture.h"
+#include "Debug.h"
+#include "LightShader.h"
+#include "LightMapShader.h"
+#include "TextureShader.h"
+#include "MultiTextureShader.h"
+#include "ToonShader.h"
 
 using namespace DirectX;
 namespace Engine
@@ -198,9 +206,10 @@ namespace Engine
 			return false;
 		}
 
-
-
-
+		//enum ShaderType { LIGHT, TEXTURE,MULTITEXTURE, TOON, LIGHTMAP };
+		shaders[ShaderType::LIGHT] = std::unique_ptr<LightShader>(new LightShader);
+		shaders[ShaderType::TEXTURE] = std::unique_ptr<TextureShader>(new TextureShader);
+		shaders[ShaderType::MULTITEXTURE] = std::unique_ptr<MultiTextureShader>(new MultiTextureShader);
 #pragma endregion
 
 		return OnResize(width,height);
@@ -505,4 +514,33 @@ namespace Engine
 		m_deviceContext->OMSetDepthStencilState(m_depthDisabledStencilState, 1);
 		return;
 	} 
+
+	Texture* Graphics::CreateTexture(std::wstring filename1, std::wstring filename2)
+	{
+		Texture* texture = new Texture();
+
+		if(!texture->Initialize(this,filename1,filename2))
+			return nullptr;
+
+		return texture;
+	}
+
+	Model* Graphics::CreateModel(std::wstring filename, Texture* texture)
+	{
+		Model* model = new Model();
+
+		if(!model->Initialize(this,filename,texture))
+		{
+			debug.Print("Could not Initialize the model object.");
+			return nullptr;
+		}
+
+		return model;
+	}
+
+
+	void Graphics::Render(Model* model,ShaderType shaderType)
+	{
+
+	}
 }

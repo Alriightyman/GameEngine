@@ -3,9 +3,12 @@ namespace Engine
 {
 
 	MultiTextureShader::MultiTextureShader()
-		: m_vertexShader(0),m_pixelShader(0),m_layout(0),m_sampleState(0)
+		: m_sampleState(0)
 	{
-	}
+		 m_vertexShader = 0;
+		 m_pixelShader = 0;
+		 m_layout = 0;
+	}	 
 
 	MultiTextureShader::~MultiTextureShader() {  }
 

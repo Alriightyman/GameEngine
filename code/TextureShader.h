@@ -1,14 +1,14 @@
 #pragma
 
 #include "Graphics.h"
+#include "Shader.h"
 #include <SimpleMath.h>
-
 #include <fstream>
 using namespace DirectX::SimpleMath;
 namespace Engine
 {
 
-	class TextureShader
+	class TextureShader : public Shader
 	{
 	private:
 		struct MatrixBuffer
@@ -18,27 +18,27 @@ namespace Engine
 			Matrix projection;
 		};
 	private:
-		ID3D11VertexShader* m_vertexShader;
-		ID3D11PixelShader* m_pixelShader;
-		ID3D11InputLayout* m_layout;
-		ID3D11Buffer* m_matrixBuffer;
+
+		ConstantBuffer<MatrixBuffer> m_matrixBuffer;
 		ID3D11SamplerState* m_sampleState;
+		ID3D11ShaderResourceView* m_texture;
 
 	public:
+		void SetTexture(ID3D11ShaderResourceView* texture);
+	public:
 		TextureShader();
-		~TextureShader();
+		~TextureShader() override;
 
-		bool Initialize(Graphics* graphics,HWND window);
-		void Shutdown();
-		void Render(Graphics* graphics,int indexCount,Matrix world,
-			Matrix view,Matrix projection,ID3D11ShaderResourceView* texture);
+		bool Initialize(Graphics* graphics) override;
+		void Shutdown() override;
+		void Render(Graphics* graphics,int indexCount) override;
 	private:
-		bool InitializeShader(Graphics* graphics,HWND window,std::wstring vertexShaderFilename,std::wstring pixelShaderFilename);
+		bool InitializeShader(Graphics* graphics,std::wstring vertexShaderFilename,std::wstring pixelShaderFilename) override;
 		void ShutdownShader();
-		void OutputShaderErrorMessage(ID3D10Blob* blob,HWND window,std::wstring message);
+		
+		void SetShaderParameters(Graphics* graphics) override;
+		void RenderShader(Graphics* graphics,int indexCount) override;
 
-		void SetShaderParameters(Graphics* graphics,Matrix world,
-			Matrix view, Matrix proj,ID3D11ShaderResourceView* texture);
-		void RenderShader(Graphics* graphics,int indexCount);
+
 	}; 
 }

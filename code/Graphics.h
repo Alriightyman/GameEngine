@@ -3,10 +3,19 @@
 #include <d3dcommon.h>
 #include <d3d11.h>
 #include <SimpleMath.h>
+#include <map>
+#include <memory>
+
 using namespace DirectX;
 using namespace DirectX::SimpleMath;
 namespace Engine
 {
+	class Texture;
+	class Model;
+
+	class Shader;
+
+	enum ShaderType { LIGHT, TEXTURE,MULTITEXTURE, TOON, LIGHTMAP };
 
 	class Graphics
 	{
@@ -30,6 +39,9 @@ namespace Engine
 		XMMATRIX m_projectionMatrix;
 		XMMATRIX m_worldMatrix;
 		XMMATRIX m_orthoMatrix;
+
+		// shader class
+		std::map<ShaderType,std::unique_ptr<Shader> > shaders;
 
 	public: // properties
 		float GetScreenDepth() const { return m_screenDepth; }
@@ -66,5 +78,10 @@ namespace Engine
 
 		void TurnZBufferOn();
 		void TurnZBufferOff();
+
+		Texture* CreateTexture(std::wstring filename1, std::wstring filename2);
+		Model* CreateModel(std::wstring filename, Texture* texure);
+
+		void Render(Model* model, ShaderType shaderType = ShaderType::LIGHT);
 	}; 
 }

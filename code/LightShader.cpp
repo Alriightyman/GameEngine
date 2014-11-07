@@ -13,12 +13,9 @@ namespace Engine
 		m_pixelShader = 0;
 		m_layout = 0;
 		m_sampleState = 0;
-		//m_matrixBuffer = 0;
-		//m_cameraBuffer = 0;
-		//m_lightBuffer = 0;
-		m_world = Matrix::Identity;
-		m_view = Matrix::Identity;
-		m_projection = Matrix::Identity;
+		m_worldMatrix = Matrix::Identity;
+		m_viewMatrix = Matrix::Identity;
+		m_projectionMatrix = Matrix::Identity;
 		m_texture = 0;
 		m_lightDirection = Vector3::Zero;
 		m_diffuseColor = Color(1,1,1,1);
@@ -233,15 +230,15 @@ namespace Engine
 		ID3D11DeviceContext* deviceContext = graphics->GetImmediateContex();
 		ID3D11Buffer* buffer;
 
-		Matrix worldMatrixCopy = m_world;
-		Matrix viewMatrixCopy = m_view;
-		Matrix projectionMatrixCopy = m_projection;
+		Matrix worldMatrixCopy = m_worldMatrix;
+		Matrix viewMatrixCopy = m_viewMatrix;
+		Matrix projectionMatrixCopy = m_projectionMatrix;
 
 		// Transpose the matrices to prepare them for the shader.
 
-		worldMatrixCopy = m_world.Transpose();
-		viewMatrixCopy = m_view.Transpose();
-		projectionMatrixCopy = m_projection.Transpose();
+		worldMatrixCopy = m_worldMatrix.Transpose();
+		viewMatrixCopy = m_viewMatrix.Transpose();
+		projectionMatrixCopy = m_projectionMatrix.Transpose();
 
 		// Copy the matrices into the constant buffer.
 		m_matrixBuffer.Data.world = worldMatrixCopy;
@@ -310,21 +307,21 @@ namespace Engine
 
 	void LightShader::SetWorldMatrix(Matrix& world)
 	{
-		m_world = world;
+		m_worldMatrix = world;
 	}
 	void LightShader::SetViewMatrix(Matrix& view)
 	{
-		m_view = view;
+		m_viewMatrix = view;
 	}
 	void LightShader::SetProjectionMatrix(Matrix& proj)
 	{
-		m_projection = proj;
+		m_projectionMatrix = proj;
 	}
 	void LightShader::SetWolrdViewProjMatrix(Matrix& world,Matrix& view,Matrix& proj)
 	{
-		m_world = world;
-		m_view = view; 
-		m_projection = proj;
+		m_worldMatrix = world;
+		m_viewMatrix = view; 
+		m_projectionMatrix = proj;
 	}
 	void LightShader::SetTexture(ID3D11ShaderResourceView* texture)
 	{

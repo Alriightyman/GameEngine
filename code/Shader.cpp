@@ -16,6 +16,13 @@ namespace Engine
 
 	}
 
+	void Shader::SetWorldViewProjMatrices(Matrix world,Matrix view, Matrix projection)
+	{
+		m_worldMatrix = world;
+		m_viewMatrix = view;
+		m_projectionMatrix = projection;
+	}
+
 	char* Shader::LoadCompiledShader(std::wstring filename, unsigned int& size)
 	{
 		// open the file

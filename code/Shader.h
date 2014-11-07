@@ -19,6 +19,7 @@ namespace Engine
 		ID3D11VertexShader* m_vertexShader;
 		ID3D11PixelShader* m_pixelShader;
 		ID3D11InputLayout* m_layout;
+		Matrix m_worldMatrix, m_viewMatrix,m_projectionMatrix;
 
 	public:
 		Shader();
@@ -27,7 +28,8 @@ namespace Engine
 		virtual void Shutdown();
 
 		virtual void Render(Graphics* graphics, int indexCount) = 0;
-
+	public:
+		void SetWorldViewProjMatrices(Matrix world,Matrix view, Matrix projection);
 	protected:
 		virtual bool InitializeShader(Graphics* graphics, std::wstring vertShaderfilename,std::wstring pixelShaderFilename) = 0;
 		virtual void ShutdownShader() = 0;

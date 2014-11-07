@@ -69,7 +69,7 @@ namespace Engine
 		Model(const Model&);
 		~Model();
 
-		bool Initialize(Graphics* graphics,char* modelFilename, std::wstring textureFilename1,std::wstring textureFilename2);
+		bool Initialize(Graphics* graphics,std::wstring modelFilename, Texture* texture);
 		void Shutdown();
 		void Render(Graphics* graphics, Shader* shader);
 
@@ -82,10 +82,10 @@ namespace Engine
 		void ShutdownBuffers();
 		void RenderBuffers(Graphics*);
 
-		bool LoadModel(char* filename);
+		bool LoadModel(std::wstring filename);
 		void ReleaseModel();
 
-		bool LoadTextures(Graphics*, std::wstring,std::wstring);
+		//bool LoadTextures(Graphics*, std::wstring,std::wstring);
 		void ReleaseTextures();
 	};
 

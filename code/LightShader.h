@@ -63,7 +63,6 @@ namespace Engine
 	private:
 		bool InitializeShader(Graphics* graphics,  std::wstring vertShaderfilename,  std::wstring pixelShaderfilename) override;
 		void ShutdownShader() override;
-//		void OutputShaderErrorMessage(ID3D10Blob*, HWND, WCHAR*);
 
 		void SetShaderParameters(Graphics* graphics) override;
 		void RenderShader(Graphics* graphics, int indexCount) override;
