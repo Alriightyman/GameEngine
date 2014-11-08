@@ -78,6 +78,12 @@
     <Filter Include="Shaders\BaseShader">
       <UniqueIdentifier>{8dec11c5-581a-43d5-925a-04693307dac1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders\AlphaMap Shader">
+      <UniqueIdentifier>{7b99686c-df6f-404f-8f46-7b4077e5a30a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\AlphaMap Shader\Shaders">
+      <UniqueIdentifier>{3664962c-dccb-4535-99aa-864f1c74bf1e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="code\BackgroundScreen.cpp">
@@ -303,6 +309,12 @@
     <FxCompile Include="Content\Shaders\LightMapVS.hlsl">
       <Filter>Shaders\Light Map Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="Content\Shaders\AplhaMapVS.hlsl">
+      <Filter>Shaders\AlphaMap Shader\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Content\Shaders\AlphaMapPS.hlsl">
+      <Filter>Shaders\AlphaMap Shader\Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\Scripts\Options.lua">
@@ -314,5 +326,6 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="Info.txt" />
+    <Text Include="ReadMe.txt" />
   </ItemGroup>
 </Project>

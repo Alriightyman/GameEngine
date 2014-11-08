@@ -1,5 +1,85 @@
-﻿Build started 11/6/2014 9:42:46 PM.
+﻿Build started 11/7/2014 9:40:26 PM.
+     1>Project "C:\Users\Alriighytman\Documents\GitHub\GameEngine\GameEngine.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _CRT_SECURE_NO_WARNINGS=1 /D _DEBUG /D _WINDOWS /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt code\GameplayScreen.cpp
+         GameplayScreen.cpp
+     1>c:\users\alriighytman\documents\github\gameengine\code\gameplayscreen.cpp(109): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\alriighytman\documents\github\gameengine\code\gameplayscreen.cpp(115): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\alriighytman\documents\github\gameengine\code\gameplayscreen.cpp(121): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\alriighytman\documents\github\gameengine\code\gameplayscreen.cpp(127): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\alriighytman\documents\github\gameengine\code\gameplayscreen.cpp(133): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\alriighytman\documents\github\gameengine\code\gameplayscreen.cpp(140): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Alriighytman\Documents\GitHub\GameEngine\Debug\GameEngine.exe" /INCREMENTAL /NOLOGO d3d11.lib d3dcompiler.lib dxgi.lib winmm.lib xinput.lib dinput8.lib DirectXTK.lib lua52.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Alriighytman\Documents\GitHub\GameEngine\Debug\GameEngine.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Alriighytman\Documents\GitHub\GameEngine\Debug\GameEngine.lib" /MACHINE:X86 Debug\BackgroundScreen.obj
+         Debug\Camera.obj
+         Debug\Frustum.obj
+         Debug\Light.obj
+         Debug\LightMapShader.obj
+         Debug\LightShader.obj
+         Debug\MultiTextureShader.obj
+         Debug\Script.obj
+         Debug\Shader.obj
+         Debug\Texture.obj
+         Debug\TextureShader.obj
+         Debug\Debug.obj
+         Debug\Game.obj
+         Debug\GameplayScreen.obj
+         Debug\GameScreen.obj
+         Debug\Graphics.obj
+         Debug\InputState.obj
+         Debug\LoadingScreen.obj
+         Debug\MainMenuScreen.obj
+         Debug\MathHelper.obj
+         Debug\MenuEntry.obj
+         Debug\MenuScreen.obj
+         Debug\MessageBoxScreen.obj
+         Debug\Model.obj
+         Debug\OptionsMenuScreen.obj
+         Debug\PauseMenuScreen.obj
+         Debug\PlayerIndexEventArgs.obj
+         Debug\ScreenManager.obj
+         Debug\ToonShader.obj
+         GameEngine.vcxproj -> C:\Users\Alriighytman\Documents\GitHub\GameEngine\Debug\GameEngine.exe
+       PostBuildEvent:
+         xcopy  "C:\Users\Alriighytman\Documents\GitHub\GameEngine\Content\Models\*.cmo" "C:\Users\Alriighytman\Documents\GitHub\GameEngine\Debug\Content\Models\" /e /y /i /r
+         xcopy  "C:\Users\Alriighytman\Documents\GitHub\GameEngine\Content\Models\*.dds" "C:\Users\Alriighytman\Documents\GitHub\GameEngine\Debug\Content\Models\" /e /y /i /r
+         xcopy  "C:\Users\Alriighytman\Documents\GitHub\GameEngine\Content\Font\*.spritefont" "C:\Users\Alriighytman\Documents\GitHub\GameEngine\Debug\Content\Font\" /e /y /i /r
+         xcopy  "C:\Users\Alriighytman\Documents\GitHub\GameEngine\Content\Shaders\*.cso" "C:\Users\Alriighytman\Documents\GitHub\GameEngine\Debug\Content\Shaders" /e /y /i /r
+         xcopy  "C:\Users\Alriighytman\Documents\GitHub\GameEngine\Content\Scripts\*.*" "C:\Users\Alriighytman\Documents\GitHub\GameEngine\Debug\Content\Scripts\" /e /y /i /r
+         xcopy  "C:\Users\Alriighytman\Documents\GitHub\GameEngine\Content\Textures\*.*" "C:\Users\Alriighytman\Documents\GitHub\GameEngine\Debug\Content\Textures\" /e /y /i /r
+         :VCEnd
+         0 File(s) copied
+         0 File(s) copied
+         C:\Users\Alriighytman\Documents\GitHub\GameEngine\Content\Font\gameFont.spritefont
+         C:\Users\Alriighytman\Documents\GitHub\GameEngine\Content\Font\menuFont.spritefont
+         2 File(s) copied
+         C:\Users\Alriighytman\Documents\GitHub\GameEngine\Content\Shaders\LightMapPS.cso
+         C:\Users\Alriighytman\Documents\GitHub\GameEngine\Content\Shaders\LightMapVS.cso
+         C:\Users\Alriighytman\Documents\GitHub\GameEngine\Content\Shaders\LightPS.cso
+         C:\Users\Alriighytman\Documents\GitHub\GameEngine\Content\Shaders\LightVS.cso
+         C:\Users\Alriighytman\Documents\GitHub\GameEngine\Content\Shaders\MultiTexturePS.cso
+         C:\Users\Alriighytman\Documents\GitHub\GameEngine\Content\Shaders\MultiTextureVS.cso
+         C:\Users\Alriighytman\Documents\GitHub\GameEngine\Content\Shaders\ToonOutlinePS.cso
+         C:\Users\Alriighytman\Documents\GitHub\GameEngine\Content\Shaders\ToonOutlineVS.cso
+         C:\Users\Alriighytman\Documents\GitHub\GameEngine\Content\Shaders\ToonPS.cso
+         C:\Users\Alriighytman\Documents\GitHub\GameEngine\Content\Shaders\ToonVS.cso
+         10 File(s) copied
+         C:\Users\Alriighytman\Documents\GitHub\GameEngine\Content\Scripts\DemoInput.lua
+         C:\Users\Alriighytman\Documents\GitHub\GameEngine\Content\Scripts\Options.lua
+         2 File(s) copied
+         C:\Users\Alriighytman\Documents\GitHub\GameEngine\Content\Textures\background.dds
+         C:\Users\Alriighytman\Documents\GitHub\GameEngine\Content\Textures\blank.dds
+         C:\Users\Alriighytman\Documents\GitHub\GameEngine\Content\Textures\cube_diffuse.dds
+         C:\Users\Alriighytman\Documents\GitHub\GameEngine\Content\Textures\cube_normal.png
+         C:\Users\Alriighytman\Documents\GitHub\GameEngine\Content\Textures\dirt01.dds
+         C:\Users\Alriighytman\Documents\GitHub\GameEngine\Content\Textures\gradient.dds
+         C:\Users\Alriighytman\Documents\GitHub\GameEngine\Content\Textures\guy.dds
+         C:\Users\Alriighytman\Documents\GitHub\GameEngine\Content\Textures\light01.dds
+         C:\Users\Alriighytman\Documents\GitHub\GameEngine\Content\Textures\seafloor.dds
+         C:\Users\Alriighytman\Documents\GitHub\GameEngine\Content\Textures\stone01.dds
+         10 File(s) copied
+     1>Done Building Project "C:\Users\Alriighytman\Documents\GitHub\GameEngine\GameEngine.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.00
+Time Elapsed 00:00:02.92

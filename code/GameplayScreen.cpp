@@ -6,6 +6,10 @@
 #include "PauseMenuScreen.h"
 #include "Debug.h"
 #include "Graphics.h"
+#include "LightShader.h"
+#include "ToonShader.h"
+#include "MultiTextureShader.h"
+#include "LightMapShader.h"
 
 using namespace DirectX;
 using namespace SimpleMath;
@@ -13,8 +17,8 @@ namespace Engine
 {
 
 	GameplayScreen::GameplayScreen(void)
-		: m_Font(0),m_camera(0),m_lightShader(0),
-		m_light(0),m_frustum(0),m_multiTextureShader(0)//,m_model(0)
+		: m_Font(0),m_camera(0),
+		m_light(0),m_frustum(0)//,m_model(0)
 	{
 		rotationX = rotationZ = rotation = 0.0f;
 		rotationY = 0.0f;
@@ -42,20 +46,7 @@ namespace Engine
 		m_camera->SetPosition(0.0f,0.0f,-10.0f);
 
 		// create the model object
-//		m_model.reset(new Model());
-		// initialize the model object
-//		if(!m_model->Initialize(m_ScreenManager->GetGraphicsDevice(),"Content/Models/Cube.txt",L"Content/Textures/stone01.dds",L"Content/Textures/dirt01.dds"))
-		m_model.reset( graphics->CreateModel(L"Content/Models/Cube.txt",graphics->CreateTexture(L"Content/Textures/stone01.dds",L"Content/Textures/dirt01.dds")));
-
-		m_lightShader = new LightShader();
-
-		m_lightShader->Initialize(m_ScreenManager->GetGraphicsDevice());
-
-//		m_toonShader = new ToonShader();
-//		m_toonShader->Initialize(m_ScreenManager->GetGraphicsDevice()->GetDevice());
-
-		m_multiTextureShader = new MultiTextureShader();
-		m_multiTextureShader->Initialize(m_ScreenManager->GetGraphicsDevice());
+		m_model.reset( graphics->CreateModel(L"Content/Models/square.txt",graphics->CreateTexture(L"Content/Textures/stone01.dds",L"Content/Textures/light01.dds")));
 
 		m_light = new Light();
 		m_light->SetAmbientColor(0.15f,0.15f,0.15f,1.0f);
@@ -75,13 +66,6 @@ namespace Engine
 			m_frustum = 0;
 		}
 
-		if(m_multiTextureShader)
-		{
-			m_multiTextureShader->Shutdown();
-			delete m_multiTextureShader;
-			m_multiTextureShader = 0;
-		}
-
 		if(m_light)
 		{
 			delete m_light;
@@ -93,26 +77,6 @@ namespace Engine
 			delete m_camera;
 			m_camera = 0;
 		}
-		
-		//if (m_model)
-		//{
-		//delete m_model;
-		//m_model = 0;
-		//}
-		
-		if(m_lightShader)
-		{
-			m_lightShader->Shutdown();
-			delete m_lightShader;
-			m_lightShader = 0;
-		}
-
-		//if(m_toonShader)
-		//{
-		//	m_toonShader->Shutdown();
-		//	delete m_toonShader;
-		//	m_toonShader = 0;
-		//}
 	}
 	void GameplayScreen::HandleInput(InputState* input)
 	{
@@ -221,15 +185,17 @@ namespace Engine
 			m_frustum->Construct(m_ScreenManager->GetGraphicsDevice()->GetScreenDepth(),projMatrix,viewMatrix);
 
 			// set shader parameters
-			m_lightShader->SetAmbientColor(m_light->GetAmbientColor());
-			m_lightShader->SetCameraPosition(m_camera->GetPosition());
-			m_lightShader->SetDiffuseColor(m_light->GetDiffuseColor());
-			m_lightShader->SetLightDirection(m_light->GetDirection());
-			m_lightShader->SetSpecularColor(m_light->GetSpecularColor());
-			m_lightShader->SetSpecularPower(m_light->GetSpecularPower());
-			m_lightShader->SetTexture(m_model->GetTextures()[0]);
-			m_lightShader->SetWolrdViewProjMatrix(worldMatrix,viewMatrix,projMatrix);
-
+			//LightShader* lightShader = m_ScreenManager->GetGraphicsDevice()->GetLightShader();
+			//lightShader->SetAmbientColor(m_light->GetAmbientColor());
+			//lightShader->SetCameraPosition(m_camera->GetPosition());
+			//lightShader->SetDiffuseColor(m_light->GetDiffuseColor());
+			//lightShader->SetLightDirection(m_light->GetDirection());
+			//lightShader->SetSpecularColor(m_light->GetSpecularColor());
+			//lightShader->SetSpecularPower(m_light->GetSpecularPower());
+			//lightShader->SetTexture(m_model->GetTextures());
+			//lightShader->SetWolrdViewProjMatrix(worldMatrix,viewMatrix,projMatrix);
+			
+			
 		}
 	}
 
@@ -241,12 +207,25 @@ namespace Engine
 		Graphics* graphics = m_ScreenManager->GetGraphicsDevice();
 		// get the font object
 		SpriteFont* font = m_ScreenManager->Font();
+		Matrix viewMatrix,projMatrix,worldMatrix;
 
+			// generate the view matrix based on the camera's position
+		m_camera->Render();
+
+		// get the world,view, and projection matrices from the camera
+		viewMatrix = m_camera->GetViewMatrix();
+		worldMatrix = m_ScreenManager->GetGraphicsDevice()->GetWorldMatrix();
+		projMatrix = m_ScreenManager->GetGraphicsDevice()->GetProjectionMatrix();
+
+		// set up the frustum
+		m_frustum->Construct(m_ScreenManager->GetGraphicsDevice()->GetScreenDepth(),projMatrix,viewMatrix);
+		m_ScreenManager->GetGraphicsDevice()->GetLightMapShader()->SetTexture(m_model->GetTextures());
+		m_ScreenManager->GetGraphicsDevice()->GetLightMapShader()->SetWorldViewProjMatrices(worldMatrix,viewMatrix,projMatrix);
 		// clear the screen to a different color
-		graphics->Clear(Colors::Blue);
+		graphics->Clear(Colors::Black);
 
 		// render the model
-		m_model->Render(graphics,m_lightShader);
+		graphics->Render(m_model.get(), ShaderType::LIGHTMAP);
 
 		spriteBatch->Begin();
 

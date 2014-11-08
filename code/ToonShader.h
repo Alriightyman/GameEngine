@@ -4,13 +4,14 @@
 #include <SimpleMath.h>
 #include <fstream>
 #include "Graphics.h"
-#include "ConstantBuffer.h"
+#include "Shader.h"
 using namespace DirectX::SimpleMath;
 
 namespace Engine
 {
+	class Texture;
 
-	class ToonShader
+	class ToonShader : public Shader
 	{
 	private:
 		struct MatrixBuffer
@@ -27,37 +28,39 @@ namespace Engine
 			Vector3 Direction;
 			float Intensity;
 		};
-
+	public:
+		void SetTexture(Texture* texture);
+		void SetLightDirection(Vector3& lightDirection);
+		void SetDiffuseColor(Color& diffuseColor);
+		void IsDrawLine(bool isDrawLine);
 	public:
 		ToonShader();
-		~ToonShader();
+		~ToonShader() override;
 
-		bool Initialize(ID3D11Device* device);
+		bool Initialize(Graphics* graphics) override;
 		void Shutdown();
-		bool Render(Graphics* graphics, int indexCount, const Matrix& worldMatrix, const Matrix& viewMatrix,
-			const Matrix& projectionMatrix, ID3D11ShaderResourceView* texture, const Vector3& lightDirection, 
-			const Color& diffuseColor,bool drawLine = true );
+		void Render(Graphics* graphics, int indexCount) override;;
 	private:
-		bool InitializeShader(ID3D11Device*, std::wstring, std::wstring,
+		bool InitializeShader(Graphics* graphics, std::wstring,std::wstring) override {return true;}
+
+		bool InitializeShader(Graphics* graphics, std::wstring, std::wstring,
 			std::wstring, std::wstring);
-		void ShutdownShader();
-		void* LoadCompiledShader(const wchar_t* filename,unsigned int& size);
-		bool SetShaderParameters(ID3D11DeviceContext* deviceContext, const Matrix& worldMatrix, const Matrix& viewMatrix,
-			const Matrix& projectionMatrix, ID3D11ShaderResourceView* texture, const Vector3& lightDirection, 
-			const Color& diffuseColor );
-		void RenderShader(Graphics* graphics, int,bool);
+		void ShutdownShader() override;;
+		void SetShaderParameters(Graphics* graphics)  override;
+		void RenderShader(Graphics*,int) override;
+
 
 	private:
-		ID3D11VertexShader* m_mainVertexShader;
-		ID3D11PixelShader* m_mainPixelShader;
+		ID3D11ShaderResourceView* m_texture;
+		Vector3 m_lightDirection;
+		Color m_diffuseColor;
+		bool m_drawLine;
 		ID3D11VertexShader* m_outlineVertexShader;
 		ID3D11PixelShader* m_outlinePixelShader;
 
-		ID3D11InputLayout* m_layout;
 		ID3D11InputLayout* m_outLineLayout;
 		ID3D11SamplerState* m_sampleState;
-		//ID3D11Buffer* m_matrixBuffer;
-		//ID3D11Buffer* m_lightBuffer;
+
 		ConstantBuffer<MatrixBuffer> m_matrixBuffer;
 		ConstantBuffer<LightBuffer> m_lightBuffer;
 	}; 

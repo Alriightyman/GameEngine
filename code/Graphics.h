@@ -6,14 +6,19 @@
 #include <map>
 #include <memory>
 
+
 using namespace DirectX;
 using namespace DirectX::SimpleMath;
 namespace Engine
 {
 	class Texture;
 	class Model;
-
 	class Shader;
+	class LightShader;
+	class LightMapShader;
+	class ToonShader;
+	class TextureShader;
+	class MultiTextureShader;
 
 	enum ShaderType { LIGHT, TEXTURE,MULTITEXTURE, TOON, LIGHTMAP };
 
@@ -64,6 +69,12 @@ namespace Engine
 		Matrix GetWorldMatrix() const { return m_worldMatrix; }
 		Matrix GetOrthoMatrix() const { return m_orthoMatrix; }
 		D3D11_VIEWPORT* GetViewPort() { return &m_viewport; }
+
+		LightShader* GetLightShader(); 
+		TextureShader* GetTextureShader();
+		MultiTextureShader* GetMultiTextureShader();
+		ToonShader* GetToonShader();
+		LightMapShader* GetLightMapShader();
 	public:
 		Graphics();
 		~Graphics();

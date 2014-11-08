@@ -8,19 +8,18 @@
 #include "Shader.h"
 using namespace DirectX::SimpleMath;
 
-/*
-| Model format is an extension of the obj format.
-| The ascii format is the same as the original obj format,
-| but now has added info for animation data. The obx format is
-| just the same as the ascii format except it is in binary form.
+/* 
+|
 */
 namespace Engine
 {
 
 	class Model
 	{
+		// make friends with the Graphics class
+		friend class Graphics;
 	private:
-
+		// static vertex buffer
 		struct StaticVertex
 		{
 			Vector3 position;
@@ -35,6 +34,7 @@ namespace Engine
 			}
 		};
 
+		// has a little skinned data
 		struct Vertex
 		{
 			Vector3 position;
@@ -50,6 +50,7 @@ namespace Engine
 				normal = Vector3(0,0,0);
 			}
 		};
+
 
 		struct ModelData
 		{
@@ -69,14 +70,12 @@ namespace Engine
 		Model(const Model&);
 		~Model();
 
-		bool Initialize(Graphics* graphics,std::wstring modelFilename, Texture* texture);
 		void Shutdown();
-		void Render(Graphics* graphics, Shader* shader);
-
 		int GetIndexCount();
-		ID3D11ShaderResourceView** GetTextures();
-
-
+		Texture* GetTextures();
+	protected:
+		bool Initialize(Graphics* graphics,std::wstring modelFilename, Texture* texture);
+		void Render(Graphics* graphics, Shader* shader);
 	private:
 		bool InitializeBuffers(Graphics*);
 		void ShutdownBuffers();
@@ -85,7 +84,6 @@ namespace Engine
 		bool LoadModel(std::wstring filename);
 		void ReleaseModel();
 
-		//bool LoadTextures(Graphics*, std::wstring,std::wstring);
 		void ReleaseTextures();
 	};
 

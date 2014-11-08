@@ -77,9 +77,9 @@ namespace Engine
 	}
 
 
-	ID3D11ShaderResourceView** Model::GetTextures()
+	Texture* Model::GetTextures()
 	{
-		return m_Textures->GetTextures();
+		return m_Textures;
 	}
 
 

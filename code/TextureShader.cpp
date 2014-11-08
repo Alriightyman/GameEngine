@@ -1,5 +1,6 @@
 #include "TextureShader.h"
 #include "HelperUtilities.h"
+#include "Texture.h"
 namespace Engine
 {
 
@@ -179,8 +180,8 @@ namespace Engine
 		context->DrawIndexed(indexCount,0,0);
 	} 
 
-	void TextureShader::SetTexture(ID3D11ShaderResourceView* texture)
+	void TextureShader::SetTexture(Texture* texture)
 	{
-		m_texture = texture;
+		m_texture = texture->GetTextures()[0];
 	}
 }

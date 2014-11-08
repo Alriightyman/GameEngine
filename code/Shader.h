@@ -1,8 +1,6 @@
 #pragma once
 #include "Graphics.h"
 #include "ConstantBuffer.h"
-
-#include <d3d11.h>
 #include <SimpleMath.h>
 #include <fstream>
 

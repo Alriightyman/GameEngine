@@ -1,4 +1,6 @@
 #include "MultiTextureShader.h"
+#include "Texture.h"
+
 namespace Engine
 {
 
@@ -26,10 +28,9 @@ namespace Engine
 		ShutdownShader();
 	}
 
-	void MultiTextureShader::Render(Graphics* graphics,int indexCount, Matrix worldMatrix,Matrix viewMatrix,
-		Matrix projMatrix, ID3D11ShaderResourceView** textureArray)
+	void MultiTextureShader::Render(Graphics* graphics,int indexCount)
 	{
-		SetShaderParameters(graphics,worldMatrix,viewMatrix,projMatrix,textureArray);
+		SetShaderParameters(graphics);
 
 		// render the buffers
 		RenderShader(graphics,indexCount);
@@ -154,22 +155,21 @@ namespace Engine
 	}
 
 
-	void MultiTextureShader::SetShaderParameters(Graphics* graphics,Matrix worldMatrix,Matrix viewMatrix,
-		Matrix projMatrix, ID3D11ShaderResourceView** textureArray)
+	void MultiTextureShader::SetShaderParameters(Graphics* graphics)
 	{
 		unsigned int bufferNumber;
 		ID3D11DeviceContext* deviceContext = graphics->GetImmediateContex();;
 
-		m_matrixBuffer.Data.World = worldMatrix.Transpose();
-		m_matrixBuffer.Data.View = viewMatrix.Transpose();
-		m_matrixBuffer.Data.Projection = projMatrix.Transpose();
+		m_matrixBuffer.Data.World = m_worldMatrix.Transpose();
+		m_matrixBuffer.Data.View = m_viewMatrix.Transpose();
+		m_matrixBuffer.Data.Projection = m_projectionMatrix.Transpose();
 		m_matrixBuffer.ApplyChanges(deviceContext);
 
 		bufferNumber = 0;
 		ID3D11Buffer* constBuffer[] = { m_matrixBuffer.Buffer() };
 		deviceContext->VSSetConstantBuffers(bufferNumber,1,constBuffer);
 
-		deviceContext->PSSetShaderResources(0,2,textureArray);
+		deviceContext->PSSetShaderResources(0,2,m_textureArray);
 
 	}
 
@@ -189,30 +189,8 @@ namespace Engine
 		deviceContext->DrawIndexed(indexCount,0,0);
 	}
 
-	void* MultiTextureShader::LoadCompiledShader(std::wstring filename,unsigned int& size)
+	void MultiTextureShader::SetTextureArray(Texture* texture)
 	{
-		// open the file
-		std::ifstream ifs(filename, std::ios::binary);
-		// make sure it is good
-		if (ifs.bad() || ifs.fail())
-		{
-			std::wstring failmsg = L"Failed to load shader from ";
-			failmsg.append(filename);
-			return 0;
-		}
-		// get the size of the file
-		ifs.seekg(0, std::ios::end);
-		size = (UINT)ifs.tellg();
-		// create some memory
-		char* buffer = new char[size];
-		// set position to the begining of the file
-		ifs.seekg(0, std::ios::beg);
-		// read the file
-		ifs.read(buffer, size);
-		// close the file
-		ifs.close();
-		// return the buffer
-		return buffer;
+		m_textureArray = texture->GetTextures();
 	}
-
 }

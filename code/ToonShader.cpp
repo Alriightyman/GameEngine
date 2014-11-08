@@ -1,22 +1,24 @@
 #include "ToonShader.h"
+#include "Texture.h"
+
 namespace Engine
 {
 
 	ToonShader::ToonShader()
 		: m_outlinePixelShader(0),m_outlineVertexShader(0),
-		m_mainPixelShader(0),m_mainVertexShader(0),
-		m_layout(0),m_sampleState(0)
+		m_sampleState(0)
 	{ 
-
+		m_vertexShader = 0;
+		m_pixelShader = 0;
 	}
 
 	ToonShader::~ToonShader()
 	{
 	}
 
-	bool ToonShader::Initialize(ID3D11Device* device)
+	bool ToonShader::Initialize(Graphics* graphics)
 	{
-		if(!InitializeShader(device,L"Content/Shaders/ToonVS.cso",
+		if(!InitializeShader(graphics,L"Content/Shaders/ToonVS.cso",
 			L"Content/Shaders/ToonPS.cso",
 			L"Content/Shaders/ToonOutlineVS.cso",
 			L"Content/Shaders/ToonOutlinePS.cso"))
@@ -32,33 +34,31 @@ namespace Engine
 		ShutdownShader();
 	}
 
-	bool ToonShader::Render(Graphics* g, int indexCount, const Matrix& worldMatrix, const Matrix& viewMatrix,
-		const Matrix& projectionMatrix, ID3D11ShaderResourceView* texture, const Vector3& lightDirection, 
-		const Color& diffuseColor,bool drawLine )
+	void ToonShader::Render(Graphics* graphics, int indexCount)
 	{
 
-		if(!SetShaderParameters(g->GetImmediateContex(),worldMatrix,viewMatrix,projectionMatrix,texture,lightDirection,diffuseColor))
-			return false;
+		SetShaderParameters(graphics);
+			
 
-		RenderShader(g,indexCount,drawLine);
-
-		return true;
+		RenderShader(graphics,indexCount);
 	}
 
 
-	bool ToonShader::InitializeShader(ID3D11Device* device, std::wstring vertexShaderFilename, std::wstring pixelShaderFilename,
+	bool ToonShader::InitializeShader(Graphics* graphics, std::wstring vertexShaderFilename, std::wstring pixelShaderFilename,
 		std::wstring vertexOutlineShaderFilename, std::wstring pixelOutlineShaderFilename)
 	{
 		HRESULT result;
 		D3D11_INPUT_ELEMENT_DESC polygonLayout[3];
 		unsigned int numElements;
 		D3D11_SAMPLER_DESC samplerDesc;
+		ID3D11Device* device = graphics->GetDevice();
 
 		struct ShaderBuffer
 		{
 			unsigned int size;
 			void* data;
 		};
+
 		ShaderBuffer VSBuffer;
 		ShaderBuffer PSBuffer;
 		memset(&VSBuffer,0,sizeof(ShaderBuffer));
@@ -68,13 +68,13 @@ namespace Engine
 		PSBuffer.data = LoadCompiledShader(pixelShaderFilename.c_str(),PSBuffer.size);
 
 		// Create the vertex shader from the buffer.
-		result = device->CreateVertexShader(VSBuffer.data, VSBuffer.size, NULL, &m_mainVertexShader);
+		result = device->CreateVertexShader(VSBuffer.data, VSBuffer.size, NULL, &m_vertexShader);
 		if(FAILED(result))
 		{
 			return false;
 		}
 		// Create the pixel shader from the buffer.
-		result = device->CreatePixelShader(PSBuffer.data, PSBuffer.size, NULL, &m_mainPixelShader);
+		result = device->CreatePixelShader(PSBuffer.data, PSBuffer.size, NULL, &m_pixelShader);
 		if(FAILED(result))
 		{
 			return false;
@@ -196,20 +196,6 @@ namespace Engine
 		}
 
 		// Release the pixel shader.
-		if(m_mainPixelShader)
-		{
-			m_mainPixelShader->Release();
-			m_mainPixelShader = 0;
-		}
-
-		// Release the vertex shader.
-		if(m_mainVertexShader)
-		{
-			m_mainVertexShader->Release();
-			m_mainVertexShader = 0;
-		}
-
-		// Release the pixel shader.
 		if(m_outlinePixelShader)
 		{
 			m_outlinePixelShader->Release();
@@ -224,53 +210,17 @@ namespace Engine
 		}
 
 	}
-	/*
-	void ToonShader::OutputShaderErrorMessage(ID3D10Blob* errorMessage, HWND hwnd, WCHAR* shaderFilename)
-	{
-	char* compileErrors;
-	SIZE_T bufferSize, i;
-	std::ofstream fout;
 
-
-	// Get a pointer to the error message text buffer.
-	compileErrors = (char*)(errorMessage->GetBufferPointer());
-
-	// Get the length of the message.
-	bufferSize = errorMessage->GetBufferSize();
-
-	// Open a file to write the error message to.
-	fout.open("shader-error.txt");
-
-	// Write out the error message.
-	for(i=0; i<bufferSize; i++)
-	{
-	fout << compileErrors[i];
-	}
-
-	// Close the file.
-	fout.close();
-
-	// Release the error message.
-	errorMessage->Release();
-	errorMessage = 0;
-
-	// Pop a message up on the screen to notify the user to check the text file for compile errors.
-	MessageBox(0, "Error compiling shader.  Check shader-error.txt for message.", "", MB_OK);
-
-	return;
-	}
-	*/
-	bool ToonShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, const Matrix& worldMatrix, const Matrix& viewMatrix,
-		const Matrix& projectionMatrix, ID3D11ShaderResourceView* texture, const Vector3& lightDirection, 
-		const Color& diffuseColor)
+	void ToonShader::SetShaderParameters(Graphics* graphics)
 	{
 		unsigned int bufferNumber;
+		ID3D11DeviceContext* deviceContext = graphics->GetImmediateContex();
 		// Transpose the matrices and 		
 		// update data in the constant buffer
-		m_matrixBuffer.Data.World = worldMatrix.Transpose();
-		m_matrixBuffer.Data.WorldInverseTranspose = worldMatrix.Invert().Transpose();
-		m_matrixBuffer.Data.View = viewMatrix.Transpose();
-		m_matrixBuffer.Data.Projection = projectionMatrix.Transpose();
+		m_matrixBuffer.Data.World = m_worldMatrix.Transpose();
+		m_matrixBuffer.Data.WorldInverseTranspose = m_worldMatrix.Invert().Transpose();
+		m_matrixBuffer.Data.View = m_viewMatrix.Transpose();
+		m_matrixBuffer.Data.Projection = m_projectionMatrix.Transpose();
 		// set the constant buufer
 		m_matrixBuffer.ApplyChanges(deviceContext);
 
@@ -281,12 +231,12 @@ namespace Engine
 		deviceContext->VSSetConstantBuffers(bufferNumber, 1, cBuffer);
 
 		// Set shader texture resource in the pixel shader.
-		deviceContext->PSSetShaderResources(0, 1, &texture);
+		deviceContext->PSSetShaderResources(0, 1, &m_texture);
 
 		// Copy the lighting variables into the constant buffer.
 		m_lightBuffer.Data.Intensity = 1.0f;
-		m_lightBuffer.Data.DiffuseColor = diffuseColor;
-		m_lightBuffer.Data.Direction = lightDirection;
+		m_lightBuffer.Data.DiffuseColor = m_diffuseColor;
+		m_lightBuffer.Data.Direction = m_lightDirection;
 		// set the constant buffer
 		m_lightBuffer.ApplyChanges(deviceContext);
 
@@ -296,17 +246,16 @@ namespace Engine
 		// Finally set the light constant buffer in the pixel shader with the updated values.
 		deviceContext->PSSetConstantBuffers(bufferNumber, 1, cLightBuffer);
 
-		return true;
 	}
 
-	void ToonShader::RenderShader(Graphics* graphics, int indexCount, bool drawLine)
+	void ToonShader::RenderShader(Graphics* graphics, int indexCount)
 	{
 		// get our graphics devices
 		auto deviceContext = graphics->GetImmediateContex();
 		auto device = graphics->GetDevice();
 		// set the layout
 		deviceContext->IASetInputLayout(m_layout);
-		if(drawLine)
+		if(m_drawLine)
 		{
 			// draw the outline first
 			deviceContext->RSSetState(graphics->GetOutlineRasterState());
@@ -316,36 +265,26 @@ namespace Engine
 		}
 		// draw the rest of the model in a toony way
 		deviceContext->RSSetState(graphics->GetRasterState()); // set the renderstate
-		deviceContext->VSSetShader(m_mainVertexShader,0,0);    // set vertexShader 
-		deviceContext->PSSetShader(m_mainPixelShader,0,0);     // set pixelShader
+		deviceContext->VSSetShader(m_vertexShader,0,0);    // set vertexShader 
+		deviceContext->PSSetShader(m_pixelShader,0,0);     // set pixelShader
 		deviceContext->PSSetSamplers(0,1,&m_sampleState);      // set the sampler State
 		deviceContext->DrawIndexed(indexCount,0,0);			   // draw the indexed model
 	}
 
-	// loads and returns a pointer to a compiled shader in memory
-	void* ToonShader::LoadCompiledShader(const wchar_t* filename, UINT& size)
+	void ToonShader::SetTexture(Texture* texture)
 	{
-		// open the file
-		std::ifstream ifs(filename, std::ios::binary);
-		// make sure it is good
-		if (ifs.bad() || ifs.fail())
-		{
-			std::wstring failmsg = L"Failed to load shader from ";
-			failmsg.append(filename);
-			return 0;
-		}
-		// get the size of the file
-		ifs.seekg(0, std::ios::end);
-		size = (UINT)ifs.tellg();
-		// create some memory
-		char* buffer = new char[size];
-		// set position to the begining of the file
-		ifs.seekg(0, std::ios::beg);
-		// read the file
-		ifs.read(buffer, size);
-		// close the file
-		ifs.close();
-		// return the buffer
-		return buffer;
-	} 
+		m_texture = texture->GetTextures()[0];
+	}
+	void ToonShader::SetLightDirection(Vector3& lightDirection)
+	{
+		m_lightDirection = lightDirection;
+	}
+	void ToonShader::SetDiffuseColor(Color& diffuseColor)
+	{
+		m_diffuseColor = diffuseColor;
+	}
+	void ToonShader::IsDrawLine(bool isDrawLine)
+	{
+		m_drawLine = isDrawLine;
+	}
 }

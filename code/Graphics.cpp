@@ -39,7 +39,7 @@ namespace Engine
 		IDXGIFactory* factory;
 		IDXGIAdapter* adapter;
 		IDXGIOutput* adapterOutput;
-		unsigned int numModes, i, numerator = 60, denominator = 1, stringLength;
+		unsigned int numModes = 0, i, numerator = 60, denominator = 1, stringLength;
 		DXGI_MODE_DESC* displayModeList;
 		DXGI_ADAPTER_DESC adapterDesc;
 		int error;
@@ -206,10 +206,27 @@ namespace Engine
 			return false;
 		}
 
-		//enum ShaderType { LIGHT, TEXTURE,MULTITEXTURE, TOON, LIGHTMAP };
-		shaders[ShaderType::LIGHT] = std::unique_ptr<LightShader>(new LightShader);
-		shaders[ShaderType::TEXTURE] = std::unique_ptr<TextureShader>(new TextureShader);
-		shaders[ShaderType::MULTITEXTURE] = std::unique_ptr<MultiTextureShader>(new MultiTextureShader);
+		// create all shaders, initialize them and add them to the shader list
+		LightShader* lightShader = new LightShader();
+		lightShader->Initialize(this);
+		shaders[ShaderType::LIGHT].reset(lightShader);
+
+		LightMapShader* lightMapShader = new LightMapShader();
+		lightMapShader->Initialize(this);
+		shaders[ShaderType::LIGHTMAP].reset(lightMapShader);
+
+		TextureShader* textureShader = new TextureShader();
+		textureShader->Initialize(this);
+		shaders[ShaderType::TEXTURE].reset(textureShader);
+
+		MultiTextureShader* multiTextureShader = new MultiTextureShader();
+		multiTextureShader->Initialize(this);
+		shaders[ShaderType::MULTITEXTURE].reset(multiTextureShader);
+
+		ToonShader* toonShader = new ToonShader();
+		toonShader->Initialize(this);
+		shaders[ShaderType::TOON].reset(toonShader);
+
 #pragma endregion
 
 		return OnResize(width,height);
@@ -541,6 +558,30 @@ namespace Engine
 
 	void Graphics::Render(Model* model,ShaderType shaderType)
 	{
+		model->Render(this,shaders[shaderType].get());
+	}
 
+	LightShader* Graphics::GetLightShader()
+	{
+		return  (LightShader*)shaders[ShaderType::LIGHT].get();
+	}
+
+	LightMapShader* Graphics::GetLightMapShader()
+	{
+		return  (LightMapShader*)shaders[ShaderType::LIGHTMAP].get();
+	}
+
+	TextureShader* Graphics::GetTextureShader()
+	{
+		return  (TextureShader*)shaders[ShaderType::TEXTURE].get();
+	}
+
+	MultiTextureShader* Graphics::GetMultiTextureShader()
+	{
+		return  (MultiTextureShader*)shaders[ShaderType::MULTITEXTURE].get();
+	}
+	ToonShader* Graphics::GetToonShader()
+	{
+		return  (ToonShader*)shaders[ShaderType::TOON].get();
 	}
 }

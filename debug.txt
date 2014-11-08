@@ -34,13 +34,13 @@ Draw LoadingScreen...slow
 Draw LoadingScreen...slow
 Draw LoadingScreen...slow
 Draw LoadingScreen...slow
+Draw LoadingScreen...slow
 BackgroundScreen Deleted
 Draw LoadingScreen...slow
 MenuEntry - Exit deleted
 MenuEntry - Options deleted
 MenuEntry - Play Game deleted
 Main Menu deleted
-Draw LoadingScreen...slow
 Draw LoadingScreen...slow
 Draw LoadingScreen...slow
 Draw LoadingScreen...slow

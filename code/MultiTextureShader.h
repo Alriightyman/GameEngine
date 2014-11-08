@@ -6,6 +6,7 @@
 #include <fstream>
 namespace Engine
 {
+	class Texture;
 
 	class MultiTextureShader : public Shader
 	{
@@ -21,7 +22,7 @@ namespace Engine
 		ConstantBuffer<MatrixBuffer> m_matrixBuffer;
 		ID3D11ShaderResourceView** m_textureArray;
 	public:
-		void SetTextureArray(ID3D11ShaderResourceView** texArray);
+		void SetTextureArray(Texture* texture);
 	public:
 		MultiTextureShader();
 		~MultiTextureShader() override;

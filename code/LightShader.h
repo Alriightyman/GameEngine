@@ -13,6 +13,7 @@ using namespace std;
 
 namespace Engine
 {
+	class Texture;
 
 	class LightShader : public Shader
 	{
@@ -53,7 +54,7 @@ namespace Engine
 		void SetViewMatrix(Matrix& view);
 		void SetProjectionMatrix(Matrix& proj);
 		void SetWolrdViewProjMatrix(Matrix& world,Matrix& view,Matrix& proj);
-		void SetTexture(ID3D11ShaderResourceView* texture);
+		void SetTexture(Texture* texture);
 		void SetLightDirection(const Vector3& lightDirection); 
 		void SetAmbientColor(const Color& ambientColor);
 		void SetDiffuseColor(const Color& diffuseColor);

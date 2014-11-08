@@ -7,6 +7,7 @@
 using namespace DirectX::SimpleMath;
 namespace Engine
 {
+	class Texture;
 
 	class TextureShader : public Shader
 	{
@@ -24,7 +25,7 @@ namespace Engine
 		ID3D11ShaderResourceView* m_texture;
 
 	public:
-		void SetTexture(ID3D11ShaderResourceView* texture);
+		void SetTexture(Texture* texture);
 	public:
 		TextureShader();
 		~TextureShader() override;

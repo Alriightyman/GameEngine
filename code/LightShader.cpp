@@ -3,6 +3,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 #include "lightshader.h"
 #include <DirectXColors.h>
+#include "Texture.h"
 
 namespace Engine
 {
@@ -170,27 +171,6 @@ namespace Engine
 
 	void LightShader::ShutdownShader()
 	{
-		// release the camera constant buffer
-
-		//if(m_cameraBuffer)
-		//{
-		//	m_cameraBuffer->Release();
-		//	m_cameraBuffer = 0;
-		//}
-
-		//// Release the light constant buffer.
-		//if(m_lightBuffer)
-		//{
-		//	m_lightBuffer->Release();
-		//	m_lightBuffer = 0;
-		//}
-
-		//// Release the matrix constant buffer.
-		//if(m_matrixBuffer)
-		//{
-		//	m_matrixBuffer->Release();
-		//	m_matrixBuffer = 0;
-		//}
 
 		// Release the sampler state.
 		if(m_sampleState)
@@ -323,9 +303,9 @@ namespace Engine
 		m_viewMatrix = view; 
 		m_projectionMatrix = proj;
 	}
-	void LightShader::SetTexture(ID3D11ShaderResourceView* texture)
+	void LightShader::SetTexture(Texture* texture)
 	{
-		m_texture = texture;
+		m_texture = texture->GetTextures()[0];
 	}
 	void LightShader::SetLightDirection(const Vector3& lightDirection)
 	{
