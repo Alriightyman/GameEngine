@@ -8,7 +8,7 @@ namespace Engine
 
 	Texture::Texture()
 	{
-		for(int i = 0; i < 2; i++)
+		for(int i = 0; i < 3; i++)
 			m_textures[i] = 0;
 	}
 
@@ -24,7 +24,7 @@ namespace Engine
 	}
 
 
-	bool Texture::Initialize(Graphics* graphics,std::wstring filename1, std::wstring filename2)
+	bool Texture::Initialize(Graphics* graphics,std::wstring filename1, std::wstring filename2,std::wstring filename3)
 	{
 		ID3D11Device* device = graphics->GetDevice();
 
@@ -34,10 +34,15 @@ namespace Engine
 			return false;
 
 		if(filename2.size() > 1)
+		{
 			if(FAILED(CreateDDSTextureFromFile( device, filename2.c_str(), nullptr, &m_textures[1] )))
 				return false;
+		
+			if(filename3.size() > 1)
+				if(FAILED(CreateDDSTextureFromFile(device,filename3.c_str(),nullptr,&m_textures[2])))
+					return false;
 
-
+		}
 		return true;
 	}
 
@@ -45,7 +50,7 @@ namespace Engine
 	void Texture::Shutdown()
 	{
 		// Release the texture resource.
-		for(int i = 0; i < 2; i++)
+		for(int i = 0; i < 3; i++)
 		{
 			if(m_textures[i])
 			{

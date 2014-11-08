@@ -19,8 +19,9 @@ namespace Engine
 	class ToonShader;
 	class TextureShader;
 	class MultiTextureShader;
+	class AlphaMapShader;
 
-	enum ShaderType { LIGHT, TEXTURE,MULTITEXTURE, TOON, LIGHTMAP };
+	enum ShaderType { LIGHT, TEXTURE,MULTITEXTURE, TOON, LIGHTMAP,ALPHAMAP };
 
 	class Graphics
 	{
@@ -75,6 +76,8 @@ namespace Engine
 		MultiTextureShader* GetMultiTextureShader();
 		ToonShader* GetToonShader();
 		LightMapShader* GetLightMapShader();
+		AlphaMapShader* GetAlphaMapShader();
+
 	public:
 		Graphics();
 		~Graphics();
@@ -90,7 +93,7 @@ namespace Engine
 		void TurnZBufferOn();
 		void TurnZBufferOff();
 
-		Texture* CreateTexture(std::wstring filename1, std::wstring filename2);
+		Texture* CreateTexture(std::wstring filename1, std::wstring filename2,std::wstring filename3);
 		Model* CreateModel(std::wstring filename, Texture* texure);
 
 		void Render(Model* model, ShaderType shaderType = ShaderType::LIGHT);

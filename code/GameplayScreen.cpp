@@ -10,6 +10,7 @@
 #include "ToonShader.h"
 #include "MultiTextureShader.h"
 #include "LightMapShader.h"
+#include "AlphaMapShader.h"
 
 using namespace DirectX;
 using namespace SimpleMath;
@@ -46,7 +47,7 @@ namespace Engine
 		m_camera->SetPosition(0.0f,0.0f,-10.0f);
 
 		// create the model object
-		m_model.reset( graphics->CreateModel(L"Content/Models/square.txt",graphics->CreateTexture(L"Content/Textures/stone01.dds",L"Content/Textures/light01.dds")));
+		m_model.reset( graphics->CreateModel(L"Content/Models/square.txt",graphics->CreateTexture(L"Content/Textures/stone01.dds",L"Content/Textures/dirt01.dds",L"Content/Textures/alpha01.dds")));
 
 		m_light = new Light();
 		m_light->SetAmbientColor(0.15f,0.15f,0.15f,1.0f);
@@ -219,13 +220,14 @@ namespace Engine
 
 		// set up the frustum
 		m_frustum->Construct(m_ScreenManager->GetGraphicsDevice()->GetScreenDepth(),projMatrix,viewMatrix);
-		m_ScreenManager->GetGraphicsDevice()->GetLightMapShader()->SetTexture(m_model->GetTextures());
-		m_ScreenManager->GetGraphicsDevice()->GetLightMapShader()->SetWorldViewProjMatrices(worldMatrix,viewMatrix,projMatrix);
+		m_ScreenManager->GetGraphicsDevice()->GetAlphaMapShader()->SetTexture(m_model->GetTextures());
+		m_ScreenManager->GetGraphicsDevice()->GetAlphaMapShader()->SetWorldViewProjMatrices(worldMatrix,viewMatrix,projMatrix);
+
 		// clear the screen to a different color
 		graphics->Clear(Colors::Black);
 
 		// render the model
-		graphics->Render(m_model.get(), ShaderType::LIGHTMAP);
+		graphics->Render(m_model.get(), ShaderType::ALPHAMAP);
 
 		spriteBatch->Begin();
 

@@ -12,7 +12,7 @@ using namespace DirectX;
 
 namespace Engine
 {
-
+	// a texture class that holds a 3 textures
 	class Texture
 	{
 	public:
@@ -20,14 +20,13 @@ namespace Engine
 		Texture(const Texture&);
 		~Texture();
 
-		bool Initialize(Graphics* graphics, std::wstring filename1,std::wstring filename2);
+		bool Initialize(Graphics* graphics, std::wstring filename1,std::wstring filename2,std::wstring filename3);
 		void Shutdown();
 
 		ID3D11ShaderResourceView** GetTextures();
 
 	private:
-		ID3D11ShaderResourceView* m_textures[2];
+		ID3D11ShaderResourceView* m_textures[3];
 	};
-
 
 }

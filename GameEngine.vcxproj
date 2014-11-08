@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="code\AlphaMapShader.cpp" />
     <ClCompile Include="code\BackgroundScreen.cpp" />
     <ClCompile Include="code\Camera.cpp" />
     <ClCompile Include="code\Frustum.cpp" />
@@ -42,6 +43,7 @@
     <ClCompile Include="code\ToonShader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="code\AlphaMapShader.h" />
     <ClInclude Include="code\BackgroundScreen.h" />
     <ClInclude Include="code\Camera.h" />
     <ClInclude Include="code\ConstantBuffer.h" />
@@ -79,8 +81,12 @@
     <FxCompile Include="Content\Shaders\AlphaMapPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Content/Shaders/%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Content/Shaders/%(Filename).cso</ObjectFileOutput>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
     </FxCompile>
-    <FxCompile Include="Content\Shaders\AplhaMapVS.hlsl">
+    <FxCompile Include="Content\Shaders\AlphaMapVS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Content/Shaders/%(Filename).cso</ObjectFileOutput>
@@ -221,8 +227,7 @@
       <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;dxgi.lib;winmm.lib;xinput.lib;dinput8.lib;DirectXTK.lib;lua52.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy  "$(ProjectDir)Content\Models\*.cmo" "$(OutDir)Content\Models\" /e /y /i /r
-xcopy  "$(ProjectDir)Content\Models\*.dds" "$(OutDir)Content\Models\" /e /y /i /r
+      <Command>xcopy  "$(ProjectDir)Content\Models\*.txt" "$(OutDir)Content\Models\" /e /y /i /r
 xcopy  "$(ProjectDir)Content\Font\*.spritefont" "$(OutDir)Content\Font\" /e /y /i /r
 xcopy  "$(ProjectDir)Content\Shaders\*.cso" "$(OutDir)Content\Shaders" /e /y /i /r
 xcopy  "$(ProjectDir)Content\Scripts\*.*" "$(OutDir)Content\Scripts\" /e /y /i /r
@@ -246,6 +251,13 @@ xcopy  "$(ProjectDir)Content\Textures\*.*" "$(OutDir)Content\Textures\" /e /y /i
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;dxgi.lib;winmm.lib;xinput.lib;dinput8.lib;DirectXTK.lib;lua52.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy  "$(ProjectDir)Content\Models\*.txt" "$(OutDir)Content\Models\" /e /y /i /r
+xcopy  "$(ProjectDir)Content\Font\*.spritefont" "$(OutDir)Content\Font\" /e /y /i /r
+xcopy  "$(ProjectDir)Content\Shaders\*.cso" "$(OutDir)Content\Shaders" /e /y /i /r
+xcopy  "$(ProjectDir)Content\Scripts\*.*" "$(OutDir)Content\Scripts\" /e /y /i /r
+xcopy  "$(ProjectDir)Content\Textures\*.*" "$(OutDir)Content\Textures\" /e /y /i /r</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

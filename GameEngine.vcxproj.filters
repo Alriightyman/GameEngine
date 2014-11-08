@@ -173,6 +173,9 @@
     <ClCompile Include="code\Shader.cpp">
       <Filter>Shaders\BaseShader</Filter>
     </ClCompile>
+    <ClCompile Include="code\AlphaMapShader.cpp">
+      <Filter>Shaders\AlphaMap Shader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\BackgroundScreen.h">
@@ -271,6 +274,9 @@
     <ClInclude Include="code\Shader.h">
       <Filter>Shaders\BaseShader</Filter>
     </ClInclude>
+    <ClInclude Include="code\AlphaMapShader.h">
+      <Filter>Shaders\AlphaMap Shader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Content\Shaders\ToonPS.hlsl">
@@ -309,10 +315,10 @@
     <FxCompile Include="Content\Shaders\LightMapVS.hlsl">
       <Filter>Shaders\Light Map Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="Content\Shaders\AplhaMapVS.hlsl">
+    <FxCompile Include="Content\Shaders\AlphaMapPS.hlsl">
       <Filter>Shaders\AlphaMap Shader\Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="Content\Shaders\AlphaMapPS.hlsl">
+    <FxCompile Include="Content\Shaders\AlphaMapVS.hlsl">
       <Filter>Shaders\AlphaMap Shader\Shaders</Filter>
     </FxCompile>
   </ItemGroup>

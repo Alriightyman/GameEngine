@@ -8,6 +8,7 @@
 #include "TextureShader.h"
 #include "MultiTextureShader.h"
 #include "ToonShader.h"
+#include "AlphaMapShader.h"
 
 using namespace DirectX;
 namespace Engine
@@ -226,6 +227,10 @@ namespace Engine
 		ToonShader* toonShader = new ToonShader();
 		toonShader->Initialize(this);
 		shaders[ShaderType::TOON].reset(toonShader);
+
+		AlphaMapShader* alphaShader = new AlphaMapShader();
+		alphaShader->Initialize(this);
+		shaders[ShaderType::ALPHAMAP].reset(alphaShader);
 
 #pragma endregion
 
@@ -532,11 +537,11 @@ namespace Engine
 		return;
 	} 
 
-	Texture* Graphics::CreateTexture(std::wstring filename1, std::wstring filename2)
+	Texture* Graphics::CreateTexture(std::wstring filename1, std::wstring filename2,std::wstring filename3)
 	{
 		Texture* texture = new Texture();
 
-		if(!texture->Initialize(this,filename1,filename2))
+		if(!texture->Initialize(this,filename1,filename2,filename3))
 			return nullptr;
 
 		return texture;
@@ -583,5 +588,10 @@ namespace Engine
 	ToonShader* Graphics::GetToonShader()
 	{
 		return  (ToonShader*)shaders[ShaderType::TOON].get();
+	}
+
+	AlphaMapShader* Graphics::GetAlphaMapShader()
+	{
+		return (AlphaMapShader*)shaders[ShaderType::ALPHAMAP].get();
 	}
 }
