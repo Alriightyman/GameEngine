@@ -32,6 +32,10 @@ namespace Engine
 		result = LoadModel(modelFilename);
 		if(!result)
 			return false;
+
+		// Calculate the tangent, binormal, and normals
+		CalculateModelVectors();
+
 		// Initialize the vertex and index buffers.
 		result = InitializeBuffers(graphics);
 		if(!result)
@@ -85,7 +89,7 @@ namespace Engine
 
 	bool Model::InitializeBuffers(Graphics* graphics)
 	{
-		StaticVertex* vertices;
+		Vertex* vertices;
 		unsigned long* indices;
 		D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
 		D3D11_SUBRESOURCE_DATA vertexData, indexData;
@@ -93,7 +97,7 @@ namespace Engine
 		ID3D11Device* device = graphics->GetDevice();
 
 		// Create the vertex array.
-		vertices = new StaticVertex[m_vertexCount];
+		vertices = new Vertex[m_vertexCount];
 		if(!vertices)
 		{
 			return false;
@@ -112,6 +116,8 @@ namespace Engine
 			vertices[i].position = Vector3(m_model[i].x, m_model[i].y, m_model[i].z); 
 			vertices[i].texture = Vector2(m_model[i].tu, m_model[i].tv);
 			vertices[i].normal = Vector3(m_model[i].nx, m_model[i].ny, m_model[i].nz);
+			vertices[i].tangent = Vector3(m_model[i].tx, m_model[i].ty, m_model[i].tz);
+			vertices[i].binormal = Vector3(m_model[i].bx, m_model[i].by, m_model[i].bz);
 
 			indices[i] = i;
 		}
@@ -119,7 +125,7 @@ namespace Engine
 
 		// Set up the description of the static vertex buffer.
 		vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-		vertexBufferDesc.ByteWidth = sizeof(StaticVertex) * m_vertexCount;
+		vertexBufferDesc.ByteWidth = sizeof(Vertex) * m_vertexCount;
 		vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 		vertexBufferDesc.CPUAccessFlags = 0;
 		vertexBufferDesc.MiscFlags = 0;
@@ -195,7 +201,7 @@ namespace Engine
 
 		ID3D11DeviceContext* deviceContext = graphics->GetImmediateContex();
 		// Set vertex buffer stride and offset.
-		stride = sizeof(StaticVertex); 
+		stride = sizeof(Vertex); 
 		offset = 0;
 
 		// Set the vertex buffer to active in the input assembler so it can be rendered.
@@ -284,6 +290,153 @@ namespace Engine
 			delete[] m_model;
 			m_model = 0;
 		}
+	}
+
+	void Model::CalculateModelVectors()
+	{
+		int faceCount, index;
+		TempVertex v1,v2,v3;
+		Vector3 tangent,binormal,normal;
+
+		// calculate the number of faces
+		faceCount = m_vertexCount / 3;
+
+		// initializee the index to the model data
+		index = 0;
+		// go through all the faces and calculate the tangent, binormal, and normal vectors
+		for(int i = 0; i < faceCount; i++)
+		{
+			// get the three vertices for this face
+			v1.x = m_model[index].x;
+			v1.y = m_model[index].y;
+			v1.z = m_model[index].z;
+			v1.tu = m_model[index].tu;
+			v1.tv = m_model[index].tv;
+			v1.nx = m_model[index].nx;
+			v1.ny = m_model[index].ny;
+			v1.nz = m_model[index].nz;
+			index++;
+
+			v2.x = m_model[index].x;
+			v2.y = m_model[index].y;
+			v2.z = m_model[index].z;
+			v2.tu = m_model[index].tu;
+			v2.tv = m_model[index].tv;
+			v2.nx = m_model[index].nx;
+			v2.ny = m_model[index].ny;
+			v2.nz = m_model[index].nz;
+			index++;
+
+			v3.x = m_model[index].x;
+			v3.y = m_model[index].y;
+			v3.z = m_model[index].z;
+			v3.tu = m_model[index].tu;
+			v3.tv = m_model[index].tv;
+			v3.nx = m_model[index].nx;
+			v3.ny = m_model[index].ny;
+			v3.nz = m_model[index].nz;
+			index++;
+
+			// calculate the tangent and binormals
+			CalculateTangentBinormal(v1,v2,v3,tangent,binormal);
+
+			// calculate the normals based on the tangents and binormals
+			CalculateNormal(tangent,binormal,normal);
+
+			m_model[index - 1].nx = normal.x;
+			m_model[index - 1].ny = normal.y;
+			m_model[index - 1].nz = normal.z;
+			m_model[index - 1].tx = tangent.x;
+			m_model[index - 1].ty = tangent.y;
+			m_model[index - 1].tz = tangent.z;
+			m_model[index - 1].bx = binormal.x;
+			m_model[index - 1].by = binormal.y;
+			m_model[index - 1].bz = binormal.z;
+
+			m_model[index - 2].nx = normal.x;
+			m_model[index - 2].ny = normal.y;
+			m_model[index - 2].nz = normal.z;
+			m_model[index - 2].tx = tangent.x;
+			m_model[index - 2].ty = tangent.y;
+			m_model[index - 2].tz = tangent.z;
+			m_model[index - 2].bx = binormal.x;
+			m_model[index - 2].by = binormal.y;
+			m_model[index - 2].bz = binormal.z;
+
+			m_model[index - 3].nx = normal.x;
+			m_model[index - 3].ny = normal.y;
+			m_model[index - 3].nz = normal.z;
+			m_model[index - 3].tx = tangent.x;
+			m_model[index - 3].ty = tangent.y;
+			m_model[index - 3].tz = tangent.z;
+			m_model[index - 3].bx = binormal.x;
+			m_model[index - 3].by = binormal.y;
+			m_model[index - 3].bz = binormal.z;
+		}
+	}
+
+	void Model::CalculateTangentBinormal(TempVertex v1,TempVertex v2,TempVertex v3, Vector3& tangent,Vector3& binormal)
+	{
+		float vector1[3], vector2[3];
+		float tuVector[2], tvVector[2];
+		float den;
+		float length;
+
+		// caclulate the two vectors for this face
+		vector1[0] = v2.x - v1.x;
+		vector1[1] = v2.y - v1.y;
+		vector1[2] = v2.z - v1.z;
+
+		vector2[0] = v3.x - v1.x;
+		vector2[1] = v3.y - v1.y;
+		vector2[2] = v3.z - v1.z;
+
+		// calculate the tu and tv texture space vectors
+		tuVector[0] = v2.tu - v1.tu;
+		tvVector[0] = v2.tv - v1.tv;
+
+		tuVector[1] = v3.tu - v1.tu;
+		tvVector[1] = v3.tv - v1.tv;
+
+		// calculate the denominator of the tangent/binormal equation
+		den = 1.0f/ (tuVector[0] * tvVector[1] - tuVector[1]* tvVector[0]);
+
+		// Calculate the cross products and multiply by the coefficient to get the tangent and binormal.
+		tangent.x = (tvVector[1] * vector1[0] - tvVector[0] * vector2[0]) * den;
+		tangent.y = (tvVector[1] * vector1[1] - tvVector[0] * vector2[1]) * den;
+		tangent.z = (tvVector[1] * vector1[2] - tvVector[0] * vector2[2]) * den;
+
+		binormal.x = (tuVector[0] * vector2[0] - tuVector[1] * vector1[0]) * den;
+		binormal.y = (tuVector[0] * vector2[1] - tuVector[1] * vector1[1]) * den;
+		binormal.z = (tuVector[0] * vector2[2] - tuVector[1] * vector1[2]) * den;
+
+		// Calculate the length of this normal.
+		length = sqrt((tangent.x * tangent.x) + (tangent.y * tangent.y) + (tangent.z * tangent.z));
+			
+		// Normalize the normal and then store it
+		tangent.x = tangent.x / length;
+		tangent.y = tangent.y / length;
+		tangent.z = tangent.z / length;
+
+		// Calculate the length of this normal.
+		length = sqrt((binormal.x * binormal.x) + (binormal.y * binormal.y) + (binormal.z * binormal.z));
+			
+		// Normalize the normal and then store it
+		binormal.x = binormal.x / length;
+		binormal.y = binormal.y / length;
+		binormal.z = binormal.z / length;
+
+	}
+
+	void Model::CalculateNormal(Vector3 tangent, Vector3 binormal, Vector3& normal)
+	{
+		float length = 0;
+
+		// calculate the cross product of the tangent and binormal to get normal
+		normal = tangent.Cross(binormal);
+
+		// normalize the normal
+		normal.Normalize();
 	}
 
 #pragma region MODEL_LIST

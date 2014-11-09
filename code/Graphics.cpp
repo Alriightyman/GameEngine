@@ -9,6 +9,7 @@
 #include "MultiTextureShader.h"
 #include "ToonShader.h"
 #include "AlphaMapShader.h"
+#include "NormalMapShader.h"
 
 using namespace DirectX;
 namespace Engine
@@ -231,6 +232,10 @@ namespace Engine
 		AlphaMapShader* alphaShader = new AlphaMapShader();
 		alphaShader->Initialize(this);
 		shaders[ShaderType::ALPHAMAP].reset(alphaShader);
+		
+		NormalMapShader* normalMap = new NormalMapShader();
+		normalMap->Initialize(this);
+		shaders[ShaderType::NORMALMAP].reset(normalMap);
 
 #pragma endregion
 
@@ -593,5 +598,10 @@ namespace Engine
 	AlphaMapShader* Graphics::GetAlphaMapShader()
 	{
 		return (AlphaMapShader*)shaders[ShaderType::ALPHAMAP].get();
+	}
+
+	NormalMapShader* Graphics::GetNormalMapShader()
+	{
+		return (NormalMapShader*)shaders[ShaderType::NORMALMAP].get();
 	}
 }

@@ -34,20 +34,29 @@ namespace Engine
 			}
 		};
 
-		// has a little skinned data
+		// used for normal, tangent, binormal calculation
+		struct TempVertex
+		{
+			float x,y,z;
+			float tu,tv;
+			float nx,ny,nz;
+		};
+
 		struct Vertex
 		{
 			Vector3 position;
 			Vector2 texture;
 			Vector3 normal;
-			Vector4 weight;
-			Vector4 weightIndex;
+			Vector3 tangent;
+			Vector3 binormal;
 
 			Vertex()
 			{
 				position = Vector3(0,0,0);
 				texture = Vector2(0,0);
 				normal = Vector3(0,0,0);
+				tangent = Vector3(0,0,0);
+				binormal = Vector3(0,0,0);
 			}
 		};
 
@@ -57,6 +66,8 @@ namespace Engine
 			float x,y,z;
 			float tu,tv;
 			float nx,ny,nz;
+			float tx,ty,tz;
+			float bx,by,bz;
 		};
 
 	private:
@@ -80,6 +91,10 @@ namespace Engine
 		bool InitializeBuffers(Graphics*);
 		void ShutdownBuffers();
 		void RenderBuffers(Graphics*);
+
+		void CalculateModelVectors();
+		void CalculateTangentBinormal(TempVertex vertex1, TempVertex vertex2, TempVertex vertex3, Vector3& tangent,Vector3& binormal);
+		void CalculateNormal(Vector3 tangent, Vector3 binormal, Vector3& normal);
 
 		bool LoadModel(std::wstring filename);
 		void ReleaseModel();

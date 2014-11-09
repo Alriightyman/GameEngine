@@ -84,6 +84,12 @@
     <Filter Include="Shaders\AlphaMap Shader\Shaders">
       <UniqueIdentifier>{3664962c-dccb-4535-99aa-864f1c74bf1e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders\NormalMapShader">
+      <UniqueIdentifier>{03cac006-053e-4c33-8316-8d7b2849a550}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\NormalMapShader\Shaders">
+      <UniqueIdentifier>{44a6c20e-a29b-4fae-ba78-d7671419de6d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="code\BackgroundScreen.cpp">
@@ -175,6 +181,9 @@
     </ClCompile>
     <ClCompile Include="code\AlphaMapShader.cpp">
       <Filter>Shaders\AlphaMap Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="code\NormalMapShader.cpp">
+      <Filter>Shaders\NormalMapShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -277,6 +286,9 @@
     <ClInclude Include="code\AlphaMapShader.h">
       <Filter>Shaders\AlphaMap Shader</Filter>
     </ClInclude>
+    <ClInclude Include="code\NormalMapShader.h">
+      <Filter>Shaders\NormalMapShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Content\Shaders\ToonPS.hlsl">
@@ -320,6 +332,12 @@
     </FxCompile>
     <FxCompile Include="Content\Shaders\AlphaMapVS.hlsl">
       <Filter>Shaders\AlphaMap Shader\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Content\Shaders\NormalMapVS.hlsl">
+      <Filter>Shaders\NormalMapShader\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Content\Shaders\NormalMapPS.hlsl">
+      <Filter>Shaders\NormalMapShader\Shaders</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

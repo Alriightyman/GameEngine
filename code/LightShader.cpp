@@ -80,9 +80,6 @@ namespace Engine
 		D3D11_INPUT_ELEMENT_DESC polygonLayout[3];
 		unsigned int numElements;
 		D3D11_SAMPLER_DESC samplerDesc;
-		D3D11_BUFFER_DESC matrixBufferDesc;
-		D3D11_BUFFER_DESC cameraBufferDesc;
-		D3D11_BUFFER_DESC lightBufferDesc;
 		ID3D11Device* device = graphics->GetDevice();
 
 		memset(&vertexShaderBuffer,0,sizeof(ShaderBuffer));

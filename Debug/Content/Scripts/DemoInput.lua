@@ -21,9 +21,9 @@ function RotateYRight(x)
 end
 
 function RotateZLeft(x)
-	RotZ = x + Pi * 0.1
+	RotZ = x + Pi * 0.02
 end
 
 function RotateZRight(x)
-	RotZ = x - Pi * 0.1
+	RotZ = x - Pi * 0.02
 end

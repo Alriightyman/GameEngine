@@ -20,8 +20,9 @@ namespace Engine
 	class TextureShader;
 	class MultiTextureShader;
 	class AlphaMapShader;
+	class NormalMapShader;
 
-	enum ShaderType { LIGHT, TEXTURE,MULTITEXTURE, TOON, LIGHTMAP,ALPHAMAP };
+	enum ShaderType { LIGHT, TEXTURE,MULTITEXTURE, TOON, LIGHTMAP,ALPHAMAP,NORMALMAP };
 
 	class Graphics
 	{
@@ -77,6 +78,7 @@ namespace Engine
 		ToonShader* GetToonShader();
 		LightMapShader* GetLightMapShader();
 		AlphaMapShader* GetAlphaMapShader();
+		NormalMapShader* GetNormalMapShader();
 
 	public:
 		Graphics();

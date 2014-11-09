@@ -11,6 +11,7 @@
 #include "MultiTextureShader.h"
 #include "LightMapShader.h"
 #include "AlphaMapShader.h"
+#include "NormalMapShader.h"
 
 using namespace DirectX;
 using namespace SimpleMath;
@@ -44,15 +45,15 @@ namespace Engine
 		m_camera = new Camera();
 
 		// set the initial position of the camera
-		m_camera->SetPosition(0.0f,0.0f,-10.0f);
+		m_camera->SetPosition(0.0f,0.0f,-5.0f);
 
 		// create the model object
-		m_model.reset( graphics->CreateModel(L"Content/Models/square.txt",graphics->CreateTexture(L"Content/Textures/stone01.dds",L"Content/Textures/dirt01.dds",L"Content/Textures/alpha01.dds")));
+		m_model.reset( graphics->CreateModel(L"Content/Models/cube.txt",graphics->CreateTexture(L"Content/Textures/stone01.dds",L"Content/Textures/bump01.dds",L"")));
 
 		m_light = new Light();
 		m_light->SetAmbientColor(0.15f,0.15f,0.15f,1.0f);
 		m_light->SetDiffuseColor(1.0f,1.0f,1.0f,1.0f);
-		m_light->SetDirection(1.0f,1.0f,-1.0f);
+		m_light->SetDirection(0.0f,0.0f,1.0f);
 		m_light->SetSpecularColor(1.0f,1.0f,1.0f,1.0f);
 		m_light->SetSpecularPower(32.0f);
 
@@ -152,7 +153,8 @@ namespace Engine
 
 			rotation += -thumbstick.x * static_cast<float>(*g_XMPi) * 1.5f;
 
-			m_camera->SetRotation(rotationX,rotationY,rotationZ);
+			m_camera->SetRotation(rotationX,rotationY,0.0f);
+
 		}
 
 	}
@@ -169,33 +171,6 @@ namespace Engine
 		if(IsActive())
 		{
 
-			if(rotation > 360.0f)
-				rotation -= 360.0f;
-
-			Matrix viewMatrix,projMatrix,worldMatrix;
-
-			// generate the view matrix based on the camera's position
-			m_camera->Render();
-
-			// get the world,view, and projection matrices from the camera
-			viewMatrix = m_camera->GetViewMatrix();
-			worldMatrix = m_ScreenManager->GetGraphicsDevice()->GetWorldMatrix();
-			projMatrix = m_ScreenManager->GetGraphicsDevice()->GetProjectionMatrix();
-
-			// set up the frustum
-			m_frustum->Construct(m_ScreenManager->GetGraphicsDevice()->GetScreenDepth(),projMatrix,viewMatrix);
-
-			// set shader parameters
-			//LightShader* lightShader = m_ScreenManager->GetGraphicsDevice()->GetLightShader();
-			//lightShader->SetAmbientColor(m_light->GetAmbientColor());
-			//lightShader->SetCameraPosition(m_camera->GetPosition());
-			//lightShader->SetDiffuseColor(m_light->GetDiffuseColor());
-			//lightShader->SetLightDirection(m_light->GetDirection());
-			//lightShader->SetSpecularColor(m_light->GetSpecularColor());
-			//lightShader->SetSpecularPower(m_light->GetSpecularPower());
-			//lightShader->SetTexture(m_model->GetTextures());
-			//lightShader->SetWolrdViewProjMatrix(worldMatrix,viewMatrix,projMatrix);
-			
 			
 		}
 	}
@@ -217,22 +192,23 @@ namespace Engine
 		viewMatrix = m_camera->GetViewMatrix();
 		worldMatrix = m_ScreenManager->GetGraphicsDevice()->GetWorldMatrix();
 		projMatrix = m_ScreenManager->GetGraphicsDevice()->GetProjectionMatrix();
-
+		worldMatrix = Matrix::CreateRotationX(rotationZ);
 		// set up the frustum
 		m_frustum->Construct(m_ScreenManager->GetGraphicsDevice()->GetScreenDepth(),projMatrix,viewMatrix);
-		m_ScreenManager->GetGraphicsDevice()->GetAlphaMapShader()->SetTexture(m_model->GetTextures());
-		m_ScreenManager->GetGraphicsDevice()->GetAlphaMapShader()->SetWorldViewProjMatrices(worldMatrix,viewMatrix,projMatrix);
+		NormalMapShader* normalMap = m_ScreenManager->GetGraphicsDevice()->GetNormalMapShader();
+		normalMap->SetTexture(m_model->GetTextures());
+		normalMap->SetWorldViewProjMatrices(worldMatrix,viewMatrix,projMatrix);
+		normalMap->SetDiffuseColor(m_light->GetDiffuseColor());
+		normalMap->SetLightDiretion(m_light->GetDirection());
 
 		// clear the screen to a different color
 		graphics->Clear(Colors::Black);
 
 		// render the model
-		graphics->Render(m_model.get(), ShaderType::ALPHAMAP);
+		graphics->Render(m_model.get(), ShaderType::NORMALMAP);
+
 
 		spriteBatch->Begin();
-
-		wstring s = L"Rotation: " + std::to_wstring(rotationY) + L"\nRotationX: " + std::to_wstring(rotationX);
-		font->DrawString(spriteBatch,s.c_str(),Vector2(100,100));
 
 		spriteBatch->End();
 
