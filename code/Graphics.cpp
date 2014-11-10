@@ -48,7 +48,7 @@ namespace Engine
 		DXGI_SWAP_CHAIN_DESC swapChainDesc;
 		D3D_FEATURE_LEVEL featureLevel;
 
-		D3D11_DEPTH_STENCIL_DESC depthDisabledStencilDesc;
+//		D3D11_DEPTH_STENCIL_DESC depthDisabledStencilDesc;
 
 		// Store the vsync setting.
 		m_vsync_enabled = true;

@@ -160,7 +160,6 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev,LPSTR cmdLine,int showCmd)
 	Engine::Game game;
 
 	// Initialize the application object
-	// 1024 × 576 widescreen resolution
 	if(!game.Init(hInst,1280,720,true))
 		return 0;
 

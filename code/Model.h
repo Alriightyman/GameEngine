@@ -28,9 +28,9 @@ namespace Engine
 
 			StaticVertex()
 			{
-				position = Vector3(0,0,0);
-				texture = Vector2(0,0);
-				normal = Vector3(0,0,0);
+				position	= Vector3(0,0,0);
+				texture		= Vector2(0,0);
+				normal		= Vector3(0,0,0);
 			}
 		};
 
@@ -52,11 +52,11 @@ namespace Engine
 
 			Vertex()
 			{
-				position = Vector3(0,0,0);
-				texture = Vector2(0,0);
-				normal = Vector3(0,0,0);
-				tangent = Vector3(0,0,0);
-				binormal = Vector3(0,0,0);
+				position	= Vector3(0,0,0);
+				texture		= Vector2(0,0);
+				normal		= Vector3(0,0,0);
+				tangent		= Vector3(0,0,0);
+				binormal	= Vector3(0,0,0);
 			}
 		};
 

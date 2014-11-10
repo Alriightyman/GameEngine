@@ -153,7 +153,7 @@ namespace Engine
 
 			rotation += -thumbstick.x * static_cast<float>(*g_XMPi) * 1.5f;
 
-			m_camera->SetRotation(rotationX,rotationY,0.0f);
+			
 
 		}
 
@@ -170,7 +170,10 @@ namespace Engine
 
 		if(IsActive())
 		{
+			rotationX *= deltaTime;
+			rotationY *= deltaTime;
 
+			m_camera->SetRotation(rotationX,rotationY,0.0f);
 			
 		}
 	}
