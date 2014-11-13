@@ -28,5 +28,7 @@ public:
 	void RunFunction(const char* name,const char* arg, int numAgrs, int isReturn = 0);
 	void RunFunction(const char* name,double arg, int numAgrs, int isReturn = 0);
 	void RunFunction(const char* name,int numAgrs = 0, int isReturn = 0);
+
+	double GetResultNumber();
 };
 

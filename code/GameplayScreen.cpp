@@ -50,9 +50,21 @@ namespace Engine
 		// create the model object
 		m_model.reset( graphics->CreateModel(L"Content/Models/cube.txt",graphics->CreateTexture(L"Content/Textures/stone01.dds",L"Content/Textures/bump01.dds",L"")));
 
+		Script* script = m_ScreenManager->GetScript();
+		script->LoadScript("Content/Scripts/LevelData.lua");
+
+
 		m_light = new Light();
+		float r,g,b;
+		script->RunFunction("SetLightingR");
+		r = script->GetGlobalNumber("diffuse");
+		script->RunFunction("SetLightingG");
+		g = script->GetGlobalNumber("diffuse");
+		script->RunFunction("SetLightingB");
+		b = script->GetGlobalNumber("diffuse");
+
 		m_light->SetAmbientColor(0.15f,0.15f,0.15f,1.0f);
-		m_light->SetDiffuseColor(1.0f,1.0f,1.0f,1.0f);
+		m_light->SetDiffuseColor(r, g,b,1.0f);
 		m_light->SetDirection(0.0f,0.0f,1.0f);
 		m_light->SetSpecularColor(1.0f,1.0f,1.0f,1.0f);
 		m_light->SetSpecularPower(32.0f);
@@ -141,7 +153,63 @@ namespace Engine
 				script->RunFunction("RotateZRight",rotationZ,1); // rotationZ += static_cast<float>(*g_XMPi) * 0.1f;
 				rotationZ = script->GetGlobalNumber("RotZ");
 			}
-			
+
+			if(input->IsKeyDown(DIK_R))
+			{
+				Color c = m_light->GetDiffuseColor();
+				float r = c.R();
+				if(input->IsKeyDown(DIK_LSHIFT))
+				{
+					script->RunFunction("SubtractColorValue",r,1,1);
+					r = (float)script->GetResultNumber();
+					m_light->SetDiffuseColor(r,c.G(),c.B(),c.A());
+				}
+				else
+				{
+					script->RunFunction("AddColorValue",r,1,1);
+					r = (float)script->GetResultNumber();
+					m_light->SetDiffuseColor(r,c.G(),c.B(),c.A());
+				}
+
+			}
+
+			if(input->IsKeyDown(DIK_G))
+			{
+				Color c = m_light->GetDiffuseColor();
+				float g = c.G();
+				if(input->IsKeyDown(DIK_LSHIFT))
+				{
+					script->RunFunction("SubtractColorValue",g,1,1);
+					g = (float)script->GetResultNumber();
+					m_light->SetDiffuseColor(c.R(),g,c.B(),c.A());
+				}
+				else
+				{
+					script->RunFunction("AddColorValue",g,1,1);
+					g = (float)script->GetResultNumber();
+					m_light->SetDiffuseColor(c.R(),g,c.B(),c.A());
+				}
+
+			}
+
+			if(input->IsKeyDown(DIK_B))
+			{
+				Color c = m_light->GetDiffuseColor();
+				float b = c.B();
+				if(input->IsKeyDown(DIK_LSHIFT))
+				{
+					script->RunFunction("SubtractColorValue",b,1,1);
+					b = (float)script->GetResultNumber();
+					m_light->SetDiffuseColor(c.B(),c.G(),b,c.A());
+				}
+				else
+				{
+					script->RunFunction("AddColorValue",b,1,1);
+					b = (float)script->GetResultNumber();
+					m_light->SetDiffuseColor(c.B(),c.G(),b,c.A());
+				}
+
+			}
 			// check for joystick movements
 			Vector2 thumbstick(gamepadState.thumbSticks.leftX,gamepadState.thumbSticks.leftY);
 

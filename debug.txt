@@ -28,14 +28,8 @@ Draw LoadingScreen...slow
 Draw LoadingScreen...slow
 Draw LoadingScreen...slow
 Draw LoadingScreen...slow
-Draw LoadingScreen...slow
-Draw LoadingScreen...slow
-Draw LoadingScreen...slow
-Draw LoadingScreen...slow
-Draw LoadingScreen...slow
-Draw LoadingScreen...slow
-Draw LoadingScreen...slow
 BackgroundScreen Deleted
+Draw LoadingScreen...slow
 Draw LoadingScreen...slow
 MenuEntry - Exit deleted
 MenuEntry - Options deleted
@@ -68,17 +62,6 @@ MenuEntry - Quit Game deleted
 MenuEntry - Resume Game deleted
 Paused deleted
 LoadingScreen deleted
-MenuEntry -  Loaded
-MenuEntry -  Loaded
-MenuEntry -  Loaded
-MenuEntry -  Loaded
-MenuEntry - Back Loaded
-MenuEntry - Back deleted
-MenuEntry - Elf: 24 deleted
-MenuEntry - Frobnicate: On deleted
-MenuEntry - Language: Deoxyribonucleic deleted
-MenuEntry - Preferred ungulate: Llama deleted
-Options deleted
 MessageBoxScreen Loaded
 MessageBoxScreen deleted
 MenuEntry - Exit deleted

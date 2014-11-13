@@ -347,6 +347,9 @@
     <None Include="Content\Scripts\DemoInput.lua">
       <Filter>Script\scripts</Filter>
     </None>
+    <None Include="Content\Scripts\LevelData.lua">
+      <Filter>Script\scripts</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Info.txt" />

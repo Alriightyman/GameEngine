@@ -185,6 +185,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\Scripts\DemoInput.lua" />
+    <None Include="Content\Scripts\LevelData.lua" />
     <None Include="Content\Scripts\Options.lua" />
   </ItemGroup>
   <ItemGroup>

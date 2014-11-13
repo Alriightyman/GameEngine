@@ -138,3 +138,11 @@ void Script::OutputError( int state )
         lua_pop(m_luaState, 1); //remove error
     }
 }
+
+double Script::GetResultNumber()
+{
+	double value;
+	value = lua_tonumber(m_luaState,-1);
+	lua_pop(m_luaState,1);
+	return value;
+}
