@@ -44,15 +44,16 @@ namespace Engine
 		// create the camera object
 		m_camera = new Camera();
 
+		Script* script = m_ScreenManager->GetScript();
+		script->LoadScript("Content/Scripts/LevelData.lua");
+		script->RunFunction("SetCameraZ",0,1);
+		float z = (float)script->GetResultNumber();
+
 		// set the initial position of the camera
-		m_camera->SetPosition(0.0f,0.0f,-5.0f);
+		m_camera->SetPosition(0.0f,0.0f,z);
 
 		// create the model object
 		m_model.reset( graphics->CreateModel(L"Content/Models/cube.txt",graphics->CreateTexture(L"Content/Textures/stone01.dds",L"Content/Textures/bump01.dds",L"")));
-
-		Script* script = m_ScreenManager->GetScript();
-		script->LoadScript("Content/Scripts/LevelData.lua");
-
 
 		m_light = new Light();
 		float r,g,b;
@@ -65,7 +66,7 @@ namespace Engine
 
 		m_light->SetAmbientColor(0.15f,0.15f,0.15f,1.0f);
 		m_light->SetDiffuseColor(r, g,b,1.0f);
-		m_light->SetDirection(0.0f,0.0f,1.0f);
+		m_light->SetDirection(1.0f,1.0f,1.0f);
 		m_light->SetSpecularColor(1.0f,1.0f,1.0f,1.0f);
 		m_light->SetSpecularPower(32.0f);
 
