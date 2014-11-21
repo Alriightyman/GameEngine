@@ -87,7 +87,7 @@ namespace Engine
 		bool Init(HWND hwnd, int width, int height, bool windowed);
 		void Release();
 
-		void Clear(const float* color,UINT clearFlags = D3D11_CLEAR_DEPTH,float depth = 1.0f,UINT8 stencil = 0);
+		void Clear(const float* color,UINT clearFlags = D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL,float depth = 1.0f,UINT8 stencil = 0);
 		void Present();
 
 		bool OnResize(int width,int height);

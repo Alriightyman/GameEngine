@@ -146,3 +146,24 @@ double Script::GetResultNumber()
 	lua_pop(m_luaState,1);
 	return value;
 }
+
+void Script::Clean() 
+{
+    int n = lua_gettop(m_luaState);
+    lua_pop(m_luaState, n);
+}
+
+std::vector<std::wstring> Script::ReturnArray()
+	{
+		std::vector<std::wstring> v;
+		lua_pushnil(m_luaState);
+		while(lua_next(m_luaState, -2)) 
+		{
+			std::string s((const char*)lua_tostring(m_luaState, -1));
+			v.push_back(std::wstring(s.begin(),s.end()));
+			lua_pop(m_luaState, 1);
+		}
+		Clean();
+
+		return v;
+	}

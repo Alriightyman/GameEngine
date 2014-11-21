@@ -51,9 +51,12 @@ namespace Engine
 
 		// set the initial position of the camera
 		m_camera->SetPosition(0.0f,0.0f,z);
+		script->RunFunction("LoadModelData",0,1);
+
+		std::vector<std::wstring> modelData = script->ReturnArray();
 
 		// create the model object
-		m_model.reset( graphics->CreateModel(L"Content/Models/cube.txt",graphics->CreateTexture(L"Content/Textures/stone01.dds",L"Content/Textures/bump01.dds",L"")));
+		m_model.reset( graphics->CreateModel(modelData[0],graphics->CreateTexture(modelData[1],modelData[2],modelData[3])));
 
 		m_light = new Light();
 		float r,g,b;
@@ -253,6 +256,10 @@ namespace Engine
 		SpriteBatch* spriteBatch = m_ScreenManager->SpriteBatch();
 		// get the graphics object
 		Graphics* graphics = m_ScreenManager->GetGraphicsDevice();
+
+		// must be set or there will be depth problems
+		graphics->GetImmediateContex()->OMSetDepthStencilState(graphics->GetDepthStencilState(),1);
+
 		// get the font object
 		SpriteFont* font = m_ScreenManager->Font();
 		Matrix viewMatrix,projMatrix,worldMatrix;
@@ -274,7 +281,7 @@ namespace Engine
 		normalMap->SetLightDiretion(m_light->GetDirection());
 
 		// clear the screen to a different color
-		graphics->Clear(Colors::Black);
+		graphics->Clear(Colors::Red);
 
 		// render the model
 		graphics->Render(m_model.get(), ShaderType::NORMALMAP);

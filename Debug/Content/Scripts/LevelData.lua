@@ -1,6 +1,6 @@
 
 function SetCameraZ()
-	return -1000.0;
+	return -5.0;
 end
 
 function SetLightingR()
@@ -13,4 +13,8 @@ end
 
 function SetLightingB()
      diffuse = 0.5;
+end
+
+function LoadModelData()
+	return {"Content/Models/test.rtx","Content/Textures/stone01.dds","Content/Textures/bump01.dds","" };
 end

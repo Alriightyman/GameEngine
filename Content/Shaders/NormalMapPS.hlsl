@@ -31,6 +31,7 @@ float4 main(PixelInput input) : SV_TARGET
 	textureColor = shaderTexture[0].Sample(sampleType,input.tex);
 
 	bumpMap = shaderTexture[1].Sample(sampleType,input.tex);
+
 	// expand the range of the normal value from (0,+1) to (-1, +1)
 	bumpMap = (bumpMap * 2.0f) - 1.0f;
 
@@ -47,6 +48,9 @@ float4 main(PixelInput input) : SV_TARGET
 	color = saturate(diffuseColor * lightIntensity);
 
 	color = color * textureColor;
-	
+
+	// fixes alpha problem
+	color[3] = 1.0f;
+
 	return color;
 }

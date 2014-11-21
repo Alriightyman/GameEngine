@@ -10,6 +10,7 @@
 #include "ToonShader.h"
 #include "AlphaMapShader.h"
 #include "NormalMapShader.h"
+#include <iostream>
 
 using namespace DirectX;
 namespace Engine
@@ -47,9 +48,11 @@ namespace Engine
 		int error;
 		DXGI_SWAP_CHAIN_DESC swapChainDesc;
 		D3D_FEATURE_LEVEL featureLevel;
-
+		UINT deviceFlags = 0;
 //		D3D11_DEPTH_STENCIL_DESC depthDisabledStencilDesc;
-
+		#if defined(DEBUG) || defined(_DEBUG)
+//		deviceFlags |= D3D11_CREATE_DEVICE_DEBUG | D3D11_RLDO_DETAIL;
+		#endif
 		// Store the vsync setting.
 		m_vsync_enabled = true;
 
@@ -201,7 +204,7 @@ namespace Engine
 		featureLevel = D3D_FEATURE_LEVEL_11_0;
 
 		// Create the swap chain, Direct3D device, and Direct3D device context.
-		result = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, 0, &featureLevel, 1, 
+		result = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, deviceFlags, &featureLevel, 1, 
 			D3D11_SDK_VERSION, &swapChainDesc, &m_swapChain, &m_device, NULL, &m_deviceContext);
 		if(FAILED(result))
 		{
@@ -286,6 +289,7 @@ namespace Engine
 		depthBufferDesc.CPUAccessFlags = 0;
 		depthBufferDesc.MiscFlags = 0;
 
+		
 		// Create the texture for the depth buffer using the filled out description.
 		result = m_device->CreateTexture2D(&depthBufferDesc, NULL, &m_depthStencilBuffer);
 		if(FAILED(result))
@@ -324,7 +328,7 @@ namespace Engine
 		{
 			return false;
 		}
-
+		
 		// Set the depth stencil state.
 		m_deviceContext->OMSetDepthStencilState(m_depthStencilState, 1);
 
@@ -336,14 +340,13 @@ namespace Engine
 		depthStencilViewDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 		depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 		depthStencilViewDesc.Texture2D.MipSlice = 0;
-
+		
 		// Create the depth stencil view.
 		result = m_device->CreateDepthStencilView(m_depthStencilBuffer, &depthStencilViewDesc, &m_depthStencilView);
 		if(FAILED(result))
 		{
 			return false;
 		}
-
 		// Bind the render target view and depth stencil buffer to the output render pipeline.
 		m_deviceContext->OMSetRenderTargets(1, &m_renderTargetView, m_depthStencilView);
 
@@ -370,49 +373,7 @@ namespace Engine
 		// Now set the rasterizer state.
 		m_deviceContext->RSSetState(m_rasterState);
 
-		D3D11_RASTERIZER_DESC outlineRasterDesc;
-		// Setup the raster description which will determine how and what polygons will be drawn.
-		outlineRasterDesc.AntialiasedLineEnable = false;
-		outlineRasterDesc.CullMode = D3D11_CULL_FRONT;
-		outlineRasterDesc.DepthBias = 0;
-		outlineRasterDesc.DepthBiasClamp = 0.0f;
-		outlineRasterDesc.DepthClipEnable = true;
-		outlineRasterDesc.FillMode = D3D11_FILL_SOLID;
-		outlineRasterDesc.FrontCounterClockwise = true;
-		outlineRasterDesc.MultisampleEnable = false;
-		outlineRasterDesc.ScissorEnable = false;
-		outlineRasterDesc.SlopeScaledDepthBias = 0.0f;
 
-		// Create the rasterizer state from the description we just filled out.
-		result = m_device->CreateRasterizerState(&outlineRasterDesc, &m_outLineRasterState);
-		if(FAILED(result))
-		{
-			return false;
-		}
-
-
-		D3D11_DEPTH_STENCIL_DESC depthDisabledStencilDesc;
-		// Clear the second depth stencil state before setting the parameters.
-		ZeroMemory(&depthDisabledStencilDesc, sizeof(depthDisabledStencilDesc));
-
-		// Now create a second depth stencil state which turns off the Z buffer for 2D rendering.  The only difference is 
-		// that DepthEnable is set to false, all other parameters are the same as the other depth stencil state.
-		depthDisabledStencilDesc.DepthEnable = false;
-		depthDisabledStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-		depthDisabledStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
-		depthDisabledStencilDesc.StencilEnable = true;
-		depthDisabledStencilDesc.StencilReadMask = 0xFF;
-		depthDisabledStencilDesc.StencilWriteMask = 0xFF;
-		depthDisabledStencilDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-		depthDisabledStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
-		depthDisabledStencilDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-		depthDisabledStencilDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
-		depthDisabledStencilDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-		depthDisabledStencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
-		depthDisabledStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-		depthDisabledStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
-
-		result = m_device->CreateDepthStencilState(&depthDisabledStencilDesc, &m_depthDisabledStencilState);
 		// Setup the viewport for rendering.
 		m_viewport.Width = (float)width;
 		m_viewport.Height = (float)height;

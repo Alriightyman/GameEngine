@@ -2,6 +2,8 @@
 #include "Lua\lua.hpp"
 #include "Lua\LuaBridge\LuaBridge.h"
 #include <string>
+#include <vector>
+
 class Script
 {
 private:
@@ -30,5 +32,10 @@ public:
 	void RunFunction(const char* name,int numAgrs = 0, int isReturn = 0);
 
 	double GetResultNumber();
+	void Clean();
+
+
+	std::vector<std::wstring> ReturnArray();
+	
 };
 
