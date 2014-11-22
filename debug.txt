@@ -33,8 +33,6 @@ Draw LoadingScreen...slow
 Draw LoadingScreen...slow
 Draw LoadingScreen...slow
 Draw LoadingScreen...slow
-Draw LoadingScreen...slow
-Draw LoadingScreen...slow
 BackgroundScreen Deleted
 Draw LoadingScreen...slow
 MenuEntry - Exit deleted

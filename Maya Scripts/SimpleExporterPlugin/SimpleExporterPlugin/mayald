@@ -1,0 +1,86 @@
+#! /bin/sh
+#Tag 0x00270237
+
+########################################################################
+#
+#  Copyright (c) 1997-2001 by Alias|Wavefront, Inc., and Alias|Wavefront,
+#  a division of Silicon Graphics Canada Ltd.  All rights reserved.
+#
+#  mayald is used to link "library mode" maya applications.  It links
+#  the .o's of the application against the .so's of Maya in the order
+#  necessary to acheive proper loading of the application.
+#
+#  The location of the Maya .so files is determined by the value of
+#  environment variable "MAYA_LOCATION".  If this is not set, then the
+#  default install location of "/usr/aw/maya4.0" is used.
+#
+########################################################################
+
+
+MAYA_LOCATION=${MAYA_LOCATION:="/usr/aw/maya5.0"}
+
+case `uname` in
+    IRIX*)
+		LDCMD=CC
+		WARNFLAGS="-Wl,-woff,84 -Wl,-woff,85"
+		LDFLAGS="${WARNFLAGS}"
+		LIBS="\
+		  -L${MAYA_LOCATION}/lib \
+		  -L/usr/lib32/internal \
+		  -lOpenMayalib \
+		  -lOpenMaya \
+		  -lAnimSlice \
+		  -lDeformSlice \
+		  -lDynSlice \
+		  -lKinSlice \
+		  -lModelSlice \
+		  -lNurbsSlice \
+		  -lPolySlice \
+		  -lProjectSlice \
+		  -lImage \
+		  -lShared \
+		  -lTranslators \
+		  -lDataModel \
+		  -lRenderModel \
+		  -lNurbsEngine \
+		  -lDependEngine \
+		  -lCommandEngine \
+		  -lFoundation \
+		  -lStringCatalog \
+		  -lStackTrace \
+		  -lm \
+		  -lcl \
+		  -lfpe "
+		;;
+
+    Linux*)
+		LDCMD=g++
+		WARNFLAGS=
+		LDFLAGS="${WARNFLAGS} -Wl,-rpath ${MAYA_LOCATION}/lib"
+		LIBS="-L${MAYA_LOCATION}/lib \
+		  -lOpenMayalib \
+		  -lOpenMaya \
+		  -lOpenMayaAnim \
+		  -lAnimSlice \
+		  -lDeformSlice \
+		  -lDynSlice \
+		  -lKinSlice \
+		  -lModelSlice \
+		  -lNurbsSlice \
+		  -lPolySlice \
+		  -lProjectSlice \
+		  -lImage \
+		  -lShared \
+		  -lTranslators \
+		  -lDataModel \
+		  -lRenderModel \
+		  -lNurbsEngine \
+		  -lDependEngine \
+		  -lCommandEngine \
+		  -lFoundation \
+		  -lStringCatalog \
+		  -lm -ldl"
+		;;
+esac
+
+${LDCMD} ${LDFLAGS} $* ${LIBS}

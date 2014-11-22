@@ -50,7 +50,7 @@ namespace Engine
 		float z = (float)script->GetResultNumber();
 
 		// set the initial position of the camera
-		m_camera->SetPosition(0.0f,0.0f,z);
+		m_camera->SetPosition(0.0f,-1.0f,z);
 		script->RunFunction("LoadModelData",0,1);
 
 		std::vector<std::wstring> modelData = script->ReturnArray();
@@ -69,7 +69,7 @@ namespace Engine
 
 		m_light->SetAmbientColor(0.15f,0.15f,0.15f,1.0f);
 		m_light->SetDiffuseColor(r, g,b,1.0f);
-		m_light->SetDirection(1.0f,1.0f,1.0f);
+		m_light->SetDirection(0.0f,-1.0f,0.0f);
 		m_light->SetSpecularColor(1.0f,1.0f,1.0f,1.0f);
 		m_light->SetSpecularPower(32.0f);
 
@@ -281,7 +281,7 @@ namespace Engine
 		normalMap->SetLightDiretion(m_light->GetDirection());
 
 		// clear the screen to a different color
-		graphics->Clear(Colors::Red);
+		graphics->Clear(Colors::CornflowerBlue);
 
 		// render the model
 		graphics->Render(m_model.get(), ShaderType::NORMALMAP);
