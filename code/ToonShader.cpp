@@ -34,13 +34,13 @@ namespace Engine
 		ShutdownShader();
 	}
 
-	void ToonShader::Render(Graphics* graphics, int indexCount)
+	void ToonShader::Render(Graphics* graphics)
 	{
 
 		SetShaderParameters(graphics);
 			
 
-		RenderShader(graphics,indexCount);
+		RenderShader(graphics);
 	}
 
 
@@ -231,7 +231,7 @@ namespace Engine
 		deviceContext->VSSetConstantBuffers(bufferNumber, 1, cBuffer);
 
 		// Set shader texture resource in the pixel shader.
-		deviceContext->PSSetShaderResources(0, 1, &m_texture);
+		deviceContext->PSSetShaderResources(0, 1, m_textures->GetTextures());
 
 		// Copy the lighting variables into the constant buffer.
 		m_lightBuffer.Data.Intensity = 1.0f;
@@ -248,33 +248,28 @@ namespace Engine
 
 	}
 
-	void ToonShader::RenderShader(Graphics* graphics, int indexCount)
+	void ToonShader::RenderShader(Graphics* graphics)
 	{
 		// get our graphics devices
 		auto deviceContext = graphics->GetImmediateContex();
 		auto device = graphics->GetDevice();
 		// set the layout
 		deviceContext->IASetInputLayout(m_layout);
-		if(m_drawLine)
-		{
-			// draw the outline first
-			deviceContext->RSSetState(graphics->GetOutlineRasterState());
-			deviceContext->VSSetShader(m_outlineVertexShader,0,0);
-			deviceContext->PSSetShader(m_outlinePixelShader,0,0);
-			deviceContext->DrawIndexed(indexCount,0,0);
-		}
+		//if(m_drawLine)
+		//{
+		//	// draw the outline first
+		//	deviceContext->RSSetState(graphics->GetOutlineRasterState());
+		//	deviceContext->VSSetShader(m_outlineVertexShader,0,0);
+		//	deviceContext->PSSetShader(m_outlinePixelShader,0,0);
+		//}
 		// draw the rest of the model in a toony way
 		deviceContext->RSSetState(graphics->GetRasterState()); // set the renderstate
 		deviceContext->VSSetShader(m_vertexShader,0,0);    // set vertexShader 
 		deviceContext->PSSetShader(m_pixelShader,0,0);     // set pixelShader
 		deviceContext->PSSetSamplers(0,1,&m_sampleState);      // set the sampler State
-		deviceContext->DrawIndexed(indexCount,0,0);			   // draw the indexed model
+
 	}
 
-	void ToonShader::SetTexture(Texture* texture)
-	{
-		m_texture = texture->GetTextures()[0];
-	}
 	void ToonShader::SetLightDirection(Vector3& lightDirection)
 	{
 		m_lightDirection = lightDirection;

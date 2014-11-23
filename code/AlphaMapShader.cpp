@@ -29,12 +29,12 @@ namespace Engine
 		ShutdownShader();
 	}
 
-	void AlphaMapShader::Render(Graphics* graphics,int indexCount)
+	void AlphaMapShader::Render(Graphics* graphics)
 	{
 
 		SetShaderParameters(graphics);
 
-		RenderShader(graphics,indexCount);
+		RenderShader(graphics);
 	}
 
 	bool AlphaMapShader::InitializeShader(Graphics* graphics, std::wstring vsFilename, std::wstring psFilename)
@@ -140,10 +140,10 @@ namespace Engine
 
 		ID3D11Buffer* buffer = m_matrixBuffer.Buffer();
 		context->VSSetConstantBuffers(bufferNumber,1,&buffer);
-		context->PSSetShaderResources(0,3,m_texture->GetTextures());
+		context->PSSetShaderResources(0,3,m_textures->GetTextures());
 	}
 
-	void AlphaMapShader::RenderShader(Graphics* graphics,int indexCount)
+	void AlphaMapShader::RenderShader(Graphics* graphics)
 	{
 		ID3D11DeviceContext* context= graphics->GetImmediateContex();
 
@@ -152,13 +152,6 @@ namespace Engine
 		// set the vertex and pixel shaders
 		context->VSSetShader(m_vertexShader,0,0);
 		context->PSSetShader(m_pixelShader,0,0);
-
-		// 
-		context->DrawIndexed(indexCount,0,0);
 	}
 
-	void AlphaMapShader::SetTexture(Texture* texture)
-	{
-		m_texture = texture;
-	} 
 }

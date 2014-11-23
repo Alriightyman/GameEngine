@@ -17,7 +17,6 @@ namespace Engine
 		m_worldMatrix = Matrix::Identity;
 		m_viewMatrix = Matrix::Identity;
 		m_projectionMatrix = Matrix::Identity;
-		m_texture = 0;
 		m_lightDirection = Vector3::Zero;
 		m_diffuseColor = Color(1,1,1,1);
 		m_ambientColor = Color(1,1,1,1);
@@ -54,14 +53,14 @@ namespace Engine
 	}
 
 
-	void LightShader::Render(Graphics* graphics, int indexCount)
+	void LightShader::Render(Graphics* graphics)
 	{
 
 		// Set the shader parameters that it will use for rendering.
 		SetShaderParameters(graphics);
 
 		// Now render the prepared buffers with the shader.
-		RenderShader(graphics, indexCount);
+		RenderShader(graphics);
 	}
 
 
@@ -244,7 +243,7 @@ namespace Engine
 		deviceContext->VSSetConstantBuffers(bufferNumber, 1, &buffer);
 
 		// Set shader texture resource in the pixel shader.
-		deviceContext->PSSetShaderResources(0, 1, &m_texture);
+		deviceContext->PSSetShaderResources(0, 1, m_textures->GetTextures());
 
 		// Copy the lighting variables into the constant buffer.
 		m_lightBuffer.Data.ambientColor = m_ambientColor;
@@ -264,7 +263,7 @@ namespace Engine
 	}
 
 
-	void LightShader::RenderShader(Graphics* graphics, int indexCount)
+	void LightShader::RenderShader(Graphics* graphics)
 	{
 		ID3D11DeviceContext* deviceContext = graphics->GetImmediateContex();
 		// Set the vertex input layout.
@@ -277,8 +276,6 @@ namespace Engine
 		// Set the sampler state in the pixel shader.
 		deviceContext->PSSetSamplers(0, 1, &m_sampleState);
 
-		// Render the triangle.
-		deviceContext->DrawIndexed(indexCount, 0, 0);
 	} 
 
 
@@ -299,10 +296,6 @@ namespace Engine
 		m_worldMatrix = world;
 		m_viewMatrix = view; 
 		m_projectionMatrix = proj;
-	}
-	void LightShader::SetTexture(Texture* texture)
-	{
-		m_texture = texture->GetTextures()[0];
 	}
 	void LightShader::SetLightDirection(const Vector3& lightDirection)
 	{

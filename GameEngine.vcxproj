@@ -230,7 +230,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(DXTK_DIR)\Inc;$(IncludePath)</IncludePath>
-    <LibraryPath>$(DXTK_DIR)\Bin\Desktop_2012\Win32\Release\;C:\Users\Alriighytman\Documents\Programming\C++\Direct3D\Direct3D11\GameEngine\code\Lua;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(DXTK_DIR)\Bin\Desktop_2012\Win32\Release\;C:\Users\Alriighytman\Documents\GitHub\GameEngine\code\Lua;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -239,6 +239,8 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS=1;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

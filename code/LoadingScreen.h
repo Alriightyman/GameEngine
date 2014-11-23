@@ -34,11 +34,11 @@ namespace Engine
 #pragma region Initialization
 
 	protected:
-		LoadingScreen(Engine::ScreenManager* m, bool m_LoadingIsSlow,std::vector<GameScreen*> screenToLoad);
+		LoadingScreen(Engine::ScreenManager* m, bool m_LoadingIsSlow,std::vector<GameScreen*>& screenToLoad);
 
 	public:
 		~LoadingScreen(void);
-		static void Load(Engine::ScreenManager* screenManager,bool loadingIsSlow,PlayerIndex& playerIndex,std::vector<GameScreen*> screensToLoad);
+		static void Load(Engine::ScreenManager* screenManager,bool loadingIsSlow,PlayerIndex& playerIndex,std::vector<GameScreen*>& screensToLoad);
 #pragma endregion
 
 #pragma region Update and Draw

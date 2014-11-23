@@ -12,7 +12,7 @@ namespace Engine
 
 	ScreenManager::ScreenManager(Engine::Graphics* graphics) :
 		font(0),spriteBatch(0),isInitialized(false),quit(false),traceEnabled(false),
-		m_graphics(graphics),m_script(0)
+		m_graphics(graphics),m_script(0),input(0)
 	{
 
 	}
@@ -21,18 +21,59 @@ namespace Engine
 	ScreenManager::~ScreenManager(void)
 	{
 		screensToUpdate.clear();
+
 		while(!screens.empty())
 		{
 			GameScreen* screen = screens.back();
 			screens.pop_back();
-			delete screen;
+			if(screen)
+			{
+				screen->UnLoad();
+				delete screen;
+				screen = 0;
+			}
+		}
+
+		while(!screens.empty())
+		{
+			GameScreen* screen = screens.back();
+			screens.pop_back();
+			if(screen)
+			{
+				screen->UnLoad();
+				delete screen;
+				screen = 0;
+			}
 		}
 
 		if (font)
+		{
 			delete font;
-
+		}
 		if(m_script)
+		{
 			delete m_script;
+		}
+
+		if(spriteBatch)
+		{
+			delete spriteBatch;
+			spriteBatch = 0;
+		}
+
+		if(blankTexture)
+		{
+			blankTexture->Release();
+			blankTexture = 0;
+		}
+
+		if (input)
+		{
+			delete input;
+			input = 0;
+		}
+
+
 	}
 
 
@@ -217,6 +258,7 @@ namespace Engine
 			GameScreen* s = screensToDelete.back();
 			screensToDelete.pop_back();
 			delete s;
+			s = 0;
 		}
 	}
 

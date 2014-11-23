@@ -82,11 +82,11 @@ MLL_EXPORT MStatus initializePlugin( MObject obj )
 {
 	MStatus status;
 
-	std::cout << "A Simple File translator plugin example. Rob Bateman 2004 [robthebloke@hotmail.com]" << std::endl;
-	MFnPlugin plugin( obj, "Rob Bateman", "3.0", "Any");
+	std::cout << "Exporter for my game engine model format." << std::endl;
+	MFnPlugin plugin( obj, "Ryan Turner", "1.0", "Any");
 
 	// Register the translator with the system
-	status =  plugin.registerFileTranslator( "SimpleExport", "none",
+	status =  plugin.registerFileTranslator( "RTXExporter", "none",
 		MayaFileTranslator::creator,
 		(char*)g_OptionScript,
 		(char*)g_DefaultOptions );  
@@ -108,7 +108,7 @@ MLL_EXPORT MStatus initializePlugin( MObject obj )
 MLL_EXPORT MStatus uninitializePlugin( MObject obj )
 {
 	MFnPlugin plugin( obj );
-	MStatus status =  plugin.deregisterFileTranslator( "SimpleExport" );
+	MStatus status =  plugin.deregisterFileTranslator( "RTXExporter" );
 	if (status != MS::kSuccess) {
 		status.perror("MayaExportCommand::deregisterFileTranslator");
 	}

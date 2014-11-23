@@ -17,6 +17,7 @@ namespace Engine
 	}
 
 	void GameScreen::Load(){}
+
 	void GameScreen::UnLoad(){}
 
 	/// <summary>

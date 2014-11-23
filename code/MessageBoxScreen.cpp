@@ -31,7 +31,11 @@ namespace Engine
 
 	MessageBoxScreen::~MessageBoxScreen(void)
 	{
-		debug.Print("MessageBoxScreen deleted");
+		if(m_GradientTexture)
+		{
+			m_GradientTexture->Release();
+			m_GradientTexture = 0;
+		}
 	}
 
 	void MessageBoxScreen::Load()

@@ -26,6 +26,7 @@ namespace Engine
 		ID3D11ShaderResourceView** GetTextures();
 
 	private:
+		int count;
 		ID3D11ShaderResourceView* m_textures[3];
 	};
 

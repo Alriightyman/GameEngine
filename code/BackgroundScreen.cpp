@@ -18,7 +18,7 @@ namespace Engine
 
 	BackgroundScreen::~BackgroundScreen(void)
 	{
-		debug.Print("BackgroundScreen Deleted");
+		UnLoad();
 	}
 
 	void BackgroundScreen::Load()
@@ -32,7 +32,11 @@ namespace Engine
 
 	void BackgroundScreen::UnLoad()
 	{
-		m_BackgroundTexture->Release();
+		if(m_BackgroundTexture)
+		{
+			m_BackgroundTexture->Release();
+			m_BackgroundTexture = 0;
+		}
 	}
 
 	void BackgroundScreen::Update(float deltaTime, bool otherScreenHasFocus, bool coveredByOtherScreen)

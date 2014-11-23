@@ -15,7 +15,7 @@ namespace Engine
 		m_viewMatrix = Matrix::Identity;
 		m_projectionMatrix = Matrix::Identity;
 
-		m_texture = 0;
+
 	}
 
 	TextureShader::~TextureShader()
@@ -36,11 +36,11 @@ namespace Engine
 		ShutdownShader();
 	}
 
-	void TextureShader::Render(Graphics* graphics,int indexCount)
+	void TextureShader::Render(Graphics* graphics)
 	{
 		SetShaderParameters(graphics);
 
-		RenderShader(graphics,indexCount);
+		RenderShader(graphics);
 	}
 
 
@@ -161,10 +161,10 @@ namespace Engine
 		buffer = m_matrixBuffer.Buffer();
 		context->VSSetConstantBuffers(bufferNumber,1,&buffer);
 
-		context->PSSetShaderResources(0,1,&m_texture);
+		context->PSSetShaderResources(0,1,m_textures->GetTextures());
 	}
 
-	void TextureShader::RenderShader(Graphics* graphics,int indexCount)
+	void TextureShader::RenderShader(Graphics* graphics)
 	{
 		// set the vertex layout
 		ID3D11DeviceContext* context = graphics->GetImmediateContex();
@@ -175,13 +175,5 @@ namespace Engine
 		context->PSSetShader(m_pixelShader,0,0);
 
 		context->PSSetSamplers(0,1,&m_sampleState);
-
-		// render the triangle
-		context->DrawIndexed(indexCount,0,0);
 	} 
-
-	void TextureShader::SetTexture(Texture* texture)
-	{
-		m_texture = texture->GetTextures()[0];
-	}
 }

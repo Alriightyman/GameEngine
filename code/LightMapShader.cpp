@@ -8,7 +8,6 @@ namespace Engine
 		m_vertexShader = 0;
 		m_pixelShader = 0;
 		m_layout = 0;
-		m_texture = 0;
 	}
 
 	LightMapShader::~LightMapShader() {}
@@ -27,12 +26,12 @@ namespace Engine
 		ShutdownShader();
 	}
 
-	void LightMapShader::Render(Graphics* graphics, int indexCount)
+	void LightMapShader::Render(Graphics* graphics)
 	{
 		// set the shader parameters it will use for rendering
 		SetShaderParameters(graphics);
 		// render the prepared buffers with the shader
-		RenderShader(graphics,indexCount);
+		RenderShader(graphics);
 	}
 
 	bool LightMapShader::InitializeShader(Graphics* graphics,std::wstring vertexShaderFilename, std::wstring pixelShaderFilename)
@@ -139,10 +138,10 @@ namespace Engine
 		ID3D11Buffer* buffer = m_matrixBuffer.Buffer();
 		deviceContext->VSSetConstantBuffers(bufferNumber,1,&buffer);
 
-		deviceContext->PSSetShaderResources(0,2,m_texture->GetTextures());
+		deviceContext->PSSetShaderResources(0,2,m_textures->GetTextures());
 	}
 
-	void LightMapShader::RenderShader(Graphics* graphics,int indexCount)
+	void LightMapShader::RenderShader(Graphics* graphics)
 	{
 		ID3D11DeviceContext* context = graphics->GetImmediateContex();
 		context->IASetInputLayout(m_layout);
@@ -153,13 +152,6 @@ namespace Engine
 
 		//
 		context->PSSetSamplers(0,1,&m_sampleState);
-
-		// 
-		context->DrawIndexed(indexCount,0,0);
 	}
 
-	void LightMapShader::SetTexture(Texture* texture)
-	{
-		m_texture = texture;
-	}
 }

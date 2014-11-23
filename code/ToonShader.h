@@ -29,7 +29,6 @@ namespace Engine
 			float Intensity;
 		};
 	public:
-		void SetTexture(Texture* texture);
 		void SetLightDirection(Vector3& lightDirection);
 		void SetDiffuseColor(Color& diffuseColor);
 		void IsDrawLine(bool isDrawLine);
@@ -39,7 +38,7 @@ namespace Engine
 
 		bool Initialize(Graphics* graphics) override;
 		void Shutdown();
-		void Render(Graphics* graphics, int indexCount) override;;
+		void Render(Graphics* graphics) override;;
 	private:
 		bool InitializeShader(Graphics* graphics, std::wstring,std::wstring) override {return true;}
 
@@ -47,11 +46,10 @@ namespace Engine
 			std::wstring, std::wstring);
 		void ShutdownShader() override;;
 		void SetShaderParameters(Graphics* graphics)  override;
-		void RenderShader(Graphics*,int) override;
+		void RenderShader(Graphics*) override;
 
 
 	private:
-		ID3D11ShaderResourceView* m_texture;
 		Vector3 m_lightDirection;
 		Color m_diffuseColor;
 		bool m_drawLine;

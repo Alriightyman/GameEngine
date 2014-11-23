@@ -28,12 +28,12 @@ namespace Engine
 		ShutdownShader();
 	}
 
-	void MultiTextureShader::Render(Graphics* graphics,int indexCount)
+	void MultiTextureShader::Render(Graphics* graphics)
 	{
 		SetShaderParameters(graphics);
 
 		// render the buffers
-		RenderShader(graphics,indexCount);
+		RenderShader(graphics);
 	}
 
 
@@ -169,11 +169,11 @@ namespace Engine
 		ID3D11Buffer* constBuffer[] = { m_matrixBuffer.Buffer() };
 		deviceContext->VSSetConstantBuffers(bufferNumber,1,constBuffer);
 
-		deviceContext->PSSetShaderResources(0,2,m_textureArray);
+		deviceContext->PSSetShaderResources(0,2,m_textures->GetTextures());
 
 	}
 
-	void MultiTextureShader::RenderShader(Graphics* graphics,int indexCount)
+	void MultiTextureShader::RenderShader(Graphics* graphics)
 	{
 		ID3D11DeviceContext* deviceContext = graphics->GetImmediateContex();
 		deviceContext->IASetInputLayout(m_layout);
@@ -185,12 +185,5 @@ namespace Engine
 		// set the sampler state
 		deviceContext->PSSetSamplers(0,1,&m_sampleState);
 
-		// render
-		deviceContext->DrawIndexed(indexCount,0,0);
-	}
-
-	void MultiTextureShader::SetTextureArray(Texture* texture)
-	{
-		m_textureArray = texture->GetTextures();
 	}
 }

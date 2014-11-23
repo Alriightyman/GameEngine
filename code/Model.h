@@ -6,6 +6,8 @@
 #include <fstream>
 #include "texture.h"
 #include "Shader.h"
+#include <vector> 
+
 using namespace DirectX::SimpleMath;
 
 /* 
@@ -49,15 +51,6 @@ namespace Engine
 			Vector3 normal;
 			Vector3 tangent;
 			Vector3 binormal;
-
-			Vertex()
-			{
-				position	= Vector3(0,0,0);
-				texture		= Vector2(0,0);
-				normal		= Vector3(0,0,0);
-				tangent		= Vector3(0,0,0);
-				binormal	= Vector3(0,0,0);
-			}
 		};
 
 
@@ -69,12 +62,21 @@ namespace Engine
 			float tx,ty,tz;
 			float bx,by,bz;
 		};
-
+		struct Mesh
+		{
+			int Start;
+			int Count;
+			//std::vector<Vertex> Vertices;
+			int IndexCount;
+			ModelData* Model;
+			ID3D11Buffer *VertexBuffer, *IndexBuffer;
+			Texture* Textures;
+			Mesh();
+			~Mesh();
+		};
 	private:
-		ID3D11Buffer *m_vertexBuffer, *m_indexBuffer;
-		int m_vertexCount, m_indexCount;
-		Texture* m_Textures;
-		ModelData* m_model;
+		int m_vertexCount;
+		std::vector<Mesh*> m_meshes;
 
 	public:
 		Model();
@@ -82,24 +84,20 @@ namespace Engine
 		~Model();
 
 		void Shutdown();
-		int GetIndexCount();
-		Texture* GetTextures();
 	protected:
 		bool Initialize(Graphics* graphics,std::wstring modelFilename, Texture* texture);
 		void Render(Graphics* graphics, Shader* shader);
 	private:
 		bool InitializeBuffers(Graphics*);
 		void ShutdownBuffers();
-		void RenderBuffers(Graphics*);
+		void RenderBuffers(Graphics*,Mesh* mesh);
 
 		void CalculateModelVectors();
 		void CalculateTangentBinormal(TempVertex vertex1, TempVertex vertex2, TempVertex vertex3, Vector3& tangent,Vector3& binormal);
 		void CalculateNormal(Vector3 tangent, Vector3 binormal, Vector3& normal);
 
 		bool LoadModel(std::wstring filename);
-		void ReleaseModel();
 
-		void ReleaseTextures();
 	};
 
 

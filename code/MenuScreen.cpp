@@ -23,9 +23,8 @@ namespace Engine
 			MenuEntry* entry = m_MenuEntries.back();
 			m_MenuEntries.pop_back();
 			delete entry;
+			entry = 0;
 		}
-		std::string dtext = m_MenuTitle + " deleted";
-		debug.Print((char*)dtext.c_str());
 	}
 
 	void MenuScreen::HandleInput(InputState* input)

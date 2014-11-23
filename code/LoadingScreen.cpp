@@ -6,9 +6,8 @@ using namespace DirectX;
 namespace Engine
 {
 
-	LoadingScreen::LoadingScreen(Engine::ScreenManager* m,bool loadingIsSlow,std::vector<GameScreen*> screensToLoad) : m_OtherScreensAreGone(false)
+	LoadingScreen::LoadingScreen(Engine::ScreenManager* m,bool loadingIsSlow,std::vector<GameScreen*>& screensToLoad) : m_OtherScreensAreGone(false)
 	{
-		debug.Print("LoadingScreen Loaded!");
 		this->m_LoadingIsSlow = loadingIsSlow;
 		this->m_ScreensToLoad = screensToLoad;
 
@@ -20,7 +19,7 @@ namespace Engine
 		debug.Print("LoadingScreen deleted");
 	}
 
-	void LoadingScreen::Load(Engine::ScreenManager* screenManager,bool loadingIsSlow,PlayerIndex& playerIndex,std::vector<GameScreen*> screensToLoad)
+	void LoadingScreen::Load(Engine::ScreenManager* screenManager,bool loadingIsSlow,PlayerIndex& playerIndex,std::vector<GameScreen*>& screensToLoad)
 	{
 		// tell each current screens to transition off
 		std::vector<GameScreen*> screens = screenManager->GetScreens();
@@ -70,7 +69,6 @@ namespace Engine
 		// to bother drawing the message.
 		if (m_LoadingIsSlow)
 		{
-			debug.Print("Draw LoadingScreen...slow");
 			SpriteBatch* spriteBatch = m_ScreenManager->SpriteBatch();
 			//		ID3DXFont* font = m_ScreenManager->Font(FONT24);
 			SpriteFont* font = m_ScreenManager->Font();

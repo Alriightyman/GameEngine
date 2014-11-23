@@ -123,7 +123,7 @@ MStatus	MayaFileTranslator::writer( const MFileObject& file,
 
 	//	flags that are created by the option script
 	//
-	const MString	namesonlyFlag	("File type");
+	const MString	namesonlyFlag	("FileType");
 
 	//	set initial default flags incase something has 
 	//	gone wrong on the maya side
@@ -210,7 +210,7 @@ MStatus	MayaFileTranslator::writer( const MFileObject& file,
 		}
 
 		for(int i = 0; i < m_meshes.size(); i++)
-			m_totalVertexCount += m_meshes[i].m_vertexIndices.size();
+			m_totalVertexCount += m_meshes[i]->m_vertexIndices.size();
 
 		WriteRasterTekFormatAscii(ofs);
 
@@ -218,6 +218,7 @@ MStatus	MayaFileTranslator::writer( const MFileObject& file,
 		
 		m_meshes.clear();
 		m_meshes.resize(0);
+		m_totalVertexCount = 0;
 	}
 	return MS::kSuccess;
 }
@@ -235,15 +236,15 @@ void MayaFileTranslator::WriteRasterTekFormatAscii(std::ofstream& fout)
 
 	for(int m = 0; m < m_meshes.size(); m++)
 	{
-		for (int i = 0; i < m_meshes[m].m_vertexIndices.size(); i++)
+		for (int i = 0; i < m_meshes[m]->m_vertexIndices.size(); i++)
 		{
-			float vIndex = m_meshes[m].m_vertexIndices[i];
-			float tIndex = m_meshes[m].m_uvIndices[i];
-			float nIndex = m_meshes[m].m_normalIndices[i];
+			float vIndex = m_meshes[m]->m_vertexIndices[i];
+			float tIndex = m_meshes[m]->m_uvIndices[i];
+			float nIndex = m_meshes[m]->m_normalIndices[i];
 
-			fout << m_meshes[m].m_vertices[vIndex].x << ' ' << m_meshes[m].m_vertices[vIndex].y << ' ' << -m_meshes[m].m_vertices[vIndex].z << ' '
-				 << m_meshes[m].m_uvs[tIndex].x << ' ' << 1.0f - m_meshes[m].m_uvs[tIndex].y << ' '
-				 << m_meshes[m].m_normals[nIndex].x << ' ' << m_meshes[m].m_normals[nIndex].y << ' ' << -m_meshes[m].m_normals[nIndex].z << endl;
+			fout << m_meshes[m]->m_vertices[vIndex].x << ' ' << m_meshes[m]->m_vertices[vIndex].y << ' ' << -m_meshes[m]->m_vertices[vIndex].z << ' '
+				 << m_meshes[m]->m_uvs[tIndex].x << ' ' << 1.0f - m_meshes[m]->m_uvs[tIndex].y << ' '
+				 << m_meshes[m]->m_normals[nIndex].x << ' ' << m_meshes[m]->m_normals[nIndex].y << ' ' << -m_meshes[m]->m_normals[nIndex].z << endl;
 		}
 	}
 }
@@ -259,8 +260,9 @@ void MayaFileTranslator::CreateSubsetTable(std::ofstream& fout)
 	{
 		fout << "Start: " << startCount << endl;
 		oldCount = startCount;
-		startCount += m_meshes[m].m_vertexIndices.size();
+		startCount += m_meshes[m]->m_vertexIndices.size();
 		fout << "Size: " << (startCount - oldCount) << endl;
+		//startCount++;
 	}
 }
 void MayaFileTranslator::LoadMesh(MObject& item)
@@ -270,15 +272,15 @@ void MayaFileTranslator::LoadMesh(MObject& item)
 
 	if(!fn.isIntermediateObject() )
 	{
-		Mesh mesh;
+		Mesh* mesh = new Mesh();
 
 		for (int k = 0; k < fn.parentCount(); k++)
 		{
 			// get the counts
-			mesh.m_numVertices = fn.numVertices();
-			mesh.m_numNormals = fn.numNormals();
-			mesh.m_numUVs = fn.numUVs();
-			mesh.m_numPolygons = fn.numPolygons();
+			mesh->m_numVertices = fn.numVertices();
+			mesh->m_numNormals = fn.numNormals();
+			mesh->m_numUVs = fn.numUVs();
+			mesh->m_numPolygons = fn.numPolygons();
 
 			// ------------------------------------------
 			// get position vertices
@@ -292,7 +294,7 @@ void MayaFileTranslator::LoadMesh(MObject& item)
 			for(int i = 0; i != vertices.length(); i++)
 			{
 				MPoint point = vertices[i] * mat;
-				mesh.m_vertices.push_back(point);
+				mesh->m_vertices.push_back(point);
 			}
 			// ------------------------------------------
 			// get normal vertices
@@ -320,7 +322,7 @@ void MayaFileTranslator::LoadMesh(MObject& item)
 
 				normal.normalize();
 
-				mesh.m_normals.push_back(normal);
+				mesh->m_normals.push_back(normal);
 			}
 
 
@@ -331,7 +333,7 @@ void MayaFileTranslator::LoadMesh(MObject& item)
 
 			for (int i =0; i != u_coords.length(); i++)
 			{				 
-				mesh.m_uvs.push_back(MFloatVector(u_coords[i],v_coords[i]));
+				mesh->m_uvs.push_back(MFloatVector(u_coords[i],v_coords[i]));
 			}
 
 
@@ -348,9 +350,9 @@ void MayaFileTranslator::LoadMesh(MObject& item)
 				{
 					int uv_index;
 					itPoly.getUVIndex(i,uv_index);
-					mesh.m_vertexIndices.push_back(itPoly.vertexIndex(i));
-					mesh.m_normalIndices.push_back(itPoly.normalIndex(i));
-					mesh.m_uvIndices.push_back(uv_index);
+					mesh->m_vertexIndices.push_back(itPoly.vertexIndex(i));
+					mesh->m_normalIndices.push_back(itPoly.normalIndex(i));
+					mesh->m_uvIndices.push_back(uv_index);
 				}
 
 				itPoly.next();
@@ -405,9 +407,9 @@ MPxFileTranslator::MFileKind MayaFileTranslator::identifyFile(	const MFileObject
 						 short size) const {
 	const char* str = fileName.name().asChar();
 	unsigned int len = fileName.name().length();
-	if (str[len-3] == 'm' &&
-		str[len-2] == 'o' &&
-		str[len-1] == 'd')
+	if (str[len-3] == 'r' &&
+		str[len-2] == 't' &&
+		str[len-1] == 'x')
 	{
 		return kCouldBeMyFileType;
 	}

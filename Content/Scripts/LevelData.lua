@@ -1,6 +1,6 @@
 
 function SetCameraZ()
-	return -5.0;
+	return -100.0;
 end
 
 function SetLightingR()

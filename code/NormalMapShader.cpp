@@ -4,7 +4,7 @@
 
 namespace Engine
 {
-	NormalMapShader::NormalMapShader() : m_sampleState(0), m_textures(0)
+	NormalMapShader::NormalMapShader() : m_sampleState(0)
 	{
 		using namespace DirectX::SimpleMath;
 		m_vertexShader = 0;
@@ -15,6 +15,7 @@ namespace Engine
 
 	NormalMapShader::~NormalMapShader()
 	{
+		Shutdown();
 	}
 
 	bool NormalMapShader::Initialize(Graphics* graphics)
@@ -30,11 +31,11 @@ namespace Engine
 		ShutdownShader();
 	}
 
-	void NormalMapShader::Render(Graphics* graphics, int indexCount)
+	void NormalMapShader::Render(Graphics* graphics)
 	{
 		SetShaderParameters(graphics);
 
-		RenderShader(graphics,indexCount);
+		RenderShader(graphics);
 	}
 
 	bool NormalMapShader::InitializeShader(Graphics* graphics,std::wstring vsFilename, std::wstring psFilename)
@@ -65,44 +66,44 @@ namespace Engine
 
 		// This setup needs to match the VertexType stucture in the ModelClass and in the shader.
 		polygonLayout[0].SemanticName = "POSITION";
-	polygonLayout[0].SemanticIndex = 0;
-	polygonLayout[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-	polygonLayout[0].InputSlot = 0;
-	polygonLayout[0].AlignedByteOffset = 0;
-	polygonLayout[0].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-	polygonLayout[0].InstanceDataStepRate = 0;
+		polygonLayout[0].SemanticIndex = 0;
+		polygonLayout[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+		polygonLayout[0].InputSlot = 0;
+		polygonLayout[0].AlignedByteOffset = 0;
+		polygonLayout[0].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+		polygonLayout[0].InstanceDataStepRate = 0;
 
-	polygonLayout[1].SemanticName = "TEXCOORD";
-	polygonLayout[1].SemanticIndex = 0;
-	polygonLayout[1].Format = DXGI_FORMAT_R32G32_FLOAT;
-	polygonLayout[1].InputSlot = 0;
-	polygonLayout[1].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
-	polygonLayout[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-	polygonLayout[1].InstanceDataStepRate = 0;
+		polygonLayout[1].SemanticName = "TEXCOORD";
+		polygonLayout[1].SemanticIndex = 0;
+		polygonLayout[1].Format = DXGI_FORMAT_R32G32_FLOAT;
+		polygonLayout[1].InputSlot = 0;
+		polygonLayout[1].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+		polygonLayout[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+		polygonLayout[1].InstanceDataStepRate = 0;
 
-	polygonLayout[2].SemanticName = "NORMAL";
-	polygonLayout[2].SemanticIndex = 0;
-	polygonLayout[2].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-	polygonLayout[2].InputSlot = 0;
-	polygonLayout[2].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
-	polygonLayout[2].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-	polygonLayout[2].InstanceDataStepRate = 0;
+		polygonLayout[2].SemanticName = "NORMAL";
+		polygonLayout[2].SemanticIndex = 0;
+		polygonLayout[2].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+		polygonLayout[2].InputSlot = 0;
+		polygonLayout[2].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+		polygonLayout[2].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+		polygonLayout[2].InstanceDataStepRate = 0;
 
-	polygonLayout[3].SemanticName = "TANGENT";
-	polygonLayout[3].SemanticIndex = 0;
-	polygonLayout[3].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-	polygonLayout[3].InputSlot = 0;
-	polygonLayout[3].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
-	polygonLayout[3].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-	polygonLayout[3].InstanceDataStepRate = 0;
+		polygonLayout[3].SemanticName = "TANGENT";
+		polygonLayout[3].SemanticIndex = 0;
+		polygonLayout[3].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+		polygonLayout[3].InputSlot = 0;
+		polygonLayout[3].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+		polygonLayout[3].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+		polygonLayout[3].InstanceDataStepRate = 0;
 
-	polygonLayout[4].SemanticName = "BINORMAL";
-	polygonLayout[4].SemanticIndex = 0;
-	polygonLayout[4].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-	polygonLayout[4].InputSlot = 0;
-	polygonLayout[4].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
-	polygonLayout[4].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-	polygonLayout[4].InstanceDataStepRate = 0;
+		polygonLayout[4].SemanticName = "BINORMAL";
+		polygonLayout[4].SemanticIndex = 0;
+		polygonLayout[4].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+		polygonLayout[4].InputSlot = 0;
+		polygonLayout[4].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+		polygonLayout[4].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+		polygonLayout[4].InstanceDataStepRate = 0;
 
 		// Get a count of the elements in the layout.
 		numElements = sizeof(polygonLayout) / sizeof(polygonLayout[0]);
@@ -186,7 +187,7 @@ namespace Engine
 		context->PSSetConstantBuffers(bufferNumber,1,&buffer);
 	}
 
-	void NormalMapShader::RenderShader(Graphics* graphics, int indexCount)
+	void NormalMapShader::RenderShader(Graphics* graphics)
 	{
 		ID3D11DeviceContext* context = graphics->GetImmediateContex();
 
@@ -198,9 +199,6 @@ namespace Engine
 		context->PSSetShader(m_pixelShader,0,0);
 
 		context->PSSetSamplers(0,1,&m_sampleState);
-
-		// render
-		context->DrawIndexed(indexCount,0,0);
 	}
 	
 	void NormalMapShader::SetDiffuseColor(DirectX::SimpleMath::Color color)
@@ -210,10 +208,5 @@ namespace Engine
 	void NormalMapShader::SetLightDiretion(DirectX::SimpleMath::Vector3 lightDir)
 	{
 		m_lightDirection = lightDir;
-	}
-
-	void NormalMapShader::SetTexture(Texture* texture)
-	{ 
-		m_textures = texture;
 	}
 }

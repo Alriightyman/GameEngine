@@ -19,8 +19,6 @@ namespace Engine
 
 	MenuEntry::~MenuEntry(void)
 	{
-		std::string debugText = "MenuEntry - " + m_Text + " deleted";
-		debug.Print((char*)debugText.c_str());
 
 	}
 

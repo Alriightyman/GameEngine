@@ -16,9 +16,6 @@ namespace Engine
 	private:
 		ID3D11SamplerState* m_sampleState;
 		ConstantBuffer<MatrixBuffer> m_matrixBuffer;
-		Texture* m_texture;
-	public:
-		void SetTexture(Texture* texture);
 
 	public:
 		LightMapShader();
@@ -26,14 +23,14 @@ namespace Engine
 
 		bool Initialize(Graphics* graphics) override;
 		void Shutdown() override;
-		void Render(Graphics* graphics, int indexCount) override;
+		void Render(Graphics* graphics) override;
 
 	private:
 		bool InitializeShader(Graphics* graphics, std::wstring vertexShaderFilename, std::wstring pixelShaderFilename) override;
 		void ShutdownShader() override;
 
 		void SetShaderParameters(Graphics* graphics) override;
-		void RenderShader(Graphics* graphics, int indexCount) override;
+		void RenderShader(Graphics* graphics) override;
 
 	};
 

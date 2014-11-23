@@ -48,13 +48,12 @@ namespace Engine
 
 		bool Initialize(Graphics* graphics) override;
 		void Shutdown() override;
-		void Render(Graphics* graphics, int indexCount) override;
+		void Render(Graphics* graphics) override;
 		// set params
 		void SetWorldMatrix(Matrix& world);
 		void SetViewMatrix(Matrix& view);
 		void SetProjectionMatrix(Matrix& proj);
 		void SetWolrdViewProjMatrix(Matrix& world,Matrix& view,Matrix& proj);
-		void SetTexture(Texture* texture);
 		void SetLightDirection(const Vector3& lightDirection); 
 		void SetAmbientColor(const Color& ambientColor);
 		void SetDiffuseColor(const Color& diffuseColor);
@@ -66,7 +65,7 @@ namespace Engine
 		void ShutdownShader() override;
 
 		void SetShaderParameters(Graphics* graphics) override;
-		void RenderShader(Graphics* graphics, int indexCount) override;
+		void RenderShader(Graphics* graphics) override;
 
 	private:
 
@@ -79,14 +78,12 @@ namespace Engine
 		Matrix m_world;
 		Matrix m_view;
 		Matrix m_projection;
-		ID3D11ShaderResourceView* m_texture;
 		Vector3 m_lightDirection;
 		Color m_diffuseColor;
 		Color m_ambientColor;
 		Vector3 m_cameraPosition;
 		Color m_specularColor;
 		float m_specularPower;
-
 	}; 
 }
 

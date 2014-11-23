@@ -27,7 +27,6 @@ namespace Engine
 
 		DirectX::SimpleMath::Color m_diffuseColor;
 		DirectX::SimpleMath::Vector3 m_lightDirection;
-		Texture* m_textures;
 	public:
 		void SetDiffuseColor(DirectX::SimpleMath::Color color);
 		void SetLightDiretion(DirectX::SimpleMath::Vector3 lightDir);
@@ -38,13 +37,13 @@ namespace Engine
 
 		bool Initialize(Graphics* graphics) override;
 		void Shutdown() override;
-		void Render(Graphics* graphics,int indexCount) override;
+		void Render(Graphics* graphics) override;
 
 	private:
 		bool InitializeShader(Graphics* graphics,std::wstring vsFilename, std::wstring psFilename) override;
 		void ShutdownShader() override;
 		void SetShaderParameters(Graphics* graphics) override;
-		void RenderShader(Graphics* graphics,int indexCount) override;
+		void RenderShader(Graphics* graphics) override;
 	};
 
 }

@@ -57,7 +57,7 @@ namespace Engine
 
 	bool InputState::IsNewAButtonPress(PlayerIndex controllingPlayer, PlayerIndex& playerIndex)
 	{
-		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One)
+		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One && controllingPlayer < PlayerIndex::Four + 1)
 		{
 			playerIndex = controllingPlayer;
 
@@ -76,7 +76,7 @@ namespace Engine
 
 	bool InputState::IsNewBButtonPress(PlayerIndex controllingPlayer, PlayerIndex& playerIndex)
 	{
-		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One)
+		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One && controllingPlayer < PlayerIndex::Four + 1)
 		{
 			playerIndex = controllingPlayer;
 
@@ -95,7 +95,7 @@ namespace Engine
 
 	bool InputState::IsNewXButtonPress(PlayerIndex controllingPlayer, PlayerIndex& playerIndex)
 	{
-		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One)
+		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One && controllingPlayer < PlayerIndex::Four + 1)
 		{
 			playerIndex = controllingPlayer;
 
@@ -114,7 +114,7 @@ namespace Engine
 
 	bool InputState::IsNewYButtonPress(PlayerIndex controllingPlayer, PlayerIndex& playerIndex)
 	{
-		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One)
+		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One && controllingPlayer < PlayerIndex::Four + 1)
 		{
 			playerIndex = controllingPlayer;
 
@@ -133,7 +133,7 @@ namespace Engine
 
 	bool InputState::IsNewStartButtonPress(PlayerIndex controllingPlayer, PlayerIndex& playerIndex)
 	{
-		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One)
+		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One && controllingPlayer < PlayerIndex::Four + 1)
 		{
 			playerIndex = controllingPlayer;
 
@@ -152,7 +152,7 @@ namespace Engine
 
 	bool InputState::IsNewBackButtonPress(PlayerIndex controllingPlayer, PlayerIndex& playerIndex)
 	{
-		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One)
+		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One && controllingPlayer < PlayerIndex::Four + 1)
 		{
 			playerIndex = controllingPlayer;
 
@@ -171,7 +171,7 @@ namespace Engine
 
 	bool InputState::IsNewDPADUpButtonPress(PlayerIndex controllingPlayer, PlayerIndex& playerIndex)
 	{
-		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One)
+		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One && controllingPlayer < PlayerIndex::Four + 1)
 		{
 			playerIndex = controllingPlayer;
 
@@ -190,7 +190,7 @@ namespace Engine
 
 	bool InputState::IsNewDPADDownButtonPress(PlayerIndex controllingPlayer, PlayerIndex& playerIndex)
 	{
-		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One)
+		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One && controllingPlayer < PlayerIndex::Four + 1)
 		{
 			playerIndex = controllingPlayer;
 
@@ -209,7 +209,7 @@ namespace Engine
 
 	bool InputState::IsNewDPADLeftButtonPress(PlayerIndex controllingPlayer, PlayerIndex& playerIndex)
 	{
-		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One)
+		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One && controllingPlayer < PlayerIndex::Four + 1)
 		{
 			playerIndex = controllingPlayer;
 
@@ -228,7 +228,7 @@ namespace Engine
 
 	bool InputState::IsNewDPADRightButtonPress(PlayerIndex controllingPlayer, PlayerIndex& playerIndex)
 	{
-		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One)
+		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One && controllingPlayer < PlayerIndex::Four + 1)
 		{
 			playerIndex = controllingPlayer;
 
@@ -247,7 +247,7 @@ namespace Engine
 
 	bool InputState::IsNewLButtonPress(PlayerIndex controllingPlayer, PlayerIndex& playerIndex)
 	{
-		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One)
+		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One && controllingPlayer < PlayerIndex::Four + 1)
 		{
 			playerIndex = controllingPlayer;
 
@@ -266,7 +266,7 @@ namespace Engine
 
 	bool InputState::IsNewRButtonPress(PlayerIndex controllingPlayer, PlayerIndex& playerIndex)
 	{
-		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One)
+		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One && controllingPlayer < PlayerIndex::Four + 1)
 		{
 			playerIndex = controllingPlayer;
 
@@ -285,7 +285,7 @@ namespace Engine
 
 	bool InputState::IsNewRTriggerPress(PlayerIndex controllingPlayer, PlayerIndex& playerIndex)
 	{
-		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One)
+		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One && controllingPlayer < PlayerIndex::Four + 1)
 		{
 			playerIndex = controllingPlayer;
 
@@ -304,7 +304,7 @@ namespace Engine
 
 	bool InputState::IsNewLTriggerPress(PlayerIndex controllingPlayer, PlayerIndex& playerIndex)
 	{
-		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One)
+		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One && controllingPlayer < PlayerIndex::Four + 1)
 		{
 			playerIndex = controllingPlayer;
 
@@ -323,7 +323,7 @@ namespace Engine
 
 	bool InputState::IsNewLeftStickUpPress(PlayerIndex controllingPlayer, PlayerIndex& playerIndex)
 	{
-		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One)
+		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One && controllingPlayer < PlayerIndex::Four + 1)
 		{
 			playerIndex = controllingPlayer;
 
@@ -342,7 +342,7 @@ namespace Engine
 
 	bool InputState::IsNewLeftStickDownPress(PlayerIndex controllingPlayer, PlayerIndex& playerIndex)
 	{
-		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One)
+		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One && controllingPlayer < PlayerIndex::Four + 1)
 		{
 			playerIndex = controllingPlayer;
 

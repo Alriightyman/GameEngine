@@ -20,7 +20,7 @@ namespace Engine
 
 	Texture::~Texture()
 	{
-
+	//	Shutdown();
 	}
 
 
@@ -49,16 +49,7 @@ namespace Engine
 
 	void Texture::Shutdown()
 	{
-		// Release the texture resource.
-		for(int i = 0; i < 3; i++)
-		{
-			if(m_textures[i])
-			{
-				m_textures[i]->Release();
-				m_textures[i] = 0;
-			}
-		}
-		return;
+
 	}
 
 

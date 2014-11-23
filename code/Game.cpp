@@ -2,6 +2,11 @@
 #include "BackgroundScreen.h"
 #include "MainMenuScreen.h"
 #include "GameplayScreen.h"
+
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+
 using namespace DirectX;
 
 namespace
@@ -37,7 +42,7 @@ namespace Engine
 
 	Game::~Game(void)
 	{
-		// nothing here..
+		Cleanup();
 	}
 
 	bool Game::Init(HINSTANCE hInst, int width, int height, bool windowed)
@@ -71,6 +76,7 @@ namespace Engine
 
 		// create and initalize the m_graphics object
 		m_graphics = new Graphics();
+
 		if(!m_graphics->Init(m_hwnd,width,height,windowed))
 			return false;
 
@@ -156,6 +162,8 @@ namespace Engine
 // main entry point of the application
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev,LPSTR cmdLine,int showCmd)
 {
+
+	_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
 	// create the application object
 	Engine::Game game;
 
@@ -169,6 +177,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev,LPSTR cmdLine,int showCmd)
 
 	// set the start time
 	int startTime = timeGetTime();
+
+	printf("Size %d",sizeof(Engine::GameplayScreen));
 
 	// start message loop
 	while(msg.message != WM_QUIT)
@@ -198,6 +208,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev,LPSTR cmdLine,int showCmd)
 
 	// release all resources
 	game.Cleanup();
+	g_game = 0;
 
 	return msg.wParam;
 }

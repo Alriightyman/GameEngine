@@ -156,7 +156,7 @@ private:
 
 	bool		m_bShort;
 
-	std::vector<Mesh> m_meshes;
+	std::vector<Mesh*> m_meshes;
 };
 
 #endif

@@ -23,6 +23,8 @@ namespace Engine
 		void Quit();
 
 		LRESULT MsgProc(HWND hwnd,UINT msg, WPARAM wparam,LPARAM lparam);
+
+
 	}; 
 }
 

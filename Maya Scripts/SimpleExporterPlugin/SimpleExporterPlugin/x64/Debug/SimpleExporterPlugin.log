@@ -1,5 +1,22 @@
-﻿Build started 11/22/2014 5:53:39 PM.
+﻿Build started 11/23/2014 6:04:24 PM.
+     1>Project "C:\Users\Alriighytman\Documents\GitHub\GameEngine\Maya Scripts\SimpleExporterPlugin\SimpleExporterPlugin\SimpleExporterPlugin.vcxproj" on node 2 (Build target(s)).
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V110\Microsoft.CppBuild.targets(1137,5): warning MSB8012: TargetPath(C:\Users\Alriighytman\Documents\GitHub\GameEngine\Maya Scripts\SimpleExporterPlugin\SimpleExporterPlugin\x64\Debug\RTXExporterPlugin2015.mll) does not match the Linker's OutputFile property value (C:\Users\Alriighytman\Documents\GitHub\GameEngine\Maya Scripts\SimpleExporterPlugin\SimpleExporterPlugin\x64\Debug\RTXPlugin.mll). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V110\Microsoft.CppBuild.targets(1139,5): warning MSB8012: TargetName(RTXExporterPlugin2015) does not match the Linker's OutputFile property value (RTXPlugin). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
+     1>Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"x64\Debug\RTXPlugin.mll" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Program Files\Autodesk\Maya2015\lib" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Alriighytman\Documents\GitHub\GameEngine\Maya Scripts\SimpleExporterPlugin\SimpleExporterPlugin\x64\Debug\SimpleExporterPlugin.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Alriighytman\Documents\GitHub\GameEngine\Maya Scripts\SimpleExporterPlugin\SimpleExporterPlugin\x64\Debug\SimpleExporterPlugin.lib" /MACHINE:X64 /DLL x64\Debug\MayaFileTranslator.obj
+         x64\Debug\MayaMain.obj
+            Creating library C:\Users\Alriighytman\Documents\GitHub\GameEngine\Maya Scripts\SimpleExporterPlugin\SimpleExporterPlugin\x64\Debug\SimpleExporterPlugin.lib and object C:\Users\Alriighytman\Documents\GitHub\GameEngine\Maya Scripts\SimpleExporterPlugin\SimpleExporterPlugin\x64\Debug\SimpleExporterPlugin.exp
+         SimpleExporterPlugin.vcxproj -> C:\Users\Alriighytman\Documents\GitHub\GameEngine\Maya Scripts\SimpleExporterPlugin\SimpleExporterPlugin\x64\Debug\RTXExporterPlugin2015.mll
+       PostBuildEvent:
+         xcopy "C:\Users\Alriighytman\Documents\GitHub\GameEngine\Maya Scripts\SimpleExporterPlugin\SimpleExporterPlugin\x64\Debug\RTXExporter.mll" "C:\Users\Alriighytman\Documents\maya\2015-x64\plug-ins" /e /y /i /r
+         xcopy "C:\Users\Alriighytman\Documents\GitHub\GameEngine\Maya Scripts\SimpleExporterPlugin\SimpleExporterPlugin\MayaFileExportScript.mel" "C:\Users\Alriighytman\Documents\maya\2015-x64\scripts" /e /y /i /r
+         :VCEnd
+         File not found - RTXExporter.mll
+         0 File(s) copied
+         C:\Users\Alriighytman\Documents\GitHub\GameEngine\Maya Scripts\SimpleExporterPlugin\SimpleExporterPlugin\MayaFileExportScript.mel
+         1 File(s) copied
+     1>Done Building Project "C:\Users\Alriighytman\Documents\GitHub\GameEngine\Maya Scripts\SimpleExporterPlugin\SimpleExporterPlugin\SimpleExporterPlugin.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.00
+Time Elapsed 00:00:00.98

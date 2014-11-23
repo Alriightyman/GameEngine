@@ -1,12 +1,18 @@
 #include "Shader.h"
+#include "Texture.h"
 
 namespace Engine
 {
 	Shader::Shader()
 	{
-
+		m_textures = 0;
 	}
 	Shader::~Shader()
+	{
+		Shutdown();
+	}
+
+	void Shader::Shutdown()
 	{
 		if(m_vertexShader)
 		{
@@ -25,10 +31,6 @@ namespace Engine
 			m_layout->Release();
 			m_layout = 0;
 		}
-	}
-
-	void Shader::Shutdown()
-	{
 
 	}
 

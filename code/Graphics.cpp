@@ -27,6 +27,7 @@ namespace Engine
 		m_depthStencilView = 0;
 		m_rasterState = 0;
 		m_depthDisabledStencilState = 0;
+		m_outLineRasterState = 0;
 	}
 	Graphics::~Graphics()
 	{
@@ -409,6 +410,13 @@ namespace Engine
 			m_depthDisabledStencilState->Release();
 			m_depthDisabledStencilState = 0;
 		}
+
+		if(m_outLineRasterState)
+		{
+			m_outLineRasterState->Release();
+			m_outLineRasterState = 0;
+		}
+
 		// Before shutting down set to windowed mode or when you release the swap chain it will throw an exception.
 		if(m_swapChain)
 		{
@@ -508,7 +516,12 @@ namespace Engine
 		Texture* texture = new Texture();
 
 		if(!texture->Initialize(this,filename1,filename2,filename3))
+		{
+			texture->Shutdown();
+			delete texture;
+			texture = 0;
 			return nullptr;
+		}
 
 		return texture;
 	}
@@ -520,6 +533,9 @@ namespace Engine
 		if(!model->Initialize(this,filename,texture))
 		{
 			debug.Print("Could not Initialize the model object.");
+			model->Shutdown();
+			delete model;
+			model = 0;
 			return nullptr;
 		}
 
