@@ -41,7 +41,6 @@
 
 #include <maya/MArgList.h>
 #include <maya/MFileObject.h>
-#include <maya/MFnDependencyNode.h>
 #include <maya/MItDependencyNodes.h>
 #include <maya/MObject.h>
 #include <maya/MObjectArray.h>
@@ -57,7 +56,9 @@
 #include <maya/MFloatArray.h>
 #include <maya/MFloatVector.h>
 #include <maya/MItMeshPolygon.h>
-
+#include <maya/MPlug.h>
+#include <maya/MFnPhongShader.h>
+#include <maya/MFnBlinnShader.h>
 //	maya base class includes for your own defined gubbins
 #include <maya/MPxFileTranslator.h>
 
@@ -209,20 +210,220 @@ MStatus	MayaFileTranslator::writer( const MFileObject& file,
 			}
 		}
 
+		BuildTextureData();
+
 		for(int i = 0; i < m_meshes.size(); i++)
+		{
 			m_totalVertexCount += m_meshes[i]->m_vertexIndices.size();
+			m_meshes[i]->mat.DiffuseMap = m_diffuseMaps[m_diffuseMaps.size() - i - 1];
+			m_meshes[i]->mat.NormalMap = m_normalMaps[m_normalMaps.size() - i - 1];
+		}
 
 		WriteRasterTekFormatAscii(ofs);
 
 		ofs.close();
-		
+		while(!m_meshes.empty())
+		{
+			Mesh* m = m_meshes.back();
+			if(m){ delete m; m = 0; }
+			m_meshes.pop_back();
+
+		}
+		// reset containers
 		m_meshes.clear();
 		m_meshes.resize(0);
+		m_diffuseMaps.clear();
+		m_diffuseMaps.resize(0);
+		m_normalMaps.clear();
+		m_normalMaps.resize(0);
 		m_totalVertexCount = 0;
 	}
 	return MS::kSuccess;
 }
 
+void MayaFileTranslator::BuildTextureData()
+{
+// iterate through the mesh nodes in the scene
+MItDependencyNodes itDep(MFn::kLambert);
+
+// we have to keep iterating until we get through
+// all of the nodes in the scene
+//
+	while (!itDep.isDone())
+	{
+  		switch(itDep.item().apiType()) 
+		{
+  		// if found phong shader
+			case MFn::kPhong:
+				{
+					MFnPhongShader fn( itDep.item() );
+					cout<<"Phong "<<fn.name().asChar()<<"\n";
+					OutputColor(fn,"ambientColor");
+					OutputColor(fn,"color");
+					OutputColor(fn,"specularColor");
+					OutputColor(fn,"incandescence");
+					OutputColor(fn,"transparency");
+					cout<<"\tcos "<<fn.cosPower()<< endl;
+					OutputBumpMap(itDep.item());
+					//OutputEnvMap(itDep.item());
+				}
+				break;
+			// if found blinn shader
+			case MFn::kBlinn:
+				{
+					MFnBlinnShader fnBlinn( itDep.item() );
+					cout<<"Blinn "<<fnBlinn.name().asChar()<<"\n";
+					OutputColor(fnBlinn,"ambientColor");
+					OutputColor(fnBlinn,"color");
+					OutputColor(fnBlinn,"specularColor");
+					OutputColor(fnBlinn,"incandescence");
+					OutputColor(fnBlinn,"transparency");
+					cout 	<< "\teccentricity " << fnBlinn.eccentricity() << endl;
+					cout 	<< "\tspecularRollOff " << fnBlinn.specularRollOff() << endl;
+					OutputBumpMap(itDep.item());
+					//OutputEnvMap(itDep.item());
+				}
+				break;
+			default:
+				break;
+
+		}
+		itDep.next();
+	}
+
+} 
+void MayaFileTranslator::OutputColor(MFnDependencyNode& fn,const char* name)
+{
+	MPlug p;
+
+	MString r = name;
+	r += "R";
+	MString g = name;
+	g += "G";
+	MString b = name;
+	b += "B";
+	MString a = name;
+	a += "A";
+
+	// get the color value
+	MColor color;
+
+	// get a plug to the attribute
+	p = fn.findPlug(r);
+	p.getValue(color.r);
+	p = fn.findPlug(g);
+	p.getValue(color.g);
+	p = fn.findPlug(b);
+	p.getValue(color.b);
+	p = fn.findPlug(a);
+	p.getValue(color.a);
+	p = fn.findPlug(name);
+
+	// will hold the txture node name
+	MString texname;
+
+	// get plugs connected to colour attribute
+	MPlugArray plugs;
+	p.connectedTo(plugs,true,false);
+
+	// see if any file textures are present
+	for(int i=0;i!=plugs.length();++i)
+	{
+  		// if file texture found
+		if(plugs[i].node().apiType() == MFn::kFileTexture)
+		{
+  			// bind a function set to it ....
+			MFnDependencyNode fnDep(plugs[i].node());
+
+			// to get the node name
+			texname = fnDep.name();
+			MPlug ftn = fnDep.findPlug("ftn");
+			MString filename;
+			ftn.getValue(filename);
+			MStringArray tex;
+			filename.split('/',tex);
+			m_diffuseMaps.push_back(tex[tex.length()-1].asChar());
+			// stop looping
+			break;
+
+		}
+
+	}
+
+	if( name == "color" && color.r <0.01 &&
+		color.g < 0.01 && color.b < 0.01)
+
+	{
+  		color.r=color.g=color.b=0.6f;
+
+	}
+	
+}
+
+void MayaFileTranslator::OutputBumpMap(MObject& obj)
+{
+	MFnDependencyNode fn(obj);
+
+	// get a plug to the normalCamera attribute on the material
+	MPlug bump_plug = fn.findPlug("normalCamera");
+	MPlugArray connections;
+
+	// get connections to the attribute
+	bump_plug.connectedTo(connections,true,false);
+
+	// loop through each one to find a bump2d node
+	for(unsigned int i=0;i<connections.length();++i)
+	{
+  	
+
+		if (connections[i].node().apiType() == MFn::kBump)
+		{
+			// attach a function set to the 2d bump node
+			MFnDependencyNode fnBump(connections[i].node());
+
+			float bump_depth;
+
+			// get the bump depth value from the node
+			MPlug bumpDepth = fnBump.findPlug("bumpDepth");
+			bumpDepth.getValue(bump_depth);
+
+			// we now have the fun and joy of actually finding
+			// the file node that is connected to the bump map
+			// node itself. This is going to involve checking
+			// the attribute connections to the bumpValue attribute.
+			MPlug bump_value = fnBump.findPlug("bumpValue");
+			MPlugArray bv_connections;
+
+			bump_value.connectedTo(bv_connections,true,false);
+			for(unsigned int j=0;j<bv_connections.length();++j)
+			{
+  	
+
+				if(bv_connections[i].node().apiType() == MFn::kFileTexture)
+				{
+  	
+
+					// we have a texture. determine
+					// which texture it is.
+					MFnDependencyNode fnTex(bv_connections[i].node());
+
+					MPlug ftn = fnTex.findPlug("ftn");
+
+					MString filename;
+					ftn.getValue(filename);
+					MStringArray tex;
+					filename.split('/',tex);
+					m_normalMaps.push_back(tex[tex.length()-1].asChar());
+
+					return;
+				}
+
+			}
+
+		}
+
+	}
+}
 void MayaFileTranslator::WriteRasterTekFormatAscii(std::ofstream& fout)
 {
 	using namespace std;
@@ -262,6 +463,17 @@ void MayaFileTranslator::CreateSubsetTable(std::ofstream& fout)
 		oldCount = startCount;
 		startCount += m_meshes[m]->m_vertexIndices.size();
 		fout << "Size: " << (startCount - oldCount) << endl;
+		std::string DiffuseMap = m_meshes[m]->mat.DiffuseMap;;
+		std::string NormalMap = m_meshes[m]->mat.NormalMap;
+		std::string SpecularMap = m_meshes[m]->mat.SpecularMap;
+		if (NormalMap.size() < 2)
+			NormalMap = "n";
+		if (SpecularMap.size() < 2)
+			SpecularMap = "n";
+
+		fout << "DiffuseMap: " << DiffuseMap.c_str() << std::endl;
+		fout << "NormalMap: " << NormalMap.c_str() << std::endl;
+		fout << "SpecularMap: " << SpecularMap.c_str() << std::endl << std::endl;
 		//startCount++;
 	}
 }

@@ -82,12 +82,14 @@ namespace Engine
 
 		// create the screenmanager object
 		m_screenManager = new ScreenManager(m_graphics);
+		
+
 		// add the background and mainmenu screens
 		m_screenManager->AddScreen( new BackgroundScreen(),PlayerIndex::Null);
 		m_screenManager->AddScreen( new MainMenuScreen(),PlayerIndex::Null);
 		// initialize the screenmanager
 		m_screenManager->Load();
-
+		ScreenManager::LuaBindings(m_screenManager->GetScript()->GetState());
 		return true;
 	}
 
@@ -177,8 +179,6 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev,LPSTR cmdLine,int showCmd)
 
 	// set the start time
 	int startTime = timeGetTime();
-
-	printf("Size %d",sizeof(Engine::GameplayScreen));
 
 	// start message loop
 	while(msg.message != WM_QUIT)

@@ -50,6 +50,7 @@
 #include <maya/MPxFileTranslator.h>
 #include <maya/MFloatVector.h>
 #include <maya/MPoint.h>
+#include <maya/MFnDependencyNode.h>
 #include <vector>
 //-----------------------------------------------------------------------
 /// \brief	This class defines the main file translator class.
@@ -136,9 +137,21 @@ private:
 	void WriteRasterTekFormatAscii(std::ofstream& ofs);
 	void WriteRasterTekFormatBinary(std::ofstream& ofs);
 	void CreateSubsetTable(std::ofstream& ofs);
+	void BuildTextureData();
+	void OutputColor(MFnDependencyNode& fn,const char* name);
+	void OutputBumpMap(MObject& obj);
+
 private:
 
 	int m_totalVertexCount;
+
+	struct Material
+	{
+		std::string DiffuseMap;
+		std::string NormalMap;
+		std::string SpecularMap;
+
+	};
 
 	struct Mesh
 	{
@@ -152,12 +165,17 @@ private:
 		std::vector<int> m_vertexIndices;
 		std::vector<int> m_normalIndices;
 		std::vector<int> m_uvIndices;
+		Material mat;
 	};
 
-	bool		m_bShort;
+	bool m_bShort;
 
 	std::vector<Mesh*> m_meshes;
+	std::vector<std::string> m_diffuseMaps;
+	std::vector<std::string> m_normalMaps;
 };
+
+
 
 #endif
 

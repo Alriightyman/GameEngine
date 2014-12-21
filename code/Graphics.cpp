@@ -526,11 +526,11 @@ namespace Engine
 		return texture;
 	}
 
-	Model* Graphics::CreateModel(std::wstring filename, Texture* texture)
+	Model* Graphics::CreateModel(std::wstring filename)
 	{
 		Model* model = new Model();
 
-		if(!model->Initialize(this,filename,texture))
+		if(!model->Initialize(this,filename))
 		{
 			debug.Print("Could not Initialize the model object.");
 			model->Shutdown();
@@ -543,9 +543,9 @@ namespace Engine
 	}
 
 
-	void Graphics::Render(Model* model,ShaderType shaderType)
+	void Graphics::Render(Model* model)
 	{
-		model->Render(this,shaders[shaderType].get());
+		model->Render(this);
 	}
 
 	LightShader* Graphics::GetLightShader()
@@ -580,5 +580,9 @@ namespace Engine
 	NormalMapShader* Graphics::GetNormalMapShader()
 	{
 		return (NormalMapShader*)shaders[ShaderType::NORMALMAP].get();
+	}
+	Shader* Graphics::GetShader(ShaderType shaderType)
+	{
+		return shaders[shaderType].get(); 
 	}
 }

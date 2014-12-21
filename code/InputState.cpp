@@ -1,7 +1,21 @@
 #include "InputState.h"
+
 using namespace DirectX;
 namespace Engine
 {
+
+	// binds the input into lua
+	void InputState::Bind(luabridge::lua_State* L)
+	{
+		using namespace luabridge;
+		
+		getGlobalNamespace(L)
+			.beginClass<InputState>("Input")
+				.addFunction("IsKeyDown",&InputState::IsKeyDown)
+				.addFunction("IsNewKeyPress",&InputState::IsNewKeyPress)
+			.endClass();
+	}
+
 
 	InputState::InputState(HWND hwnd) : MAXINPUTS(4)
 	{

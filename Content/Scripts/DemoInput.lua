@@ -5,7 +5,6 @@ Pi = 3.14159274
 
 function RotateXLeft(x)
 	RotX = x + Pi  * 0.1
-	print(RotX)
 end
 
 function RotateXRight(x)

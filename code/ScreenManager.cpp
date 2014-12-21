@@ -9,12 +9,14 @@ namespace Engine
 {
 
 	typedef std::vector<GameScreen*>::iterator screenIter;
+	
+	bool ScreenManager::isInitialized = false;
 
 	ScreenManager::ScreenManager(Engine::Graphics* graphics) :
-		font(0),spriteBatch(0),isInitialized(false),quit(false),traceEnabled(false),
+		font(0),spriteBatch(0),quit(false),traceEnabled(false),
 		m_graphics(graphics),m_script(0),input(0)
 	{
-
+		
 	}
 
 
@@ -103,10 +105,10 @@ namespace Engine
 		m_graphics->GetSwapChain()->GetDesc(&sd);
 		HWND hwnd = sd.OutputWindow;
 		input = new InputState(hwnd);
-
+		
 		// initialize lua
 		m_script = new Script();
-
+		InputState::Bind(m_script->GetState());
 	}
 
 	void ScreenManager::Unload()
@@ -262,4 +264,48 @@ namespace Engine
 		}
 	}
 
+	// binds data types of directXtoolkit
+	void ScreenManager::LuaBindings(luabridge::lua_State* L)
+	{
+		using namespace luabridge;
+		using namespace DirectX::SimpleMath;
+		// Vector3
+		getGlobalNamespace(L)
+			.beginClass<Vector3>("Vector3")
+				.addConstructor<void(*)(void)>()
+				.addConstructor<void(*)(float x,float y,float z)>()
+				.addData<float>("x",&Vector3::x)
+				.addData<float>("y",&Vector3::y)
+				.addData<float>("z",&Vector3::z)
+			.endClass();
+
+		// Vector2
+		getGlobalNamespace(L)
+			.beginClass<Vector2>("Vector2")
+				.addConstructor<void(*)(void)>()
+				.addConstructor<void(*)(float x,float y)>()
+				.addData<float>("x",&Vector2::x)
+				.addData<float>("y",&Vector2::y)
+			.endClass();
+		// Quat
+		getGlobalNamespace(L)
+			.beginClass<Quaternion>("Quaternion")
+				.addConstructor<void(*)(void)>()
+				.addConstructor<void(*)(float x,float y,float z, float w)>()
+				.addConstructor<void(*)(const Vector3& v, float scalar)>()
+				.addData<float>("x",&Quaternion::x)
+				.addData<float>("y",&Quaternion::y)
+			.endClass();
+		// color
+		getGlobalNamespace(L)
+			.beginClass<Color>("Color")
+				.addConstructor<void(*)(void)>()
+				.addConstructor<void(*)(float r,float g,float b, float a)>()
+				.addConstructor<void(*)(float r,float g,float b)>()
+				.addProperty("r",&Color::R,&Color::R)
+				.addProperty("g",&Color::G,&Color::G)
+				.addProperty("b",&Color::B,&Color::B)
+				.addProperty("a",&Color::A,&Color::A)
+			.endClass();
+	}
 }

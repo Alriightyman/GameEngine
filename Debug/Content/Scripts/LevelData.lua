@@ -1,6 +1,6 @@
 
 function SetCameraZ()
-	return -100.0;
+	return -10.0;
 end
 
 function SetLightingR()
@@ -16,5 +16,5 @@ function SetLightingB()
 end
 
 function LoadModelData()
-	return {"Content/Models/test.rtx","Content/Textures/stone01.dds","Content/Textures/bump01.dds","" };
+	return {"Content/Models/alien.rtx" };
 end

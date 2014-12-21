@@ -9,6 +9,8 @@
 // INCLUDES //
 //////////////
 #include <SimpleMath.h>
+#include "InputState.h"
+#include "Script.h"
 using namespace DirectX::SimpleMath;
 
 
@@ -18,23 +20,31 @@ namespace Engine
 	class Camera
 	{
 	public:
-		Camera();
+		static void BindLua(luabridge::lua_State* L);
+		static bool isInitialized;
+	public:
+		Camera(Script* script);
 		Camera(const Camera&);
 		~Camera();
 
-		void SetPosition(float, float, float);
-		void SetRotation(float, float, float);
+		void SetPosition(Vector3);
+		void SetRotation(Vector3);
 
-		Vector3 GetPosition();
-		Vector3 GetRotation();
+		Vector3 GetPosition() const;
+		Vector3 GetRotation() const;
 
 		void Render();
 		Matrix GetViewMatrix();
-
+		void MoveCamera(Script* script,InputState* input);
 	private:
-		float m_positionX, m_positionY, m_positionZ;
-		float m_rotationX, m_rotationY, m_rotationZ;
+		bool loadScript;
+		void LoadScript(Script* script);
+	private:
+		Vector3 m_position;
+		float m_posx;
+		Vector3 m_rotation;
 		Matrix m_viewMatrix;
+		std::shared_ptr<luabridge::LuaRef> func;
 	}; 
 }
 

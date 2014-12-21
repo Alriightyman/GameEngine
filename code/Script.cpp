@@ -4,7 +4,8 @@
 
 Script::Script(void)
 {
-	m_luaState = luaL_newstate();
+	using namespace luabridge;
+	m_luaState = luabridge::luaL_newstate();
 	luaL_openlibs(m_luaState);
 
 	lua_getglobal( m_luaState, "package" );
@@ -134,7 +135,7 @@ void Script::OutputError( int state )
 {
     if(state != 0)
     {
-        std::cerr << "ERR: " << lua_tostring(m_luaState, state) << std::endl;
+        std::cout << "ERR: " << lua_tostring(m_luaState, state) << std::endl;
         lua_pop(m_luaState, 1); //remove error
     }
 }
@@ -154,16 +155,16 @@ void Script::Clean()
 }
 
 std::vector<std::wstring> Script::ReturnArray()
+{
+	std::vector<std::wstring> v;
+	lua_pushnil(m_luaState);
+	while(lua_next(m_luaState, -2)) 
 	{
-		std::vector<std::wstring> v;
-		lua_pushnil(m_luaState);
-		while(lua_next(m_luaState, -2)) 
-		{
-			std::string s((const char*)lua_tostring(m_luaState, -1));
-			v.push_back(std::wstring(s.begin(),s.end()));
-			lua_pop(m_luaState, 1);
-		}
-		Clean();
-
-		return v;
+		std::string s((const char*)lua_tostring(m_luaState, -1));
+		v.push_back(std::wstring(s.begin(),s.end()));
+		lua_pop(m_luaState, 1);
 	}
+	Clean();
+
+	return v;
+}

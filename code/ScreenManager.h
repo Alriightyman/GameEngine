@@ -1,11 +1,11 @@
 #pragma once
-#include "Script.h"
 #include "GameScreen.h"
 #include <vector>
 #include <algorithm>
 #include <d3d11.h>
 #include <SpriteBatch.h>
 #include <SpriteFont.h>
+#include "Script.h"
 
 namespace Engine
 {
@@ -15,6 +15,7 @@ namespace Engine
 	class ScreenManager
 	{
 	private:
+		
 		std::vector<GameScreen*> screens;
 		std::vector<GameScreen*> screensToUpdate;
 		std::vector<GameScreen*> screensToDelete;
@@ -27,7 +28,7 @@ namespace Engine
 
 		Engine::Graphics* m_graphics;
 
-		bool isInitialized;
+		static bool isInitialized;
 		bool traceEnabled;
 
 		bool quit;
@@ -61,7 +62,8 @@ namespace Engine
 		void CleanUpScreens();
 		std::vector<GameScreen*> GetScreens();
 		void FadeBackBufferToBlack(float alpha);
-
+	public:
+		static void LuaBindings(luabridge::lua_State* L);
 	};
 
 

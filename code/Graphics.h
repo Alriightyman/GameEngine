@@ -22,7 +22,7 @@ namespace Engine
 	class AlphaMapShader;
 	class NormalMapShader;
 
-	enum ShaderType { LIGHT, TEXTURE,MULTITEXTURE, TOON, LIGHTMAP,ALPHAMAP,NORMALMAP };
+	enum ShaderType { LIGHT, TEXTURE, MULTITEXTURE, TOON, LIGHTMAP,ALPHAMAP,NORMALMAP };
 
 	class Graphics
 	{
@@ -72,6 +72,7 @@ namespace Engine
 		Matrix GetOrthoMatrix() const { return m_orthoMatrix; }
 		D3D11_VIEWPORT* GetViewPort() { return &m_viewport; }
 
+		Shader* GetShader(ShaderType shaderType);
 		LightShader* GetLightShader(); 
 		TextureShader* GetTextureShader();
 		MultiTextureShader* GetMultiTextureShader();
@@ -96,8 +97,8 @@ namespace Engine
 		void TurnZBufferOff();
 
 		Texture* CreateTexture(std::wstring filename1, std::wstring filename2,std::wstring filename3);
-		Model* CreateModel(std::wstring filename, Texture* texure);
+		Model* CreateModel(std::wstring filename);
 
-		void Render(Model* model, ShaderType shaderType = ShaderType::LIGHT);
+		void Render(Model* model);
 	}; 
 }

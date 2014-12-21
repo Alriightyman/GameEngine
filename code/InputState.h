@@ -3,8 +3,10 @@
 #include <dinput.h>
 #include <GamePad.h>
 #include "PlayerIndex.h"
+#include "Lua\LuaBridge\LuaBridge.h"
 namespace Engine
 {
+	
 	/// <summary>
 	/// Helper for reading input from m_Keyboard, gamepad, and touch input. This class 
 	/// tracks both the current and previous state of the input devices, and implements 
@@ -14,6 +16,8 @@ namespace Engine
 	class InputState
 	{
 	public:
+		static void Bind(luabridge::lua_State* L);
+	private:
 		const int MAXINPUTS;
 		LPDIRECTINPUT8 m_DInput;
 		LPDIRECTINPUTDEVICE8 m_Keyboard;

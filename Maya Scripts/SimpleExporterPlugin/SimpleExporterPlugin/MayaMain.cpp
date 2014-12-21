@@ -44,6 +44,7 @@
 #include <iostream>
 
 
+
 // link to some fairly funky maya libs. NOTE: The Image library only became part of maya
 // from version 4.01 onwards. It is not available in version 4.0
 //

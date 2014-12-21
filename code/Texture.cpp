@@ -27,18 +27,18 @@ namespace Engine
 	bool Texture::Initialize(Graphics* graphics,std::wstring filename1, std::wstring filename2,std::wstring filename3)
 	{
 		ID3D11Device* device = graphics->GetDevice();
-
+		
 		// Load the texture in.
-
-		if(FAILED(CreateDDSTextureFromFile( device, filename1.c_str(), nullptr, &m_textures[0] )))
+		HRESULT hr = CreateDDSTextureFromFile( device, filename1.c_str(), nullptr, &m_textures[0] );
+		if(FAILED(hr))
 			return false;
-
-		if(filename2.size() > 1)
+		std::wstring path = L"Content/Textures/";
+		if(filename2.size() > path.size() + 1)
 		{
 			if(FAILED(CreateDDSTextureFromFile( device, filename2.c_str(), nullptr, &m_textures[1] )))
 				return false;
 		
-			if(filename3.size() > 1)
+			if(filename3.size() > path.size() + 1)
 				if(FAILED(CreateDDSTextureFromFile(device,filename3.c_str(),nullptr,&m_textures[2])))
 					return false;
 

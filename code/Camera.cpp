@@ -2,21 +2,51 @@
 // Filename: Camera.cpp
 ////////////////////////////////////////////////////////////////////////////////
 #include "camera.h"
+#include <iostream>
 
 namespace Engine
 {
-
-	Camera::Camera()
+	bool Camera::isInitialized = false;
+	void Camera::BindLua(luabridge::lua_State* L)
 	{
-		m_positionX = 0.0f;
-		m_positionY = 0.0f;
-		m_positionZ = 0.0f;
-
-		m_rotationX = 0.0f;
-		m_rotationY = 0.0f;
-		m_rotationZ = 0.0f;
+		if (!isInitialized)
+		{
+			isInitialized = true;
+			try 
+			{
+				using namespace luabridge;
+				getGlobalNamespace(L)
+					.beginClass<Camera>("Camera")
+						.addProperty("position",&Camera::GetPosition,&Camera::SetPosition)
+						.addProperty("rotation",&Camera::GetRotation,&Camera::SetRotation)
+						.addData<bool>("reloadScript",&Camera::loadScript)
+					.endClass();
+			}
+			catch(luabridge::LuaException const& e)
+			{
+				std::cout << "ERR: " << e.what() << std::endl;
+			}
+		}
 	}
 
+	Camera::Camera(Script* script) : loadScript(false)
+	{
+		m_position = Vector3::Zero;
+		m_rotation = Vector3::Zero;
+		LoadScript(script);
+	}
+
+	void Camera::LoadScript(Script* script)
+	{
+		using namespace luabridge;
+		script->LoadScript("Content/Scripts/Camera/Control.lua");
+		LuaRef function = getGlobal(script->GetState(),"HandleInput");
+
+		if (function.isFunction())
+			func = std::make_shared<LuaRef>(function);
+		else
+			func.reset();
+	}
 
 	Camera::Camera(const Camera& other)
 	{
@@ -28,33 +58,29 @@ namespace Engine
 	}
 
 
-	void Camera::SetPosition(float x, float y, float z)
+	void Camera::SetPosition(Vector3 position)
 	{
-		m_positionX = x;
-		m_positionY = y;
-		m_positionZ = z;
-		return;
+		m_position = position;
+
 	}
 
 
-	void Camera::SetRotation(float x, float y, float z)
+	void Camera::SetRotation(Vector3 rotation)
 	{
-		m_rotationX = x;
-		m_rotationY = y;
-		m_rotationZ = z;
-		return;
+		m_rotation = rotation;
+
 	}
 
 
-	Vector3 Camera::GetPosition()
+	Vector3 Camera::GetPosition() const
 	{
-		return Vector3( m_positionX, m_positionY, m_positionZ );
+		return m_position;
 	}
 
 
-	Vector3 Camera::GetRotation()
+	Vector3 Camera::GetRotation() const
 	{
-		return Vector3( m_rotationX, m_rotationY, m_rotationZ );
+		return m_rotation;
 	}
 
 
@@ -68,14 +94,14 @@ namespace Engine
 		up = Vector3(0.0f,1.0f,0.0f);
 
 		// Setup the position of the camera in the world.
-		position = Vector3(m_positionX,m_positionY,m_positionZ);
+		position = m_position;
 		// Setup where the camera is looking by default.
 		lookAt = Vector3(0.0f,0.f,1.0f);
 
 		// Set the yaw (Y axis), pitch (X axis), and roll (Z axis) rotations in radians.
-		pitch = m_rotationX * 0.0174532925f;
-		yaw   = m_rotationY * 0.0174532925f;
-		roll  = m_rotationZ * 0.0174532925f;
+		pitch = m_rotation.x * 0.0174532925f;
+		yaw   = m_rotation.y * 0.0174532925f;
+		roll  = m_rotation.z * 0.0174532925f;
 
 		// Create the rotation matrix from the yaw, pitch, and roll values.
 		rotationMatrix = Matrix::CreateFromYawPitchRoll( pitch, yaw, roll );
@@ -89,8 +115,6 @@ namespace Engine
 
 		// Finally create the view matrix from the three updated vectors.
 		m_viewMatrix = Matrix::CreateLookAt( position, lookAt, up );
-
-		return;
 	}
 
 
@@ -98,4 +122,26 @@ namespace Engine
 	{
 		return m_viewMatrix;
 	} 
+
+	void Camera::MoveCamera(Script* script,InputState* input)
+	{
+		if(func)
+		{
+			try
+			{
+				(*func)(this,input);
+				//std::cout << "C++ Position: (" << m_position.x << "," << m_position.y << ","<<m_position.z << ")\n"; 
+			}
+			catch (luabridge::LuaException const& e)
+			{
+				std::cout << "LuaException: " << e.what() << std::endl;
+			}
+		}
+
+		if (loadScript)
+		{
+			loadScript = false;
+			LoadScript(script);
+		}
+	}
 }

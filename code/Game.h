@@ -24,7 +24,6 @@ namespace Engine
 
 		LRESULT MsgProc(HWND hwnd,UINT msg, WPARAM wparam,LPARAM lparam);
 
-
 	}; 
 }
 

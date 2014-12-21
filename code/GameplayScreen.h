@@ -19,7 +19,7 @@ namespace Engine
 		DirectX::SpriteFont* m_Font;
 
 		float m_PauseAlpha;
-		Camera m_camera;
+		std::unique_ptr<Camera> m_camera;
 		Model* m_model;
 
 		Light m_light;

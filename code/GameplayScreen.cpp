@@ -1,7 +1,6 @@
 #include <ctime>
 
 #include "GameplayScreen.h"
-#include "ScreenManager.h"
 #include "MathHelper.h"
 #include "PauseMenuScreen.h"
 #include "Debug.h"
@@ -12,6 +11,7 @@
 #include "LightMapShader.h"
 #include "AlphaMapShader.h"
 #include "NormalMapShader.h"
+#include "ScreenManager.h"
 
 using namespace DirectX;
 using namespace SimpleMath;
@@ -42,38 +42,42 @@ namespace Engine
 		m_Font = new SpriteFont(m_ScreenManager->GetGraphicsDevice()->GetDevice(),L"Content/Font/gameFont.spritefont");
 		Graphics* graphics = m_ScreenManager->GetGraphicsDevice();
 
-		// create the camera object
-		//m_camera = new Camera();
-
 		Script* script = m_ScreenManager->GetScript();
+		Camera::BindLua(script->GetState());
+		Light::Bind(script);
+		// create the camera object
+		m_camera.reset( new Camera(script));
+
+		
 		script->LoadScript("Content/Scripts/LevelData.lua");
 		script->RunFunction("SetCameraZ",0,1);
 		float z = (float)script->GetResultNumber();
 
 		// set the initial position of the camera
 		//m_camera->SetPosition(0.0f,-1.0f,z);
-		m_camera.SetPosition(0.0f,-1.0f,z);
+		m_camera->SetPosition(Vector3(0.0f,-1.0f,z));
 		script->RunFunction("LoadModelData",0,1);
 
 		std::vector<std::wstring> modelData = script->ReturnArray();
 
 		// create the model object
-		m_model = graphics->CreateModel(modelData[0],graphics->CreateTexture(modelData[1],modelData[2],modelData[3]));
-
+		m_model = graphics->CreateModel(modelData[0]);
+		m_light.LoadScript(script);
+		
 		//m_light = new Light();
-		float r,g,b;
+		/*float r,g,b;
 		script->RunFunction("SetLightingR");
 		r = script->GetGlobalNumber("diffuse");
 		script->RunFunction("SetLightingG");
 		g = script->GetGlobalNumber("diffuse");
 		script->RunFunction("SetLightingB");
-		b = script->GetGlobalNumber("diffuse");
+		b = script->GetGlobalNumber("diffuse");*/
 
-		m_light.SetAmbientColor(0.15f,0.15f,0.15f,1.0f);
-		m_light.SetDiffuseColor(r, g,b,1.0f);
-		m_light.SetDirection(-1.0f,0.0f,0.0f);
-		m_light.SetSpecularColor(1.0f,1.0f,1.0f,1.0f);
-		m_light.SetSpecularPower(32.0f);
+		//m_light.SetAmbientColor(0.15f,0.15f,0.15f,1.0f);
+		//m_light.SetDiffuseColor(r, g,b,1.0f);
+		//m_light.SetDirection(0.0f,0.0f,1.0f);
+		//m_light.SetSpecularColor(1.0f,1.0f,1.0f,1.0f);
+		//m_light.SetSpecularPower(96.0f);
 
 		//m_frustum = new Frustum();
 	}
@@ -158,20 +162,36 @@ namespace Engine
 				script->RunFunction("RotateYRight",rotationY,1); // rotationY += static_cast<float>(*g_XMPi) * 0.1f;
 				rotationY = script->GetGlobalNumber("RotY");
 			}
-			if(input->IsKeyDown(DIK_Q))
-			{
-				script->SetGlobalNumber("RotZ",rotationZ);
-				script->RunFunction("RotateZLeft",rotationZ,1); // rotationZ -= static_cast<float>(*g_XMPi) * 0.1f;
-				rotationZ = script->GetGlobalNumber("RotZ");
-			
-			}
-			if(input->IsKeyDown(DIK_W))
-			{
-				script->SetGlobalNumber("RotZ",rotationZ);
-				script->RunFunction("RotateZRight",rotationZ,1); // rotationZ += static_cast<float>(*g_XMPi) * 0.1f;
-				rotationZ = script->GetGlobalNumber("RotZ");
-			}
+			//if(input->IsKeyDown(DIK_Q))
+			//{
+			//	script->SetGlobalNumber("RotZ",rotationZ);
+			//	script->RunFunction("RotateZLeft",rotationZ,1); // rotationZ -= static_cast<float>(*g_XMPi) * 0.1f;
+			//	rotationZ = script->GetGlobalNumber("RotZ");
+			//
+			//}
+			//if(input->IsKeyDown(DIK_W))
+			//{
+			//	script->SetGlobalNumber("RotZ",rotationZ);
+			//	script->RunFunction("RotateZRight",rotationZ,1); // rotationZ += static_cast<float>(*g_XMPi) * 0.1f;
+			//	rotationZ = script->GetGlobalNumber("RotZ");
+			//}
 
+			//// camera zoom control
+			//if (input->IsKeyDown(DIK_EQUALS))
+			//{
+			//	Vector3 pos = m_camera->GetPosition();
+			//	pos.z += 1.0f;
+			//	m_camera->SetPosition(pos.x,pos.y,pos.z);
+			//}
+
+			//if (input->IsKeyDown(DIK_MINUS))
+			//{
+			//	Vector3 pos = m_camera->GetPosition();
+			//	pos.z -= 1.0f;
+			//	m_camera->SetPosition(pos.x,pos.y,pos.z);
+			//}
+
+			// light controls
 			if(input->IsKeyDown(DIK_R))
 			{
 				Color c = m_light.GetDiffuseColor();
@@ -180,13 +200,13 @@ namespace Engine
 				{
 					script->RunFunction("SubtractColorValue",r,1,1);
 					r = (float)script->GetResultNumber();
-					m_light.SetDiffuseColor(r,c.G(),c.B(),c.A());
+					//m_light.SetDiffuseColor(r,c.G(),c.B(),c.A());
 				}
 				else
 				{
 					script->RunFunction("AddColorValue",r,1,1);
 					r = (float)script->GetResultNumber();
-					m_light.SetDiffuseColor(r,c.G(),c.B(),c.A());
+					//m_light.SetDiffuseColor(r,c.G(),c.B(),c.A());
 				}
 
 			}
@@ -199,13 +219,13 @@ namespace Engine
 				{
 					script->RunFunction("SubtractColorValue",g,1,1);
 					g = (float)script->GetResultNumber();
-					m_light.SetDiffuseColor(c.R(),g,c.B(),c.A());
+					//m_light.SetDiffuseColor(c.R(),g,c.B(),c.A());
 				}
 				else
 				{
 					script->RunFunction("AddColorValue",g,1,1);
 					g = (float)script->GetResultNumber();
-					m_light.SetDiffuseColor(c.R(),g,c.B(),c.A());
+					//m_light.SetDiffuseColor(c.R(),g,c.B(),c.A());
 				}
 
 			}
@@ -218,13 +238,13 @@ namespace Engine
 				{
 					script->RunFunction("SubtractColorValue",b,1,1);
 					b = (float)script->GetResultNumber();
-					m_light.SetDiffuseColor(c.B(),c.G(),b,c.A());
+					//m_light.SetDiffuseColor(c.B(),c.G(),b,c.A());
 				}
 				else
 				{
 					script->RunFunction("AddColorValue",b,1,1);
 					b = (float)script->GetResultNumber();
-					m_light.SetDiffuseColor(c.B(),c.G(),b,c.A());
+					//m_light.SetDiffuseColor(c.B(),c.G(),b,c.A());
 				}
 
 			}
@@ -239,7 +259,7 @@ namespace Engine
 
 			rotation += -thumbstick.x * static_cast<float>(*g_XMPi) * 1.5f;
 
-			
+			m_camera->MoveCamera(m_ScreenManager->GetScript(), input);
 
 		}
 
@@ -259,8 +279,8 @@ namespace Engine
 		//	rotationX *= deltaTime;
 		//	rotationY *= deltaTime;
 
-			m_camera.SetRotation(rotationX,rotationY,0.0f);
-			
+			//m_camera.SetRotation(rotationX,rotationY,0.0f);
+			m_light.SetDirection(Vector3(rotationX,rotationY,rotationZ));
 		}
 	}
 
@@ -273,36 +293,39 @@ namespace Engine
 
 		// must be set or there will be depth problems
 		graphics->GetImmediateContex()->OMSetDepthStencilState(graphics->GetDepthStencilState(),1);
+		// Now set the rasterizer state.
+		graphics->GetImmediateContex()->RSSetState(graphics->GetRasterState());
 
 		// get the font object
 		SpriteFont* font = m_Font;
 		Matrix viewMatrix,projMatrix,worldMatrix;
 
 			// generate the view matrix based on the camera's position
-		m_camera.Render();
+		m_camera->Render();
 
 		// get the world,view, and projection matrices from the camera
-		viewMatrix = m_camera.GetViewMatrix();
+		viewMatrix = m_camera->GetViewMatrix();
 		worldMatrix = m_ScreenManager->GetGraphicsDevice()->GetWorldMatrix();
 		projMatrix = m_ScreenManager->GetGraphicsDevice()->GetProjectionMatrix();
 		worldMatrix = Matrix::CreateRotationX(rotationZ);
 		// set up the frustum
 		m_frustum.Construct(m_ScreenManager->GetGraphicsDevice()->GetScreenDepth(),projMatrix,viewMatrix);
+
 		NormalMapShader* normalMap = m_ScreenManager->GetGraphicsDevice()->GetNormalMapShader();
 		normalMap->SetWorldViewProjMatrices(worldMatrix,viewMatrix,projMatrix);
 		normalMap->SetDiffuseColor(m_light.GetDiffuseColor());
 		normalMap->SetLightDiretion(m_light.GetDirection());
-
+		
 		// clear the screen to a different color
-		graphics->Clear(Colors::CornflowerBlue);
+		graphics->Clear(Colors::Black);
 
 		// render the model
-		graphics->Render(m_model, ShaderType::NORMALMAP);
+		graphics->Render(m_model);
 
 
-		spriteBatch->Begin();
+//		spriteBatch->Begin();
 
-		spriteBatch->End();
+//		spriteBatch->End();
 
 		// If the game is transitioning on or off, fade it out to black.
 		if (m_TransitionPosition > 0 || m_PauseAlpha > 0)

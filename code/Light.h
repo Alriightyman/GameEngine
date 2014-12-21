@@ -9,28 +9,34 @@
 // INCLUDES //
 //////////////
 #include <SimpleMath.h>
+#include "Script.h"
 using namespace DirectX::SimpleMath;
 
 namespace Engine
 {
+	//class Script;
+
 	class Light
 	{
+	public:
+		static bool isInitialized;
+		static void Bind(Script* script);
 	public:
 		Light();
 		Light(const Light&);
 		~Light();
-
-		void SetAmbientColor(float,float,float,float);
-		void SetDiffuseColor(float, float, float, float);
-		void SetDirection(float, float, float);
-		void SetSpecularColor(float,float,float,float);
+		void LoadScript(Script* script);
+		void SetAmbientColor(Color color);
+		void SetDiffuseColor(Color color);
+		void SetDirection(Vector3 direction);
+		void SetSpecularColor(Color color);
 		void SetSpecularPower(float);
 
-		Color GetAmbientColor();
-		Color GetDiffuseColor();
-		Vector3 GetDirection();
-		Color GetSpecularColor();
-		float GetSpecularPower();
+		Color GetAmbientColor() const;
+		Color GetDiffuseColor() const;
+		Vector3 GetDirection() const;
+		Color GetSpecularColor() const;
+		float GetSpecularPower() const;
 
 	private:
 		Color m_ambientColor;

@@ -90,6 +90,12 @@
     <Filter Include="Shaders\NormalMapShader\Shaders">
       <UniqueIdentifier>{44a6c20e-a29b-4fae-ba78-d7671419de6d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Script\scripts\Camera">
+      <UniqueIdentifier>{7ae9c4b3-932b-48b1-8661-2085f1448386}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script\scripts\Light">
+      <UniqueIdentifier>{923cf7b2-e3b9-4977-a22d-7726e49848d3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="code\BackgroundScreen.cpp">
@@ -349,6 +355,12 @@
     </None>
     <None Include="Content\Scripts\LevelData.lua">
       <Filter>Script\scripts</Filter>
+    </None>
+    <None Include="Content\Scripts\Camera\Control.lua">
+      <Filter>Script\scripts\Camera</Filter>
+    </None>
+    <None Include="Content\Scripts\Light\Light.lua">
+      <Filter>Script\scripts\Light</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

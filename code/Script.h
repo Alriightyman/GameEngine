@@ -1,5 +1,4 @@
 #pragma once
-#include "Lua\lua.hpp"
 #include "Lua\LuaBridge\LuaBridge.h"
 #include <string>
 #include <vector>
@@ -7,7 +6,7 @@
 class Script
 {
 private:
-	lua_State* m_luaState;
+	luabridge::lua_State* m_luaState;
 
 public:
 	Script(void);
@@ -17,7 +16,7 @@ public:
 	bool LoadScript(const char* scriptFile);
 	void OutputError(int state);
 	// simple sets/gets functions
-	lua_State* GetState() { return m_luaState; }
+	luabridge::lua_State* GetState() { return m_luaState; }
 	std::string GetGlobalString(const char* name);
 	void SetGlobalString(const char* name, const char* value);
 
