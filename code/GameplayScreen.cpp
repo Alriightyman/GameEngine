@@ -12,6 +12,7 @@
 #include "AlphaMapShader.h"
 #include "NormalMapShader.h"
 #include "ScreenManager.h"
+#include "Model.h"
 
 using namespace DirectX;
 using namespace SimpleMath;
@@ -19,7 +20,7 @@ namespace Engine
 {
 
 	GameplayScreen::GameplayScreen(void)
-		: m_Font(0),m_model(0)//,m_camera(0),
+		: m_Font(0),obj(0)//,m_camera(0),
 		//m_light(0),m_frustum(0)//,m_model(0)
 	{
 		rotationX = rotationZ = rotation = 0.0f;
@@ -45,6 +46,9 @@ namespace Engine
 		Script* script = m_ScreenManager->GetScript();
 		Camera::BindLua(script->GetState());
 		Light::Bind(script);
+		Model::Bind(script);
+		DemoObject::Bind(script);
+
 		// create the camera object
 		m_camera.reset( new Camera(script));
 
@@ -61,7 +65,10 @@ namespace Engine
 		std::vector<std::wstring> modelData = script->ReturnArray();
 
 		// create the model object
-		m_model = graphics->CreateModel(modelData[0]);
+		//m_model = graphics->CreateModel(modelData[0]);
+		obj = new DemoObject();
+		obj->Initialize(graphics,script);
+
 		m_light.LoadScript(script);
 		
 		//m_light = new Light();
@@ -84,11 +91,11 @@ namespace Engine
 
 	void GameplayScreen::UnLoad()
 	{
-		if(m_model)
+		if(obj)
 		{
-			m_model->Shutdown();
-			delete m_model;
-			m_model = 0;
+			//obj->Shutdown();
+			delete obj;
+			obj = 0;
 		}
 		if(m_Font)
 		{
@@ -135,62 +142,11 @@ namespace Engine
 			Vector2 movement = Vector2::Zero;
 
 			Script* script = m_ScreenManager->GetScript();
-			script->LoadScript("Content/Scripts/DemoInput.lua");
 			
-			// check keyboard movements first
-			if(input->IsKeyDown(DIK_LEFTARROW))
-			{
-				script->SetGlobalNumber("RotX",rotationX);
-				script->RunFunction("RotateXLeft",rotationX,1); // rotationX += static_cast<float>(*g_XMPi) * 0.1f;
-				rotationX = script->GetGlobalNumber("RotX");
-			}
-			if(input->IsKeyDown(DIK_RIGHTARROW))
-			{
-				script->SetGlobalNumber("RotX",rotationX);
-				script->RunFunction("RotateXRight",rotationX,1); // rotationX -= static_cast<float>(*g_XMPi) * 0.1f;
-				rotationX = script->GetGlobalNumber("RotX");
-			}
-			if(input->IsKeyDown(DIK_UPARROW))
-			{
-				script->SetGlobalNumber("RotY",rotationY);
-				script->RunFunction("RotateYLeft",rotationY,1); // rotationY -= static_cast<float>(*g_XMPi) * 0.1f;
-				rotationY = script->GetGlobalNumber("RotY");
-			}
-			if(input->IsKeyDown(DIK_DOWNARROW))
-			{
-				script->SetGlobalNumber("RotY",rotationY);
-				script->RunFunction("RotateYRight",rotationY,1); // rotationY += static_cast<float>(*g_XMPi) * 0.1f;
-				rotationY = script->GetGlobalNumber("RotY");
-			}
-			//if(input->IsKeyDown(DIK_Q))
-			//{
-			//	script->SetGlobalNumber("RotZ",rotationZ);
-			//	script->RunFunction("RotateZLeft",rotationZ,1); // rotationZ -= static_cast<float>(*g_XMPi) * 0.1f;
-			//	rotationZ = script->GetGlobalNumber("RotZ");
-			//
-			//}
-			//if(input->IsKeyDown(DIK_W))
-			//{
-			//	script->SetGlobalNumber("RotZ",rotationZ);
-			//	script->RunFunction("RotateZRight",rotationZ,1); // rotationZ += static_cast<float>(*g_XMPi) * 0.1f;
-			//	rotationZ = script->GetGlobalNumber("RotZ");
-			//}
+			
+			obj->Input(input);
 
-			//// camera zoom control
-			//if (input->IsKeyDown(DIK_EQUALS))
-			//{
-			//	Vector3 pos = m_camera->GetPosition();
-			//	pos.z += 1.0f;
-			//	m_camera->SetPosition(pos.x,pos.y,pos.z);
-			//}
-
-			//if (input->IsKeyDown(DIK_MINUS))
-			//{
-			//	Vector3 pos = m_camera->GetPosition();
-			//	pos.z -= 1.0f;
-			//	m_camera->SetPosition(pos.x,pos.y,pos.z);
-			//}
-
+			script->LoadScript("Content/Scripts/DemoInput.lua");
 			// light controls
 			if(input->IsKeyDown(DIK_R))
 			{
@@ -229,6 +185,9 @@ namespace Engine
 				}
 
 			}
+
+			if(input->IsKeyDown(DIK_U))
+				rotationX += 1.0;
 
 			if(input->IsKeyDown(DIK_B))
 			{
@@ -280,7 +239,13 @@ namespace Engine
 		//	rotationY *= deltaTime;
 
 			//m_camera.SetRotation(rotationX,rotationY,0.0f);
-			m_light.SetDirection(Vector3(rotationX,rotationY,rotationZ));
+			obj->Update(deltaTime);
+
+//			m_light.SetDirection(Vector3(rotationX,rotationY,rotationZ));
+			Vector3 v = m_light.GetDirection();
+			Color c = m_light.GetDiffuseColor();
+			printf("Direction (%f,%f,%f)\n",v.x,v.y,v.z);
+			printf("Diffuse (%f,%f,%f)\n",c.x,c.y,c.z);
 		}
 	}
 
@@ -300,28 +265,27 @@ namespace Engine
 		SpriteFont* font = m_Font;
 		Matrix viewMatrix,projMatrix,worldMatrix;
 
-			// generate the view matrix based on the camera's position
+		// generate the view matrix based on the camera's position
 		m_camera->Render();
 
 		// get the world,view, and projection matrices from the camera
 		viewMatrix = m_camera->GetViewMatrix();
-		worldMatrix = m_ScreenManager->GetGraphicsDevice()->GetWorldMatrix();
+		worldMatrix = obj->GetWorldMatrix(); // m_ScreenManager->GetGraphicsDevice()->GetWorldMatrix();
 		projMatrix = m_ScreenManager->GetGraphicsDevice()->GetProjectionMatrix();
-		worldMatrix = Matrix::CreateRotationX(rotationZ);
+		//worldMatrix *= Matrix::CreateRotationX(rotationZ);
 		// set up the frustum
 		m_frustum.Construct(m_ScreenManager->GetGraphicsDevice()->GetScreenDepth(),projMatrix,viewMatrix);
-
+		
 		NormalMapShader* normalMap = m_ScreenManager->GetGraphicsDevice()->GetNormalMapShader();
 		normalMap->SetWorldViewProjMatrices(worldMatrix,viewMatrix,projMatrix);
 		normalMap->SetDiffuseColor(m_light.GetDiffuseColor());
 		normalMap->SetLightDiretion(m_light.GetDirection());
-		
 		// clear the screen to a different color
-		graphics->Clear(Colors::Black);
+		graphics->Clear(Colors::Blue);
 
 		// render the model
-		graphics->Render(m_model);
-
+		//graphics->Render(m_model);
+		obj->Render(graphics);
 
 //		spriteBatch->Begin();
 

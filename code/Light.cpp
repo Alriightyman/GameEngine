@@ -32,7 +32,14 @@ namespace Engine
 		if (f.isFunction())
 		{
 			std::shared_ptr<luabridge::LuaRef> func = std::make_shared<LuaRef>(f); 
+			try
+			{
 			(*func)(this);
+			}
+			catch(LuaException const& e)
+			{
+				return;
+			}
 		}
 	}
 
@@ -96,6 +103,7 @@ namespace Engine
 		using namespace luabridge;
 		if(!isInitialized)
 		{
+			isInitialized = true;
 			getGlobalNamespace(script->GetState())
 				.beginClass<Light>("Light")
 					.addProperty("Direction",&Light::GetDirection,&Light::SetDirection)

@@ -4,10 +4,9 @@
 #include <SimpleMath.h>
 #include <d3d11.h>
 #include "Camera.h"
-#include "Model.h"
 #include "Light.h"
 #include "Frustum.h"
-
+#include "../DemoObject.h"
 using namespace DirectX::SimpleMath;
 namespace Engine
 {
@@ -20,7 +19,7 @@ namespace Engine
 
 		float m_PauseAlpha;
 		std::unique_ptr<Camera> m_camera;
-		Model* m_model;
+		DemoObject* obj;
 
 		Light m_light;
 		Frustum m_frustum;

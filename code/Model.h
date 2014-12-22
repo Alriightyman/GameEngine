@@ -13,6 +13,8 @@ using namespace DirectX::SimpleMath;
 /* 
 |
 */
+class Script;
+
 namespace Engine
 {
 /*
@@ -176,13 +178,17 @@ namespace Engine
 		ModelData* m_model;
 		ID3D11Buffer *m_vertexBuffer, *m_indexBuffer;
 		std::vector<Mesh*> m_meshes;
-
+	public:
+		static void Bind(Script* script);
+		static bool isInitialized;
 	public:
 		Model();
 		Model(const Model&);
 		~Model();
 
 		void Shutdown();
+	public:
+		
 	protected:
 		bool Initialize(Graphics* graphics,std::wstring modelFilename);
 		void Render(Graphics* graphics);

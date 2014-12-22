@@ -42,6 +42,7 @@
     <ClCompile Include="code\PlayerIndexEventArgs.cpp" />
     <ClCompile Include="code\ScreenManager.cpp" />
     <ClCompile Include="code\ToonShader.cpp" />
+    <ClCompile Include="DemoObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\AlphaMapShader.h" />
@@ -49,6 +50,7 @@
     <ClInclude Include="code\Camera.h" />
     <ClInclude Include="code\ConstantBuffer.h" />
     <ClInclude Include="code\Frustum.h" />
+    <ClInclude Include="code\GameObject.h" />
     <ClInclude Include="code\Light.h" />
     <ClInclude Include="code\LightMapShader.h" />
     <ClInclude Include="code\LightShader.h" />
@@ -78,6 +80,7 @@
     <ClInclude Include="code\PlayerIndexEventArgs.h" />
     <ClInclude Include="code\ScreenManager.h" />
     <ClInclude Include="code\ToonShader.h" />
+    <ClInclude Include="DemoObject.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Content\Shaders\AlphaMapPS.hlsl">
@@ -153,10 +156,12 @@
     <FxCompile Include="Content\Shaders\TexturePS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Content/Shaders/%(Filename).cso</ObjectFileOutput>
     </FxCompile>
     <FxCompile Include="Content\Shaders\TextureVS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Content/Shaders/%(Filename).cso</ObjectFileOutput>
     </FxCompile>
     <FxCompile Include="Content\Shaders\ToonOutlinePS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
@@ -186,6 +191,7 @@
   <ItemGroup>
     <None Include="Content\Scripts\Camera\Control.lua" />
     <None Include="Content\Scripts\DemoInput.lua" />
+    <None Include="Content\Scripts\GameObjects\DemoObject.lua" />
     <None Include="Content\Scripts\LevelData.lua" />
     <None Include="Content\Scripts\Light\Light.lua" />
     <None Include="Content\Scripts\Options.lua" />
@@ -250,9 +256,9 @@
       <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;dxgi.lib;winmm.lib;xinput.lib;dinput8.lib;DirectXTK.lib;lua52.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy  "$(ProjectDir)Content\Models\*.txt" "$(OutDir)Content\Models\" /e /y /i /r
+      <Command>xcopy  "$(ProjectDir)Content\Models\*.rtx" "$(OutDir)Content\Models\" /e /y /i /r
 xcopy  "$(ProjectDir)Content\Font\*.spritefont" "$(OutDir)Content\Font\" /e /y /i /r
-xcopy  "$(ProjectDir)Content\Shaders\*.cso" "$(OutDir)Content\Shaders" /e /y /i /r
+xcopy  "$(ProjectDir)Content\Shaders\*.cso" "$(OutDir)Content\Shaders\" /e /y /i /r
 xcopy  "$(ProjectDir)Content\Scripts\*.*" "$(OutDir)Content\Scripts\" /e /y /i /r
 xcopy  "$(ProjectDir)Content\Textures\*.*" "$(OutDir)Content\Textures\" /e /y /i /r</Command>
     </PostBuildEvent>
@@ -275,9 +281,9 @@ xcopy  "$(ProjectDir)Content\Textures\*.*" "$(OutDir)Content\Textures\" /e /y /i
       <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;dxgi.lib;winmm.lib;xinput.lib;dinput8.lib;DirectXTK.lib;lua52.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy  "$(ProjectDir)Content\Models\*.txt" "$(OutDir)Content\Models\" /e /y /i /r
+      <Command>xcopy  "$(ProjectDir)Content\Models\*.rtx" "$(OutDir)Content\Models\" /e /y /i /r
 xcopy  "$(ProjectDir)Content\Font\*.spritefont" "$(OutDir)Content\Font\" /e /y /i /r
-xcopy  "$(ProjectDir)Content\Shaders\*.cso" "$(OutDir)Content\Shaders" /e /y /i /r
+xcopy  "$(ProjectDir)Content\Shaders\*.cso" "$(OutDir)Content\Shaders\" /e /y /i /r
 xcopy  "$(ProjectDir)Content\Scripts\*.*" "$(OutDir)Content\Scripts\" /e /y /i /r
 xcopy  "$(ProjectDir)Content\Textures\*.*" "$(OutDir)Content\Textures\" /e /y /i /r</Command>
     </PostBuildEvent>

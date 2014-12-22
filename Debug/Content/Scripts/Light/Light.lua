@@ -1,11 +1,11 @@
 
 
-function Initialize(Light)
+function Initialize(light)
 
-    Light.AmbientColor = Color(0.15,0.15,0.15,1.0);
-    Light.DiffuseColor = Color(0.5,0.5,0.5,1.0);
-    Light.SpecularColor = Color(1,1,1,1);
-    Light.SpecularPower = 96.0;
-    Light.Direction = Vector3(0.0,0.0,1.0);
+    light.AmbientColor = Color(.5,.5,.5,1.0);
+    light.DiffuseColor = Color(0.5,0.5,0.5,1.0);
+    light.SpecularColor = Color(1,1,1,1);
+    light.SpecularPower = 96.0;
+    light.Direction = Vector3(0.0,-1.0,-1.0);
 
 end

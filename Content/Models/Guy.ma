@@ -1,6 +1,6 @@
 //Maya ASCII 2013 scene
 //Name: Guy.ma
-//Last modified: Sat, Dec 20, 2014 11:31:09 PM
+//Last modified: Sun, Dec 21, 2014 11:43:00 PM
 //Codeset: 1252
 requires maya "2013";
 requires "Mayatomr" "2013.0 - 3.10.1.4 ";
@@ -91,7 +91,7 @@ createNode transform -n "polySurface1";
 	setAttr ".t" -type "double3" 0 2.4141419081997255 0 ;
 createNode mesh -n "polySurfaceShape2" -p "polySurface1";
 	setAttr -k off ".v";
-	setAttr -s 2 ".iog[0].og";
+	setAttr -s 4 ".iog[0].og";
 	setAttr ".vir" yes;
 	setAttr ".vif" yes;
 	setAttr ".pv" -type "double2" -1.1158787608146667 0.22794035077095032 ;
@@ -11328,6 +11328,13 @@ createNode polyMapSewMove -n "polyMapSewMove329";
 createNode polyMapSewMove -n "polyMapSewMove330";
 	setAttr ".uopa" yes;
 	setAttr ".ics" -type "componentList" 1 "e[1179]";
+createNode objectSet -n "modelPanel4ViewSelectedSet";
+	setAttr ".ihi" 0;
+createNode groupId -n "groupId4";
+	setAttr ".ihi" 0;
+createNode groupParts -n "groupParts6";
+	setAttr ".ihi" 0;
+	setAttr ".ic" -type "componentList" 3 "f[0:445]" "f[480:926]" "f[961:1019]";
 select -ne :time1;
 	setAttr ".o" 1;
 	setAttr ".unw" 1;
@@ -11363,6 +11370,8 @@ select -ne :defaultHardwareRenderGlobals;
 	setAttr ".res" -type "string" "ntsc_4d 646 485 1.333";
 connectAttr "groupId3.id" "polySurfaceShape2.iog.og[6].gid";
 connectAttr "tweakSet1.mwc" "polySurfaceShape2.iog.og[6].gco";
+connectAttr "groupId4.id" "polySurfaceShape2.iog.og[10].gid";
+connectAttr "modelPanel4ViewSelectedSet.mwc" "polySurfaceShape2.iog.og[10].gco";
 connectAttr "polyMapSewMove330.out" "polySurfaceShape2.i";
 connectAttr "polyTweakUV55.uvtk[0]" "polySurfaceShape2.uvst[0].uvtw";
 connectAttr "Root.s" "spine1.is";
@@ -11803,7 +11812,7 @@ connectAttr "polyMapSewMove271.out" "polyMapSewMove272.ip";
 connectAttr "polyMapSewMove272.out" "polyMapSewMove273.ip";
 connectAttr "polyMapSewMove273.out" "polyMapSewMove274.ip";
 connectAttr "polyMapSewMove274.out" "polyTweakUV36.ip";
-connectAttr "polyTweakUV36.out" "polyMapSewMove275.ip";
+connectAttr "groupParts6.og" "polyMapSewMove275.ip";
 connectAttr "polyMapSewMove275.out" "polyTweakUV37.ip";
 connectAttr "polyTweakUV37.out" "polyMapSewMove276.ip";
 connectAttr "polyMapSewMove276.out" "polyMapSewMove277.ip";
@@ -11885,6 +11894,10 @@ connectAttr "polyMapSewMove326.out" "polyMapSewMove327.ip";
 connectAttr "polyMapSewMove327.out" "polyMapSewMove328.ip";
 connectAttr "polyMapSewMove328.out" "polyMapSewMove329.ip";
 connectAttr "polyMapSewMove329.out" "polyMapSewMove330.ip";
+connectAttr "groupId4.msg" "modelPanel4ViewSelectedSet.gn" -na;
+connectAttr "polySurfaceShape2.iog.og[10]" "modelPanel4ViewSelectedSet.dsm" -na;
+connectAttr "polyTweakUV36.out" "groupParts6.ig";
+connectAttr "groupId4.id" "groupParts6.gi";
 connectAttr "blinn1SG.pa" ":renderPartition.st" -na;
 connectAttr "blinn1.msg" ":defaultShaderList1.s" -na;
 connectAttr "file1.msg" ":defaultTextureList1.tx" -na;

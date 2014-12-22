@@ -1,5 +1,0 @@
-
-
-function MoveX(x)
-    
-end

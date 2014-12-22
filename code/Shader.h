@@ -28,6 +28,7 @@ namespace Engine
 		virtual void Render(Graphics* graphics) = 0;
 	public:
 		void SetWorldViewProjMatrices(Matrix world,Matrix view, Matrix projection);
+		void SetWorlMatrix(Matrix world) { m_worldMatrix = world; }
 		void SetTexture(Texture* tex) { m_textures = tex; }
 	protected:
 		virtual bool InitializeShader(Graphics* graphics, std::wstring vertShaderfilename,std::wstring pixelShaderFilename) = 0;

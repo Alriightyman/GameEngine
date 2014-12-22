@@ -1,366 +1,393 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Graphics">
+    <Filter Include="Rendering">
+      <UniqueIdentifier>{2c5118e9-a0d2-4a0a-834c-96a2e77bb3ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Frustum">
+      <UniqueIdentifier>{ce31ff8f-a5d6-447f-acb6-f44b37099943}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Graphics">
       <UniqueIdentifier>{c911cf3f-e223-44e7-a48d-a59d3ddd4b09}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Debug">
+    <Filter Include="Rendering\Light">
+      <UniqueIdentifier>{dd03da2c-3766-4a3d-b3b2-ac071be521a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Model">
+      <UniqueIdentifier>{1187418c-cd8c-43ef-87f6-bc9b8692740a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Model\Models">
+      <UniqueIdentifier>{d8048518-6f92-4720-9833-cc7d63c8432e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Shaders">
+      <UniqueIdentifier>{64a2d3d5-9b51-436d-82a2-e7e0238d835c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Shaders\Light Shader">
+      <UniqueIdentifier>{b58c04c1-bb6c-472b-8bce-63b88fb48ee7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Shaders\Light Shader\Shaders">
+      <UniqueIdentifier>{b85078d6-aa99-45af-a115-f2a3681a5de8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Shaders\Toon Shaders">
+      <UniqueIdentifier>{fd6effc5-e4f6-495f-a5ed-6f2a645f50b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Shaders\Toon Shaders\Shaders">
+      <UniqueIdentifier>{78d86955-b427-4ab1-a696-ded9d591af88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Shaders\Texture Shader">
+      <UniqueIdentifier>{3f430b45-e067-478a-97f7-e4d6a953f92a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Shaders\Texture Shader\Shaders">
+      <UniqueIdentifier>{e6f03c39-ad21-4a91-861a-33832f3e84fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Shaders\Light Map Shaders">
+      <UniqueIdentifier>{ae1d7c06-69f3-44d9-9c74-855481d0cdda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Shaders\BaseShader">
+      <UniqueIdentifier>{8dec11c5-581a-43d5-925a-04693307dac1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Shaders\AlphaMap Shader">
+      <UniqueIdentifier>{7b99686c-df6f-404f-8f46-7b4077e5a30a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Shaders\AlphaMap Shader\Shaders">
+      <UniqueIdentifier>{3664962c-dccb-4535-99aa-864f1c74bf1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Shaders\NormalMapShader">
+      <UniqueIdentifier>{03cac006-053e-4c33-8316-8d7b2849a550}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Shaders\NormalMapShader\Shaders">
+      <UniqueIdentifier>{44a6c20e-a29b-4fae-ba78-d7671419de6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Texture">
+      <UniqueIdentifier>{aef42e0b-a608-4e02-9e55-eb6fe456b267}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{9cfe7826-cdd3-4286-ac1e-acc86e43ffb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Camera">
+      <UniqueIdentifier>{8144d8f2-9ba7-4b19-88ba-167ac2b1c30d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Debug">
       <UniqueIdentifier>{d2a8a8d9-5f8a-4e7b-8924-285d3681eedd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game">
+    <Filter Include="Engine\Game">
       <UniqueIdentifier>{54748d77-04e7-42f8-a395-1441a82470cc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameScreen Manager">
-      <UniqueIdentifier>{e96d6a50-5ef2-45cc-9556-2d6212423018}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GameScreens">
+    <Filter Include="Engine\GameScreens">
       <UniqueIdentifier>{02ae1d0e-b23d-4b5a-b0e8-9eda7982664f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameScreens\Header Files">
+    <Filter Include="Engine\GameScreens\Header Files">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="GameScreens\Source Files">
+    <Filter Include="Engine\GameScreens\Source Files">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Helpers">
+    <Filter Include="Engine\GameScreen Manager">
+      <UniqueIdentifier>{e96d6a50-5ef2-45cc-9556-2d6212423018}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Helpers">
       <UniqueIdentifier>{aaa26f4c-67d6-4210-9435-c823ae3d41e1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Shaders">
-      <UniqueIdentifier>{64a2d3d5-9b51-436d-82a2-e7e0238d835c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Model">
-      <UniqueIdentifier>{1187418c-cd8c-43ef-87f6-bc9b8692740a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Camera">
-      <UniqueIdentifier>{8144d8f2-9ba7-4b19-88ba-167ac2b1c30d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Texture">
-      <UniqueIdentifier>{aef42e0b-a608-4e02-9e55-eb6fe456b267}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Light">
-      <UniqueIdentifier>{dd03da2c-3766-4a3d-b3b2-ac071be521a0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Frustum">
-      <UniqueIdentifier>{ce31ff8f-a5d6-447f-acb6-f44b37099943}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Shaders\Light Shader">
-      <UniqueIdentifier>{b58c04c1-bb6c-472b-8bce-63b88fb48ee7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Shaders\Toon Shaders">
-      <UniqueIdentifier>{fd6effc5-e4f6-495f-a5ed-6f2a645f50b1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Shaders\Texture Shader">
-      <UniqueIdentifier>{3f430b45-e067-478a-97f7-e4d6a953f92a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Shaders\Toon Shaders\Shaders">
-      <UniqueIdentifier>{78d86955-b427-4ab1-a696-ded9d591af88}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Shaders\Light Shader\Shaders">
-      <UniqueIdentifier>{b85078d6-aa99-45af-a115-f2a3681a5de8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Shaders\Texture Shader\Shaders">
-      <UniqueIdentifier>{e6f03c39-ad21-4a91-861a-33832f3e84fe}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Shaders\Light Map Shaders">
-      <UniqueIdentifier>{ae1d7c06-69f3-44d9-9c74-855481d0cdda}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Script">
+    <Filter Include="Engine\Script">
       <UniqueIdentifier>{0de5a4ca-830a-44aa-b328-c2674eac60d9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Script\scripts">
+    <Filter Include="Engine\Script\scripts">
       <UniqueIdentifier>{d760489c-d4b9-405f-b9fa-8bc573786cad}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Model\Models">
-      <UniqueIdentifier>{d8048518-6f92-4720-9833-cc7d63c8432e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Shaders\BaseShader">
-      <UniqueIdentifier>{8dec11c5-581a-43d5-925a-04693307dac1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Shaders\AlphaMap Shader">
-      <UniqueIdentifier>{7b99686c-df6f-404f-8f46-7b4077e5a30a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Shaders\AlphaMap Shader\Shaders">
-      <UniqueIdentifier>{3664962c-dccb-4535-99aa-864f1c74bf1e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Shaders\NormalMapShader">
-      <UniqueIdentifier>{03cac006-053e-4c33-8316-8d7b2849a550}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Shaders\NormalMapShader\Shaders">
-      <UniqueIdentifier>{44a6c20e-a29b-4fae-ba78-d7671419de6d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Script\scripts\Camera">
+    <Filter Include="Engine\Script\scripts\Camera">
       <UniqueIdentifier>{7ae9c4b3-932b-48b1-8661-2085f1448386}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Script\scripts\Light">
+    <Filter Include="Engine\Script\scripts\Light">
       <UniqueIdentifier>{923cf7b2-e3b9-4977-a22d-7726e49848d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{30995030-684a-46a4-8997-86ade05ac54c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\GameObject">
+      <UniqueIdentifier>{72e38fd4-530d-4abf-84f5-19ccb1d57e5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Script\scripts\GameObjects">
+      <UniqueIdentifier>{b1262fff-5aab-4454-a45f-e6a26fc9d404}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="code\BackgroundScreen.cpp">
-      <Filter>GameScreens\Source Files</Filter>
+      <Filter>Engine\GameScreens\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="code\GameplayScreen.cpp">
-      <Filter>GameScreens\Source Files</Filter>
+      <Filter>Engine\GameScreens\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="code\LoadingScreen.cpp">
-      <Filter>GameScreens\Source Files</Filter>
+      <Filter>Engine\GameScreens\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="code\MainMenuScreen.cpp">
-      <Filter>GameScreens\Source Files</Filter>
+      <Filter>Engine\GameScreens\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="code\MenuEntry.cpp">
-      <Filter>GameScreens\Source Files</Filter>
+      <Filter>Engine\GameScreens\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="code\MenuScreen.cpp">
-      <Filter>GameScreens\Source Files</Filter>
+      <Filter>Engine\GameScreens\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="code\MessageBoxScreen.cpp">
-      <Filter>GameScreens\Source Files</Filter>
+      <Filter>Engine\GameScreens\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="code\OptionsMenuScreen.cpp">
-      <Filter>GameScreens\Source Files</Filter>
+      <Filter>Engine\GameScreens\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="code\PauseMenuScreen.cpp">
-      <Filter>GameScreens\Source Files</Filter>
+      <Filter>Engine\GameScreens\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="code\PlayerIndexEventArgs.cpp">
-      <Filter>GameScreens\Source Files</Filter>
+      <Filter>Engine\GameScreens\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="code\Debug.cpp">
-      <Filter>Debug</Filter>
+      <Filter>Engine\Debug</Filter>
     </ClCompile>
     <ClCompile Include="code\Graphics.cpp">
-      <Filter>Graphics</Filter>
+      <Filter>Rendering\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="code\Game.cpp">
-      <Filter>Game</Filter>
+      <Filter>Engine\Game</Filter>
     </ClCompile>
     <ClCompile Include="code\ScreenManager.cpp">
-      <Filter>GameScreen Manager</Filter>
+      <Filter>Engine\GameScreen Manager</Filter>
     </ClCompile>
     <ClCompile Include="code\InputState.cpp">
-      <Filter>GameScreen Manager</Filter>
+      <Filter>Engine\GameScreen Manager</Filter>
     </ClCompile>
     <ClCompile Include="code\GameScreen.cpp">
-      <Filter>GameScreen Manager</Filter>
+      <Filter>Engine\GameScreen Manager</Filter>
     </ClCompile>
     <ClCompile Include="code\MathHelper.cpp">
-      <Filter>Helpers</Filter>
+      <Filter>Engine\Helpers</Filter>
     </ClCompile>
     <ClCompile Include="code\Model.cpp">
-      <Filter>Model</Filter>
+      <Filter>Rendering\Model</Filter>
     </ClCompile>
     <ClCompile Include="code\Camera.cpp">
-      <Filter>Camera</Filter>
+      <Filter>Engine\Camera</Filter>
     </ClCompile>
     <ClCompile Include="code\Texture.cpp">
-      <Filter>Texture</Filter>
+      <Filter>Rendering\Texture</Filter>
     </ClCompile>
     <ClCompile Include="code\Light.cpp">
-      <Filter>Light</Filter>
+      <Filter>Rendering\Light</Filter>
     </ClCompile>
     <ClCompile Include="code\Frustum.cpp">
-      <Filter>Frustum</Filter>
+      <Filter>Rendering\Frustum</Filter>
     </ClCompile>
     <ClCompile Include="code\LightShader.cpp">
-      <Filter>Shaders\Light Shader</Filter>
+      <Filter>Rendering\Shaders\Light Shader</Filter>
     </ClCompile>
     <ClCompile Include="code\MultiTextureShader.cpp">
-      <Filter>Shaders\Texture Shader</Filter>
+      <Filter>Rendering\Shaders\Texture Shader</Filter>
     </ClCompile>
     <ClCompile Include="code\TextureShader.cpp">
-      <Filter>Shaders\Texture Shader</Filter>
+      <Filter>Rendering\Shaders\Texture Shader</Filter>
     </ClCompile>
     <ClCompile Include="code\ToonShader.cpp">
-      <Filter>Shaders\Toon Shaders</Filter>
+      <Filter>Rendering\Shaders\Toon Shaders</Filter>
     </ClCompile>
     <ClCompile Include="code\LightMapShader.cpp">
-      <Filter>Shaders\Light Map Shaders</Filter>
+      <Filter>Rendering\Shaders\Light Map Shaders</Filter>
     </ClCompile>
     <ClCompile Include="code\Script.cpp">
-      <Filter>Script</Filter>
+      <Filter>Engine\Script</Filter>
     </ClCompile>
     <ClCompile Include="code\Shader.cpp">
-      <Filter>Shaders\BaseShader</Filter>
+      <Filter>Rendering\Shaders\BaseShader</Filter>
     </ClCompile>
     <ClCompile Include="code\AlphaMapShader.cpp">
-      <Filter>Shaders\AlphaMap Shader</Filter>
+      <Filter>Rendering\Shaders\AlphaMap Shader</Filter>
     </ClCompile>
     <ClCompile Include="code\NormalMapShader.cpp">
-      <Filter>Shaders\NormalMapShader</Filter>
+      <Filter>Rendering\Shaders\NormalMapShader</Filter>
+    </ClCompile>
+    <ClCompile Include="DemoObject.cpp">
+      <Filter>Engine\GameObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\BackgroundScreen.h">
-      <Filter>GameScreens\Header Files</Filter>
+      <Filter>Engine\GameScreens\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="code\GameplayScreen.h">
-      <Filter>GameScreens\Header Files</Filter>
+      <Filter>Engine\GameScreens\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="code\LoadingScreen.h">
-      <Filter>GameScreens\Header Files</Filter>
+      <Filter>Engine\GameScreens\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="code\MainMenuScreen.h">
-      <Filter>GameScreens\Header Files</Filter>
+      <Filter>Engine\GameScreens\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="code\MenuEntry.h">
-      <Filter>GameScreens\Header Files</Filter>
+      <Filter>Engine\GameScreens\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="code\MenuScreen.h">
-      <Filter>GameScreens\Header Files</Filter>
+      <Filter>Engine\GameScreens\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="code\MessageBoxScreen.h">
-      <Filter>GameScreens\Header Files</Filter>
+      <Filter>Engine\GameScreens\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="code\OptionsMenuScreen.h">
-      <Filter>GameScreens\Header Files</Filter>
+      <Filter>Engine\GameScreens\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="code\PauseMenuScreen.h">
-      <Filter>GameScreens\Header Files</Filter>
+      <Filter>Engine\GameScreens\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="code\PlayerIndex.h">
-      <Filter>GameScreens\Header Files</Filter>
+      <Filter>Engine\GameScreens\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="code\PlayerIndexEventArgs.h">
-      <Filter>GameScreens\Header Files</Filter>
+      <Filter>Engine\GameScreens\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="code\Graphics.h">
-      <Filter>Graphics</Filter>
+      <Filter>Rendering\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="code\Debug.h">
-      <Filter>Debug</Filter>
+      <Filter>Engine\Debug</Filter>
     </ClInclude>
     <ClInclude Include="code\Game.h">
-      <Filter>Game</Filter>
+      <Filter>Engine\Game</Filter>
     </ClInclude>
     <ClInclude Include="code\GameScreen.h">
-      <Filter>GameScreen Manager</Filter>
+      <Filter>Engine\GameScreen Manager</Filter>
     </ClInclude>
     <ClInclude Include="code\InputState.h">
-      <Filter>GameScreen Manager</Filter>
+      <Filter>Engine\GameScreen Manager</Filter>
     </ClInclude>
     <ClInclude Include="code\ScreenManager.h">
-      <Filter>GameScreen Manager</Filter>
+      <Filter>Engine\GameScreen Manager</Filter>
     </ClInclude>
     <ClInclude Include="code\HelperUtilities.h">
-      <Filter>Helpers</Filter>
+      <Filter>Engine\Helpers</Filter>
     </ClInclude>
     <ClInclude Include="code\MathHelper.h">
-      <Filter>Helpers</Filter>
+      <Filter>Engine\Helpers</Filter>
     </ClInclude>
     <ClInclude Include="code\Model.h">
-      <Filter>Model</Filter>
+      <Filter>Rendering\Model</Filter>
     </ClInclude>
     <ClInclude Include="code\Camera.h">
-      <Filter>Camera</Filter>
+      <Filter>Engine\Camera</Filter>
     </ClInclude>
     <ClInclude Include="code\Texture.h">
-      <Filter>Texture</Filter>
+      <Filter>Rendering\Texture</Filter>
     </ClInclude>
     <ClInclude Include="code\Light.h">
-      <Filter>Light</Filter>
+      <Filter>Rendering\Light</Filter>
     </ClInclude>
     <ClInclude Include="code\Frustum.h">
-      <Filter>Frustum</Filter>
+      <Filter>Rendering\Frustum</Filter>
     </ClInclude>
     <ClInclude Include="code\LightShader.h">
-      <Filter>Shaders\Light Shader</Filter>
+      <Filter>Rendering\Shaders\Light Shader</Filter>
     </ClInclude>
     <ClInclude Include="code\MultiTextureShader.h">
-      <Filter>Shaders\Texture Shader</Filter>
+      <Filter>Rendering\Shaders\Texture Shader</Filter>
     </ClInclude>
     <ClInclude Include="code\TextureShader.h">
-      <Filter>Shaders\Texture Shader</Filter>
+      <Filter>Rendering\Shaders\Texture Shader</Filter>
     </ClInclude>
     <ClInclude Include="code\ToonShader.h">
-      <Filter>Shaders\Toon Shaders</Filter>
+      <Filter>Rendering\Shaders\Toon Shaders</Filter>
     </ClInclude>
     <ClInclude Include="code\ConstantBuffer.h">
-      <Filter>Shaders</Filter>
+      <Filter>Rendering\Shaders</Filter>
     </ClInclude>
     <ClInclude Include="code\LightMapShader.h">
-      <Filter>Shaders\Light Map Shaders</Filter>
+      <Filter>Rendering\Shaders\Light Map Shaders</Filter>
     </ClInclude>
     <ClInclude Include="code\Script.h">
-      <Filter>Script</Filter>
+      <Filter>Engine\Script</Filter>
     </ClInclude>
     <ClInclude Include="code\Shader.h">
-      <Filter>Shaders\BaseShader</Filter>
+      <Filter>Rendering\Shaders\BaseShader</Filter>
     </ClInclude>
     <ClInclude Include="code\AlphaMapShader.h">
-      <Filter>Shaders\AlphaMap Shader</Filter>
+      <Filter>Rendering\Shaders\AlphaMap Shader</Filter>
     </ClInclude>
     <ClInclude Include="code\NormalMapShader.h">
-      <Filter>Shaders\NormalMapShader</Filter>
+      <Filter>Rendering\Shaders\NormalMapShader</Filter>
+    </ClInclude>
+    <ClInclude Include="code\GameObject.h">
+      <Filter>Engine\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="DemoObject.h">
+      <Filter>Engine\GameObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Content\Shaders\ToonPS.hlsl">
-      <Filter>Shaders\Toon Shaders\Shaders</Filter>
+      <Filter>Rendering\Shaders\Toon Shaders\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="Content\Shaders\ToonOutlinePS.hlsl">
-      <Filter>Shaders\Toon Shaders\Shaders</Filter>
+      <Filter>Rendering\Shaders\Toon Shaders\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="Content\Shaders\ToonOutlineVS.hlsl">
-      <Filter>Shaders\Toon Shaders\Shaders</Filter>
+      <Filter>Rendering\Shaders\Toon Shaders\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="Content\Shaders\ToonVS.hlsl">
-      <Filter>Shaders\Toon Shaders\Shaders</Filter>
+      <Filter>Rendering\Shaders\Toon Shaders\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="Content\Shaders\LightPS.hlsl">
-      <Filter>Shaders\Light Shader\Shaders</Filter>
+      <Filter>Rendering\Shaders\Light Shader\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="Content\Shaders\LightVS.hlsl">
-      <Filter>Shaders\Light Shader\Shaders</Filter>
+      <Filter>Rendering\Shaders\Light Shader\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="Content\Shaders\MultiTexturePS.hlsl">
-      <Filter>Shaders\Texture Shader\Shaders</Filter>
+      <Filter>Rendering\Shaders\Texture Shader\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="Content\Shaders\MultiTextureVS.hlsl">
-      <Filter>Shaders\Texture Shader\Shaders</Filter>
+      <Filter>Rendering\Shaders\Texture Shader\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="Content\Shaders\TexturePS.hlsl">
-      <Filter>Shaders\Texture Shader\Shaders</Filter>
+      <Filter>Rendering\Shaders\Texture Shader\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="Content\Shaders\TextureVS.hlsl">
-      <Filter>Shaders\Texture Shader\Shaders</Filter>
+      <Filter>Rendering\Shaders\Texture Shader\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="Content\Shaders\LightMapPS.hlsl">
-      <Filter>Shaders\Light Map Shaders</Filter>
+      <Filter>Rendering\Shaders\Light Map Shaders</Filter>
     </FxCompile>
     <FxCompile Include="Content\Shaders\LightMapVS.hlsl">
-      <Filter>Shaders\Light Map Shaders</Filter>
+      <Filter>Rendering\Shaders\Light Map Shaders</Filter>
     </FxCompile>
     <FxCompile Include="Content\Shaders\AlphaMapPS.hlsl">
-      <Filter>Shaders\AlphaMap Shader\Shaders</Filter>
+      <Filter>Rendering\Shaders\AlphaMap Shader\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="Content\Shaders\AlphaMapVS.hlsl">
-      <Filter>Shaders\AlphaMap Shader\Shaders</Filter>
+      <Filter>Rendering\Shaders\AlphaMap Shader\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="Content\Shaders\NormalMapVS.hlsl">
-      <Filter>Shaders\NormalMapShader\Shaders</Filter>
+      <Filter>Rendering\Shaders\NormalMapShader\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="Content\Shaders\NormalMapPS.hlsl">
-      <Filter>Shaders\NormalMapShader\Shaders</Filter>
+      <Filter>Rendering\Shaders\NormalMapShader\Shaders</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\Scripts\Options.lua">
-      <Filter>Script\scripts</Filter>
+      <Filter>Engine\Script\scripts</Filter>
     </None>
     <None Include="Content\Scripts\DemoInput.lua">
-      <Filter>Script\scripts</Filter>
+      <Filter>Engine\Script\scripts</Filter>
     </None>
     <None Include="Content\Scripts\LevelData.lua">
-      <Filter>Script\scripts</Filter>
+      <Filter>Engine\Script\scripts</Filter>
     </None>
     <None Include="Content\Scripts\Camera\Control.lua">
-      <Filter>Script\scripts\Camera</Filter>
+      <Filter>Engine\Script\scripts\Camera</Filter>
     </None>
     <None Include="Content\Scripts\Light\Light.lua">
-      <Filter>Script\scripts\Light</Filter>
+      <Filter>Engine\Script\scripts\Light</Filter>
+    </None>
+    <None Include="Content\Scripts\GameObjects\DemoObject.lua">
+      <Filter>Engine\Script\scripts\GameObjects</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

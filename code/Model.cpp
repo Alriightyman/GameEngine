@@ -4,7 +4,7 @@
 #include "model.h"
 #include <cmath>
 #include <string>
-
+#include "Script.h"
 
 namespace Engine
 {
@@ -48,6 +48,19 @@ namespace Engine
 		Shutdown();
 	}
 
+	void Model::Bind(Script* script)
+	{
+		using namespace luabridge;
+		if (!isInitialized)
+		{
+			isInitialized = true;
+			getGlobalNamespace(script->GetState())
+				.beginClass<Model>("Model")
+				.endClass();
+		}
+	}
+
+	bool Model::isInitialized = false;
 
 	bool Model::Initialize(Graphics* graphics,std::wstring modelFilename)
 	{
@@ -429,6 +442,7 @@ namespace Engine
 
 		// Set the type of primitive that should be rendered from this vertex buffer, in this case triangles.
 		deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		
 	}
 
 #pragma endregion
