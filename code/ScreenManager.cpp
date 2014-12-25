@@ -2,6 +2,8 @@
 #include "Debug.h"
 #include <DDSTextureLoader.h>
 #include "Graphics.h"
+#include "Script.h"
+#include "MathHelper.h"
 
 using namespace DirectX;
 
@@ -196,7 +198,7 @@ namespace Engine
 		}
 	}
 
-	void ScreenManager::AddScreen(GameScreen* screen, PlayerIndex playerIndex)
+	void ScreenManager::AddScreen(GameScreen* screen, int playerIndex)
 	{
 		screen->ControllingPlayer(playerIndex);
 		screen->ScreenManager(this);
@@ -245,7 +247,7 @@ namespace Engine
 		m_graphics->GetImmediateContex()->RSGetViewports(&viewCount,&viewport);
 
 		spriteBatch->Begin();
-		RECT r = { 0,0,viewport.Width,viewport.Height };
+		RECT r = { 0,0,static_cast<LONG>(viewport.Width),static_cast<LONG>(viewport.Height) };
 
 		XMVECTORF32 color = { 0.0f,0.0f,0.0f,alpha };
 		spriteBatch->Draw(blankTexture,r,0,color);
@@ -264,7 +266,7 @@ namespace Engine
 		}
 	}
 
-	// binds data types of directXtoolkit
+	// binds data types of directXtoolkit to lua
 	void ScreenManager::LuaBindings(luabridge::lua_State* L)
 	{
 		using namespace luabridge;
@@ -277,27 +279,73 @@ namespace Engine
 				.addData<float>("x",&Vector3::x)
 				.addData<float>("y",&Vector3::y)
 				.addData<float>("z",&Vector3::z)
-			.endClass();
+				.addFunction("Length",&Vector3::Length)
+				.addFunction("Dot",&Vector3::Dot)
+				.addStaticData<Vector3>("Zero",const_cast<Vector3*>(&Vector3::Zero))
+				.addStaticData<Vector3>("One",const_cast<Vector3*>(&Vector3::One))
+				.addStaticData<Vector3>("UnitX",const_cast<Vector3*>(&Vector3::UnitX))
+				.addStaticData<Vector3>("UnitY",const_cast<Vector3*>(&Vector3::UnitY))
+				.addStaticData<Vector3>("UnitZ",const_cast<Vector3*>(&Vector3::UnitZ))
+				.addStaticData<Vector3>("Up",const_cast<Vector3*>(&Vector3::Up))
+				.addStaticData<Vector3>("Down",const_cast<Vector3*>(&Vector3::Down))
+				.addStaticData<Vector3>("Right",const_cast<Vector3*>(&Vector3::Right))
+				.addStaticData<Vector3>("Left",const_cast<Vector3*>(&Vector3::Left))
+				.addStaticData<Vector3>("Forward",const_cast<Vector3*>(&Vector3::Forward))
+				.addStaticData<Vector3>("Backward",const_cast<Vector3*>(&Vector3::Backward))
+			.endClass()
 
 		// Vector2
-		getGlobalNamespace(L)
 			.beginClass<Vector2>("Vector2")
 				.addConstructor<void(*)(void)>()
 				.addConstructor<void(*)(float x,float y)>()
 				.addData<float>("x",&Vector2::x)
 				.addData<float>("y",&Vector2::y)
-			.endClass();
+				.addFunction("InBounds",&Vector2::InBounds)
+				.addFunction("Length",&Vector2::Length)
+				.addFunction("LengthSquared",&Vector2::LengthSquared)
+				.addFunction("Dot",&Vector2::Dot)
+				.addStaticData<Vector2>("Zero",const_cast<Vector2*>(&Vector2::Zero))
+				.addStaticData<Vector2>("One",const_cast<Vector2*>(&Vector2::One))
+				.addStaticData<Vector2>("UnitX",const_cast<Vector2*>(&Vector2::UnitX))
+				.addStaticData<Vector2>("UnitY",const_cast<Vector2*>(&Vector2::UnitY))			
+			.endClass()
+		// Vector4
+			.beginClass<Vector4>("Vector4")
+				.addConstructor<void(*)(void)>()
+				.addConstructor<void(*)(float x,float y,float z,float w)>()
+				.addData<float>("x",&Vector4::x)
+				.addData<float>("y",&Vector4::y)
+				.addData<float>("z",&Vector4::z)
+				.addData<float>("w",&Vector4::w)
+				.addFunction("InBounds",&Vector4::InBounds)
+				.addFunction("Length",&Vector4::Length)
+				.addFunction("LengthSquared",&Vector4::LengthSquared)
+				.addFunction("Dot",&Vector4::Dot)
+				.addStaticData<Vector4>("Zero",const_cast<Vector4*>(&Vector4::Zero))
+				.addStaticData<Vector4>("One",const_cast<Vector4*>(&Vector4::One))
+				.addStaticData<Vector4>("UnitX",const_cast<Vector4*>(&Vector4::UnitX))
+				.addStaticData<Vector4>("UnitY",const_cast<Vector4*>(&Vector4::UnitY))
+				.addStaticData<Vector4>("UnitZ",const_cast<Vector4*>(&Vector4::UnitZ))
+				.addStaticData<Vector4>("UnitW",const_cast<Vector4*>(&Vector4::UnitW))
+			.endClass()
 		// Quat
-		getGlobalNamespace(L)
 			.beginClass<Quaternion>("Quaternion")
 				.addConstructor<void(*)(void)>()
 				.addConstructor<void(*)(float x,float y,float z, float w)>()
 				.addConstructor<void(*)(const Vector3& v, float scalar)>()
 				.addData<float>("x",&Quaternion::x)
 				.addData<float>("y",&Quaternion::y)
-			.endClass();
+				.addData<float>("z",&Quaternion::z)
+				.addData<float>("w",&Quaternion::w)
+				.addFunction("Length",&Quaternion::Length)
+				.addFunction("LengthSquared",&Quaternion::LengthSquared)
+				.addFunction("Inverse",&Quaternion::Inverse)
+				.addFunction("Dot",&Quaternion::Dot)
+				.addStaticFunction("CreateFromAxisAngle",&Quaternion::CreateFromAxisAngle)
+				.addStaticFunction("CreateFromYawPitchRoll",&Quaternion::CreateFromYawPitchRoll)
+				.addStaticFunction("CreateFromRotationMatrix",&Quaternion::CreateFromRotationMatrix)
+			.endClass()
 		// color
-		getGlobalNamespace(L)
 			.beginClass<Color>("Color")
 				.addConstructor<void(*)(void)>()
 				.addConstructor<void(*)(float r,float g,float b, float a)>()
@@ -306,6 +354,48 @@ namespace Engine
 				.addProperty("g",&Color::G,&Color::G)
 				.addProperty("b",&Color::B,&Color::B)
 				.addProperty("a",&Color::A,&Color::A)
+				.addFunction("ToVector3",&Color::ToVector3)
+				.addFunction("ToVector4",&Color::ToVector4)
+			.endClass()
+			// Matrix
+			.beginClass<Matrix>("Matrix")
+				.addConstructor<void(*)(void)>()
+				.addConstructor<void(*)(const Vector3& v1,const Vector3& v2, const Vector3& v3)>()
+				.addFunction("Decompose",&Matrix::Decompose)
+				.addFunction("Determinant",&Matrix::Determinant)
+				.addStaticFunction("CreateBillboard",&Matrix::CreateBillboard)
+				.addStaticFunction("CreateConstrainedBillboard",&Matrix::CreateConstrainedBillboard)
+				.addStaticFunction("CreateRotationX",&Matrix::CreateRotationX)
+				.addStaticFunction("CreateRotationY",&Matrix::CreateRotationY)
+				.addStaticFunction("CreateRotationZ",&Matrix::CreateRotationZ)
+				.addStaticFunction("CreateFromAxisAngle",&Matrix::CreateFromAxisAngle)
+				.addStaticFunction("CreatePerspectiveFieldOfView",&Matrix::CreatePerspectiveFieldOfView)
+				.addStaticFunction("CreatePerspective",&Matrix::CreatePerspective)
+				.addStaticFunction("CreatePerspectiveOffCenter",&Matrix::CreatePerspectiveOffCenter)
+				.addStaticFunction("CreateOrthographic",&Matrix::CreateOrthographic)
+				.addStaticFunction("CreateOrthographicOffCenter",&Matrix::CreateOrthographicOffCenter)
+				.addStaticFunction("CreateLookAt",&Matrix::CreateLookAt)
+				.addStaticFunction("CreateWorld",&Matrix::CreateWorld)
+				.addStaticFunction("CreateFromQuaternion",&Matrix::CreateFromQuaternion)
+				.addStaticFunction("CreateFromYawPitchRoll",&Matrix::CreateFromYawPitchRoll)
+				.addStaticFunction("CreateShadow",&Matrix::CreateShadow)
+				.addStaticFunction("CreateReflection",&Matrix::CreateReflection)
+				.addStaticData<Matrix>("Identity",const_cast<Matrix*>(&Matrix::Identity))
+			.endClass()
+			
+			.beginClass<MathHelper>("MathHelper")
+				//.addStaticFunction("AngleFromXY",&MathHelper::AngleFromXY)
+				.addStaticFunction("InverseTranspose",&MathHelper::InverseTranspose)
+				.addStaticFunction("CreateTranslation",&MathHelper::CreateTranslation)
+				.addStaticFunction("MatrixMultiply",&MathHelper::MatrixMultiply)
+				.addStaticFunction("CreateScale",&MathHelper::CreateScale)
+				.addStaticData<float>("Infinity",const_cast<float*>(&MathHelper::Infinity))
+				.addStaticData<float>("Pi",const_cast<float*>(&MathHelper::Pi))
+				.addStaticFunction("Vector3Cross",&MathHelper::CrossVector3)
+				.addStaticFunction("Vector3Normalize",&MathHelper::NormalizeVector3)
+				.addStaticFunction("ATan2",&MathHelper::ATan2)
+				
 			.endClass();
+				
 	}
 }

@@ -796,7 +796,6 @@ private:
       CFunc::CallMemberFunctionHelper <MemFn, FuncTraits <MemFn>::isConstMemberFunction>::add (L, name, mf);
       return *this;
     }
-
     //--------------------------------------------------------------------------
     /**
         Add or replace a member lua_CFunction.

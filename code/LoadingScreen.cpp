@@ -19,7 +19,7 @@ namespace Engine
 		debug.Print("LoadingScreen deleted");
 	}
 
-	void LoadingScreen::Load(Engine::ScreenManager* screenManager,bool loadingIsSlow,PlayerIndex& playerIndex,std::vector<GameScreen*>& screensToLoad)
+	void LoadingScreen::Load(Engine::ScreenManager* screenManager,bool loadingIsSlow,int& playerIndex,std::vector<GameScreen*>& screensToLoad)
 	{
 		// tell each current screens to transition off
 		std::vector<GameScreen*> screens = screenManager->GetScreens();

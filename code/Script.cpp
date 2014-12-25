@@ -93,11 +93,11 @@ void Script::SetGlobalNumber(const char* name, double value)
 
 bool Script::GetGlobalBoolean(const char* name)
 {
-	bool value = 0;
+	bool value = false;
 	try 
 	{
 		lua_getglobal(m_luaState, name);
-		value = static_cast<bool>(lua_toboolean(m_luaState, -1));
+		value = (lua_toboolean(m_luaState, -1) != 0);
 		lua_pop(m_luaState, 1);
 	}
 	catch(...) { }

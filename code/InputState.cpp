@@ -1,4 +1,5 @@
 #include "InputState.h"
+#include "LuaEnum.h"
 
 using namespace DirectX;
 namespace Engine
@@ -7,17 +8,59 @@ namespace Engine
 	// binds the input into lua
 	void InputState::Bind(luabridge::lua_State* L)
 	{
-		using namespace luabridge;
-		
+		using namespace DirectX;
+		using namespace luabridge;	
 		getGlobalNamespace(L)
+			.beginClass<GamePad::Buttons>("Buttons")
+				.addData<bool>("a",&GamePad::Buttons::a)
+				.addData<bool>("b",&GamePad::Buttons::b)
+				.addData<bool>("x",&GamePad::Buttons::x)
+				.addData<bool>("y",&GamePad::Buttons::y)
+				.addData<bool>("leftStick",&GamePad::Buttons::leftStick)
+				.addData<bool>("rightStick",&GamePad::Buttons::rightStick)
+				.addData<bool>("leftShoulder",&GamePad::Buttons::leftShoulder)
+				.addData<bool>("rightShoulder",&GamePad::Buttons::rightShoulder)
+				.addData<bool>("back",&GamePad::Buttons::back)
+				.addData<bool>("start",&GamePad::Buttons::start)
+			.endClass()
+			.beginClass<GamePad::DPad>("DPad")
+				.addData<bool>("up",&GamePad::DPad::up)
+				.addData<bool>("down",&GamePad::DPad::down)
+				.addData<bool>("right",&GamePad::DPad::right)
+				.addData<bool>("left",&GamePad::DPad::left)
+			.endClass()
+			.beginClass<GamePad::ThumbSticks>("ThumbSticks")
+				.addData<float>("leftX",&GamePad::ThumbSticks::leftX)
+				.addData<float>("leftY",&GamePad::ThumbSticks::leftY)
+				.addData<float>("rightX",&GamePad::ThumbSticks::rightX)
+				.addData<float>("rightY",&GamePad::ThumbSticks::rightY)
+			.endClass()
+			.beginClass<GamePad::Triggers>("Triggers")
+				.addData<float>("left",&GamePad::Triggers::left)
+				.addData<float>("right",&GamePad::Triggers::right)
+			.endClass()
+			.beginClass<GamePad::State>("State")
+				.addData<GamePad::Buttons>("buttons",&GamePad::State::buttons)
+				.addData<GamePad::DPad>("dpad",&GamePad::State::dpad)
+				.addData<GamePad::ThumbSticks>("thumbSticks",&GamePad::State::thumbSticks)
+				.addData<GamePad::Triggers>("triggers",&GamePad::State::triggers)
+			.endClass()
 			.beginClass<InputState>("Input")
 				.addFunction("IsKeyDown",&InputState::IsKeyDown)
 				.addFunction("IsNewKeyPress",&InputState::IsNewKeyPress)
+				.addFunction("IsMenuSelect",&InputState::IsMenuSelect)
+				.addFunction("IsMenuCancel",&InputState::IsMenuCancel)
+				.addFunction("IsMenuUp",&InputState::IsMenuUp)
+				.addFunction("IsMenuDown",&InputState::IsMenuDown)
+				.addFunction("IsPauseGame",&InputState::IsPauseGame)
+				.addFunction("CurrentGamePadState",&InputState::CurrentGamePadState)
+				.addProperty("UseGamepad",&InputState::UseGamepad,&InputState::SetGamepadUse)
+
 			.endClass();
 	}
 
 
-	InputState::InputState(HWND hwnd) : MAXINPUTS(4)
+	InputState::InputState(HWND hwnd) : MAXINPUTS(4),m_useGamepad(false)
 	{
 		DirectInput8Create(GetModuleHandle(NULL), DIRECTINPUT_VERSION, IID_IDirectInput8, 
 			(void**)&m_DInput, NULL);
@@ -60,20 +103,20 @@ namespace Engine
 
 	bool InputState::IsNewKeyPress(int key)
 	{
-		return (bool)(m_CurrentKeyboardState[key] & 0x80 &&
-			!(bool)(m_PreviousKeyboardState[key] & 0x80));
+		return ( (m_CurrentKeyboardState[key] & 0x80) != 0 &&
+			!((m_PreviousKeyboardState[key] & 0x80) != 0) );
 	}
 
 	bool InputState::IsKeyDown(int key)
 	{
-		return (bool)(m_CurrentKeyboardState[key] & 0x80);
+		return (m_CurrentKeyboardState[key] & 0x80) != 0;
 	}
 
-	bool InputState::IsNewAButtonPress(PlayerIndex controllingPlayer, PlayerIndex& playerIndex)
+	bool InputState::IsNewAButtonPress(int controllingPlayer )
 	{
 		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One && controllingPlayer < PlayerIndex::Four + 1)
 		{
-			playerIndex = controllingPlayer;
+			int playerIndex = controllingPlayer;
 
 			int i = (int)playerIndex;
 			return (m_currentGamepadState[i].IsAPressed() &&
@@ -81,18 +124,18 @@ namespace Engine
 		}
 		else
 		{
-			return (IsNewAButtonPress(PlayerIndex::One,playerIndex) ||
-				IsNewAButtonPress(PlayerIndex::Two,playerIndex) ||
-				IsNewAButtonPress(PlayerIndex::Three,playerIndex) ||
-				IsNewAButtonPress(PlayerIndex::Four,playerIndex));
+			return (IsNewAButtonPress(PlayerIndex::One) ||
+				IsNewAButtonPress(PlayerIndex::Two) ||
+				IsNewAButtonPress(PlayerIndex::Three) ||
+				IsNewAButtonPress(PlayerIndex::Four));
 		}
 	}
 
-	bool InputState::IsNewBButtonPress(PlayerIndex controllingPlayer, PlayerIndex& playerIndex)
+	bool InputState::IsNewBButtonPress(int controllingPlayer )
 	{
 		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One && controllingPlayer < PlayerIndex::Four + 1)
 		{
-			playerIndex = controllingPlayer;
+			int playerIndex = controllingPlayer;
 
 			int i = (int)playerIndex;
 			return (m_currentGamepadState[i].IsBPressed() &&
@@ -100,18 +143,18 @@ namespace Engine
 		}
 		else
 		{
-			return (IsNewBButtonPress(PlayerIndex::One,playerIndex) ||
-				IsNewBButtonPress(PlayerIndex::Two,playerIndex) ||
-				IsNewBButtonPress(PlayerIndex::Three,playerIndex) ||
-				IsNewBButtonPress(PlayerIndex::Four,playerIndex));
+			return (IsNewBButtonPress(PlayerIndex::One) ||
+				IsNewBButtonPress(PlayerIndex::Two) ||
+				IsNewBButtonPress(PlayerIndex::Three) ||
+				IsNewBButtonPress(PlayerIndex::Four));
 		}
 	}
 
-	bool InputState::IsNewXButtonPress(PlayerIndex controllingPlayer, PlayerIndex& playerIndex)
+	bool InputState::IsNewXButtonPress(int controllingPlayer )
 	{
 		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One && controllingPlayer < PlayerIndex::Four + 1)
 		{
-			playerIndex = controllingPlayer;
+			int playerIndex = controllingPlayer;
 
 			int i = (int)playerIndex;
 			return (m_currentGamepadState[i].IsXPressed() &&
@@ -119,18 +162,18 @@ namespace Engine
 		}
 		else
 		{
-			return (IsNewXButtonPress(PlayerIndex::One,playerIndex) ||
-				IsNewXButtonPress(PlayerIndex::Two,playerIndex) ||
-				IsNewXButtonPress(PlayerIndex::Three,playerIndex) ||
-				IsNewXButtonPress(PlayerIndex::Four,playerIndex));
+			return (IsNewXButtonPress(PlayerIndex::One) ||
+				IsNewXButtonPress(PlayerIndex::Two) ||
+				IsNewXButtonPress(PlayerIndex::Three) ||
+				IsNewXButtonPress(PlayerIndex::Four));
 		}
 	}
 
-	bool InputState::IsNewYButtonPress(PlayerIndex controllingPlayer, PlayerIndex& playerIndex)
+	bool InputState::IsNewYButtonPress(int controllingPlayer )
 	{
 		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One && controllingPlayer < PlayerIndex::Four + 1)
 		{
-			playerIndex = controllingPlayer;
+			int playerIndex = controllingPlayer;
 
 			int i = (int)playerIndex;
 			return (m_currentGamepadState[i].IsYPressed() &&
@@ -138,18 +181,18 @@ namespace Engine
 		}
 		else
 		{
-			return (IsNewYButtonPress(PlayerIndex::One,playerIndex) ||
-				IsNewYButtonPress(PlayerIndex::Two,playerIndex) ||
-				IsNewYButtonPress(PlayerIndex::Three,playerIndex) ||
-				IsNewYButtonPress(PlayerIndex::Four,playerIndex));
+			return (IsNewYButtonPress(PlayerIndex::One) ||
+				IsNewYButtonPress(PlayerIndex::Two) ||
+				IsNewYButtonPress(PlayerIndex::Three) ||
+				IsNewYButtonPress(PlayerIndex::Four));
 		}
 	}
 
-	bool InputState::IsNewStartButtonPress(PlayerIndex controllingPlayer, PlayerIndex& playerIndex)
+	bool InputState::IsNewStartButtonPress(int controllingPlayer )
 	{
 		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One && controllingPlayer < PlayerIndex::Four + 1)
 		{
-			playerIndex = controllingPlayer;
+			int playerIndex = controllingPlayer;
 
 			int i = (int)playerIndex;
 			return (m_currentGamepadState[i].IsStartPressed() &&
@@ -157,18 +200,18 @@ namespace Engine
 		}
 		else
 		{
-			return (IsNewStartButtonPress(PlayerIndex::One,playerIndex) ||
-				IsNewStartButtonPress(PlayerIndex::Two,playerIndex) ||
-				IsNewStartButtonPress(PlayerIndex::Three,playerIndex) ||
-				IsNewStartButtonPress(PlayerIndex::Four,playerIndex));
+			return (IsNewStartButtonPress(PlayerIndex::One) ||
+				IsNewStartButtonPress(PlayerIndex::Two) ||
+				IsNewStartButtonPress(PlayerIndex::Three) ||
+				IsNewStartButtonPress(PlayerIndex::Four));
 		}
 	}
 
-	bool InputState::IsNewBackButtonPress(PlayerIndex controllingPlayer, PlayerIndex& playerIndex)
+	bool InputState::IsNewBackButtonPress(int controllingPlayer )
 	{
 		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One && controllingPlayer < PlayerIndex::Four + 1)
 		{
-			playerIndex = controllingPlayer;
+			int playerIndex = controllingPlayer;
 
 			int i = (int)playerIndex;
 			return (m_currentGamepadState[i].IsBackPressed() &&
@@ -176,37 +219,37 @@ namespace Engine
 		}
 		else
 		{
-			return (IsNewBackButtonPress(PlayerIndex::One,playerIndex) ||
-				IsNewBackButtonPress(PlayerIndex::Two,playerIndex) ||
-				IsNewBackButtonPress(PlayerIndex::Three,playerIndex) ||
-				IsNewBackButtonPress(PlayerIndex::Four,playerIndex));
+			return (IsNewBackButtonPress(PlayerIndex::One) ||
+				IsNewBackButtonPress(PlayerIndex::Two) ||
+				IsNewBackButtonPress(PlayerIndex::Three) ||
+				IsNewBackButtonPress(PlayerIndex::Four));
 		}
 	}
 
-	bool InputState::IsNewDPADUpButtonPress(PlayerIndex controllingPlayer, PlayerIndex& playerIndex)
+	bool InputState::IsNewDPADUpButtonPress(int controllingPlayer)
 	{
 		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One && controllingPlayer < PlayerIndex::Four + 1)
 		{
-			playerIndex = controllingPlayer;
+			//int playerIndex = controllingPlayer;
 
-			int i = (int)playerIndex;
+			int i = (int)controllingPlayer;
 			return (m_currentGamepadState[i].IsDPadUpPressed() &&
 				!m_prevGamePadState[i].IsDPadUpPressed());
 		}
 		else
 		{
-			return (IsNewDPADUpButtonPress(PlayerIndex::One,playerIndex) ||
-				IsNewDPADUpButtonPress(PlayerIndex::Two,playerIndex) ||
-				IsNewDPADUpButtonPress(PlayerIndex::Three,playerIndex) ||
-				IsNewDPADUpButtonPress(PlayerIndex::Four,playerIndex));
+			return (IsNewDPADUpButtonPress(PlayerIndex::One) ||
+				IsNewDPADUpButtonPress(PlayerIndex::Two) ||
+				IsNewDPADUpButtonPress(PlayerIndex::Three) ||
+				IsNewDPADUpButtonPress(PlayerIndex::Four));
 		}
 	}
 
-	bool InputState::IsNewDPADDownButtonPress(PlayerIndex controllingPlayer, PlayerIndex& playerIndex)
+	bool InputState::IsNewDPADDownButtonPress(int controllingPlayer )
 	{
 		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One && controllingPlayer < PlayerIndex::Four + 1)
 		{
-			playerIndex = controllingPlayer;
+			int playerIndex = controllingPlayer;
 
 			int i = (int)playerIndex;
 			return (m_currentGamepadState[i].IsDPadDownPressed() &&
@@ -214,18 +257,18 @@ namespace Engine
 		}
 		else
 		{
-			return (IsNewDPADDownButtonPress(PlayerIndex::One,playerIndex) ||
-				IsNewDPADDownButtonPress(PlayerIndex::Two,playerIndex) ||
-				IsNewDPADDownButtonPress(PlayerIndex::Three,playerIndex) ||
-				IsNewDPADDownButtonPress(PlayerIndex::Four,playerIndex));
+			return (IsNewDPADDownButtonPress(PlayerIndex::One) ||
+				IsNewDPADDownButtonPress(PlayerIndex::Two) ||
+				IsNewDPADDownButtonPress(PlayerIndex::Three) ||
+				IsNewDPADDownButtonPress(PlayerIndex::Four));
 		}
 	}
 
-	bool InputState::IsNewDPADLeftButtonPress(PlayerIndex controllingPlayer, PlayerIndex& playerIndex)
+	bool InputState::IsNewDPADLeftButtonPress(int controllingPlayer )
 	{
 		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One && controllingPlayer < PlayerIndex::Four + 1)
 		{
-			playerIndex = controllingPlayer;
+			int playerIndex = controllingPlayer;
 
 			int i = (int)playerIndex;
 			return (m_currentGamepadState[i].IsDPadLeftPressed() &&
@@ -233,18 +276,18 @@ namespace Engine
 		}
 		else
 		{
-			return (IsNewDPADLeftButtonPress(PlayerIndex::One,playerIndex) ||
-				IsNewDPADLeftButtonPress(PlayerIndex::Two,playerIndex) ||
-				IsNewDPADLeftButtonPress(PlayerIndex::Three,playerIndex) ||
-				IsNewDPADLeftButtonPress(PlayerIndex::Four,playerIndex));
+			return (IsNewDPADLeftButtonPress(PlayerIndex::One) ||
+				IsNewDPADLeftButtonPress(PlayerIndex::Two) ||
+				IsNewDPADLeftButtonPress(PlayerIndex::Three) ||
+				IsNewDPADLeftButtonPress(PlayerIndex::Four));
 		}
 	}
 
-	bool InputState::IsNewDPADRightButtonPress(PlayerIndex controllingPlayer, PlayerIndex& playerIndex)
+	bool InputState::IsNewDPADRightButtonPress(int controllingPlayer )
 	{
 		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One && controllingPlayer < PlayerIndex::Four + 1)
 		{
-			playerIndex = controllingPlayer;
+			int playerIndex = controllingPlayer;
 
 			int i = (int)playerIndex;
 			return (m_currentGamepadState[i].IsDPadRightPressed() &&
@@ -252,18 +295,18 @@ namespace Engine
 		}
 		else
 		{
-			return (IsNewDPADRightButtonPress(PlayerIndex::One,playerIndex) ||
-				IsNewDPADRightButtonPress(PlayerIndex::Two,playerIndex) ||
-				IsNewDPADRightButtonPress(PlayerIndex::Three,playerIndex) ||
-				IsNewDPADRightButtonPress(PlayerIndex::Four,playerIndex));
+			return (IsNewDPADRightButtonPress(PlayerIndex::One) ||
+				IsNewDPADRightButtonPress(PlayerIndex::Two) ||
+				IsNewDPADRightButtonPress(PlayerIndex::Three) ||
+				IsNewDPADRightButtonPress(PlayerIndex::Four));
 		}
 	}
 
-	bool InputState::IsNewLButtonPress(PlayerIndex controllingPlayer, PlayerIndex& playerIndex)
+	bool InputState::IsNewLButtonPress(int controllingPlayer )
 	{
 		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One && controllingPlayer < PlayerIndex::Four + 1)
 		{
-			playerIndex = controllingPlayer;
+			int playerIndex = controllingPlayer;
 
 			int i = (int)playerIndex;
 			return (m_currentGamepadState[i].IsLeftShoulderPressed() &&
@@ -271,18 +314,18 @@ namespace Engine
 		}
 		else
 		{
-			return (IsNewLButtonPress(PlayerIndex::One,playerIndex) ||
-				IsNewLButtonPress(PlayerIndex::Two,playerIndex) ||
-				IsNewLButtonPress(PlayerIndex::Three,playerIndex) ||
-				IsNewLButtonPress(PlayerIndex::Four,playerIndex));
+			return (IsNewLButtonPress(PlayerIndex::One) ||
+				IsNewLButtonPress(PlayerIndex::Two) ||
+				IsNewLButtonPress(PlayerIndex::Three) ||
+				IsNewLButtonPress(PlayerIndex::Four));
 		}
 	}
 
-	bool InputState::IsNewRButtonPress(PlayerIndex controllingPlayer, PlayerIndex& playerIndex)
+	bool InputState::IsNewRButtonPress(int controllingPlayer )
 	{
 		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One && controllingPlayer < PlayerIndex::Four + 1)
 		{
-			playerIndex = controllingPlayer;
+			int playerIndex = controllingPlayer;
 
 			int i = (int)playerIndex;
 			return (m_currentGamepadState[i].IsRightShoulderPressed() &&
@@ -290,18 +333,18 @@ namespace Engine
 		}
 		else
 		{
-			return (IsNewRButtonPress(PlayerIndex::One,playerIndex) ||
-				IsNewRButtonPress(PlayerIndex::Two,playerIndex) ||
-				IsNewRButtonPress(PlayerIndex::Three,playerIndex) ||
-				IsNewRButtonPress(PlayerIndex::Four,playerIndex));
+			return (IsNewRButtonPress(PlayerIndex::One) ||
+				IsNewRButtonPress(PlayerIndex::Two) ||
+				IsNewRButtonPress(PlayerIndex::Three) ||
+				IsNewRButtonPress(PlayerIndex::Four));
 		}
 	}
 
-	bool InputState::IsNewRTriggerPress(PlayerIndex controllingPlayer, PlayerIndex& playerIndex)
+	bool InputState::IsNewRTriggerPress(int controllingPlayer )
 	{
 		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One && controllingPlayer < PlayerIndex::Four + 1)
 		{
-			playerIndex = controllingPlayer;
+			int playerIndex = controllingPlayer;
 
 			int i = (int)playerIndex;
 			return (m_currentGamepadState[i].IsRightTriggerPressed() &&
@@ -309,18 +352,18 @@ namespace Engine
 		}
 		else
 		{
-			return (IsNewRTriggerPress(PlayerIndex::One,playerIndex) ||
-				IsNewRTriggerPress(PlayerIndex::Two,playerIndex) ||
-				IsNewRTriggerPress(PlayerIndex::Three,playerIndex) ||
-				IsNewRTriggerPress(PlayerIndex::Four,playerIndex));
+			return (IsNewRTriggerPress(PlayerIndex::One) ||
+				IsNewRTriggerPress(PlayerIndex::Two) ||
+				IsNewRTriggerPress(PlayerIndex::Three) ||
+				IsNewRTriggerPress(PlayerIndex::Four));
 		}
 	}
 
-	bool InputState::IsNewLTriggerPress(PlayerIndex controllingPlayer, PlayerIndex& playerIndex)
+	bool InputState::IsNewLTriggerPress(int controllingPlayer )
 	{
 		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One && controllingPlayer < PlayerIndex::Four + 1)
 		{
-			playerIndex = controllingPlayer;
+			int playerIndex = controllingPlayer;
 
 			int i = (int)playerIndex;
 			return (m_currentGamepadState[i].IsLeftTriggerPressed() &&
@@ -328,18 +371,18 @@ namespace Engine
 		}
 		else
 		{
-			return (IsNewLTriggerPress(PlayerIndex::One,playerIndex) ||
-				IsNewLTriggerPress(PlayerIndex::Two,playerIndex) ||
-				IsNewLTriggerPress(PlayerIndex::Three,playerIndex) ||
-				IsNewLTriggerPress(PlayerIndex::Four,playerIndex));
+			return (IsNewLTriggerPress(PlayerIndex::One) ||
+				IsNewLTriggerPress(PlayerIndex::Two) ||
+				IsNewLTriggerPress(PlayerIndex::Three) ||
+				IsNewLTriggerPress(PlayerIndex::Four));
 		}
 	}
 
-	bool InputState::IsNewLeftStickUpPress(PlayerIndex controllingPlayer, PlayerIndex& playerIndex)
+	bool InputState::IsNewLeftStickUpPress(int controllingPlayer )
 	{
 		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One && controllingPlayer < PlayerIndex::Four + 1)
 		{
-			playerIndex = controllingPlayer;
+			int playerIndex = controllingPlayer;
 
 			int i = (int)playerIndex;
 			return (m_currentGamepadState[i].IsLeftThumbStickUp() &&
@@ -347,18 +390,18 @@ namespace Engine
 		}
 		else
 		{
-			return (IsNewLeftStickUpPress(PlayerIndex::One,playerIndex) ||
-				IsNewLeftStickUpPress(PlayerIndex::Two,playerIndex) ||
-				IsNewLeftStickUpPress(PlayerIndex::Three,playerIndex) ||
-				IsNewLeftStickUpPress(PlayerIndex::Four,playerIndex));
+			return (IsNewLeftStickUpPress(PlayerIndex::One) ||
+				IsNewLeftStickUpPress(PlayerIndex::Two) ||
+				IsNewLeftStickUpPress(PlayerIndex::Three) ||
+				IsNewLeftStickUpPress(PlayerIndex::Four));
 		}
 	}
 
-	bool InputState::IsNewLeftStickDownPress(PlayerIndex controllingPlayer, PlayerIndex& playerIndex)
+	bool InputState::IsNewLeftStickDownPress(int controllingPlayer )
 	{
 		if(controllingPlayer != PlayerIndex::Null && controllingPlayer >= PlayerIndex::One && controllingPlayer < PlayerIndex::Four + 1)
 		{
-			playerIndex = controllingPlayer;
+			int playerIndex = controllingPlayer;
 
 			int i = (int)playerIndex;
 			return (m_currentGamepadState[i].IsLeftThumbStickDown() &&
@@ -366,47 +409,46 @@ namespace Engine
 		}
 		else
 		{
-			return (IsNewLeftStickDownPress(PlayerIndex::One,playerIndex) ||
-				IsNewLeftStickDownPress(PlayerIndex::Two,playerIndex) ||
-				IsNewLeftStickDownPress(PlayerIndex::Three,playerIndex) ||
-				IsNewLeftStickDownPress(PlayerIndex::Four,playerIndex));
+			return (IsNewLeftStickDownPress(PlayerIndex::One) ||
+				IsNewLeftStickDownPress(PlayerIndex::Two) ||
+				IsNewLeftStickDownPress(PlayerIndex::Three) ||
+				IsNewLeftStickDownPress(PlayerIndex::Four));
 		}
 	}
 
 	// universal selections
-	bool InputState::IsMenuSelect(PlayerIndex controllingPlayer,PlayerIndex& playerIndex)
+	bool InputState::IsMenuSelect(int controllingPlayer)
 	{
 		return IsNewKeyPress(DIK_RETURN) || 
 			IsNewKeyPress(DIK_SPACE) ||
-			IsNewAButtonPress(controllingPlayer,playerIndex) ||
-			IsNewStartButtonPress(controllingPlayer,playerIndex);
+			IsNewAButtonPress(controllingPlayer) ||
+			IsNewStartButtonPress(controllingPlayer);
 	}
-	bool InputState::IsMenuCancel(PlayerIndex controllingPlayer,PlayerIndex& playerIndex)
+	bool InputState::IsMenuCancel(int controllingPlayer)
 	{
 		return IsNewKeyPress(DIK_ESCAPE) ||
-			IsNewBButtonPress(controllingPlayer,playerIndex) ||
-			IsNewBackButtonPress(controllingPlayer,playerIndex);
+			IsNewBButtonPress(controllingPlayer) ||
+			IsNewBackButtonPress(controllingPlayer);
 	}
-	bool InputState::IsMenuUp(PlayerIndex& controllingPlayer)
+	bool InputState::IsMenuUp(int& controllingPlayer)
 	{
-		PlayerIndex playerIndex;
-
+		int playerIndex;
 		return IsNewKeyPress(DIK_UPARROW) ||
-			IsNewDPADUpButtonPress(controllingPlayer,playerIndex) ||
-			IsNewLeftStickUpPress(controllingPlayer,playerIndex);
+			IsNewDPADUpButtonPress(controllingPlayer) ||
+			IsNewLeftStickUpPress(controllingPlayer);
 	}
 
-	bool InputState::IsMenuDown(PlayerIndex& controllingPlayer)
+	bool InputState::IsMenuDown(int& controllingPlayer)
 	{
-		PlayerIndex playerIndex;
+		int playerIndex;
 		return IsNewKeyPress(DIK_DOWNARROW) ||
-			IsNewDPADDownButtonPress(controllingPlayer,playerIndex) ||
-			IsNewLeftStickDownPress(controllingPlayer,playerIndex);
+			IsNewDPADDownButtonPress(controllingPlayer) ||
+			IsNewLeftStickDownPress(controllingPlayer);
 	}
-	bool InputState::IsPauseGame(PlayerIndex& controllingPlayer)
+	bool InputState::IsPauseGame(int& controllingPlayer)
 	{
-		PlayerIndex playerIndex;
-		return IsNewKeyPress(DIK_ESCAPE) || IsNewStartButtonPress(controllingPlayer,playerIndex);
+		int playerIndex;
+		return IsNewKeyPress(DIK_ESCAPE) || IsNewStartButtonPress(controllingPlayer);
 	}
 
 	bool InputState::GamePadWasConnected(int index)

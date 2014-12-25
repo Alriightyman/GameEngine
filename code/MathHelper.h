@@ -2,9 +2,38 @@
 #include <Windows.h>
 #include <SimpleMath.h>
 
+
 class MathHelper
 {
 public:
+	static float ATan2(float y, float x)
+	{
+		return atan2f(y,x);
+	}
+	static DirectX::SimpleMath::Matrix CreateScale( const  float scale)
+	{
+		return  DirectX::SimpleMath::Matrix::CreateScale(scale);
+	}
+	static DirectX::SimpleMath::Matrix CreateTranslation( const  DirectX::SimpleMath::Vector3& position)
+	{
+		
+		return  DirectX::SimpleMath::Matrix::CreateTranslation(position);
+	}
+
+	static DirectX::SimpleMath::Vector3 CrossVector3(DirectX::SimpleMath::Vector3& v1, DirectX::SimpleMath::Vector3& v2)
+	{
+		return v1.Cross(v2);
+	}
+
+	static void NormalizeVector3(DirectX::SimpleMath::Vector3& v)
+	{
+		v.Normalize();
+	}
+
+	static DirectX::SimpleMath::Matrix MatrixMultiply(DirectX::SimpleMath::Matrix& mat1,DirectX::SimpleMath::Matrix mat2)
+	{
+		return mat1 * mat2;
+	}
 	// returns random float in [0,1).
 	static float RandF()
 	{

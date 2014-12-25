@@ -4,9 +4,10 @@
 #include <functional>
 #include <vector>
 #include <SimpleMath.h>
-#include "PlayerIndex.h"
+#include "playerIndex.h"
 using namespace DirectX::SimpleMath;
 
+class Script;
 
 namespace Engine
 {
@@ -15,6 +16,10 @@ namespace Engine
 
 	class MenuEntry
 	{
+	protected:
+		static bool isInitialized;
+	public:
+		static void Bind(Script* script);
 	protected:
 		/// <summary>
 		/// The m_Text rendered for this entry.
@@ -33,26 +38,26 @@ namespace Engine
 		/// </summary>
 		Vector2 m_Position;
 	public:
-		std::string Text() { return m_Text; }
-		void Text(std::string value) { m_Text = value; }
+		std::string GetText() const { return m_Text; }
+		void SetText(std::string value) { m_Text = value; }
 
-		Vector2 Position() { return m_Position; }
-		void Position(Vector2 value) { m_Position = value; }
+		Vector2 GetPosition() const { return m_Position; }
+		void SetPosition(Vector2 value) { m_Position = value; }
 #pragma region Events
 	public:
 		/// <summary>
 		/// Event raised when the menu entry is selected.
 		/// </summary>
-		std::function<void (void*,PlayerIndex)> Selected;
+		std::function<void (void*,int)> Selected;
 		//	void (*Selected)(void*);
 		/// <summary>
 		/// Method for raising the Selected event.
 		/// </summary>
-		virtual void OnSelectedEntry(PlayerIndex playerIndex);
+		virtual void OnSelectedEntry(int playerIndex);
 #pragma endregion
 
 	public:
-		MenuEntry(std::string m_Text);
+		MenuEntry(std::string Text);
 		~MenuEntry(void);
 
 		virtual void Update(MenuScreen* screen, bool isSelected, float deltaTime);

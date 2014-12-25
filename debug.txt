@@ -14,15 +14,4 @@ MenuEntry - Play Game Loaded
 MenuEntry - Options Loaded
 MenuEntry - Exit Loaded
 LoadingScreen deleted
-LoadingScreen deleted
-PauseMenuScreen Loaded
-MenuEntry - Resume Game Loaded
-MenuEntry - Quit Game Loaded
-MessageBoxScreen Loaded
-BackgroundScreen Loaded!
-MainMenuScreen Loaded!
-MenuEntry - Play Game Loaded
-MenuEntry - Options Loaded
-MenuEntry - Exit Loaded
-LoadingScreen deleted
 MessageBoxScreen Loaded

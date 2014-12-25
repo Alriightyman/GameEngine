@@ -1,6 +1,7 @@
 #include "MathHelper.h"
 #include <float.h>
 #include <cmath>
+
 using namespace DirectX;
 
 const float MathHelper::Infinity = FLT_MAX;
@@ -18,7 +19,7 @@ float MathHelper::AngleFromXY(float x, float y)
 		theta = atanf(y / x); // in [-pi/2, +pi/2]
 
 		if( theta < 0.0f)
-			theta += 2.0*Pi; // in [0.2*pi)
+			theta += 2.0f*Pi; // in [0.2*pi)
 	}
 	// Quadrant II or III
 	else 

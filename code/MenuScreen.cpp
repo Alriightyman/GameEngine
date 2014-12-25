@@ -47,19 +47,19 @@ namespace Engine
 		// If we pass a null controlling player, the InputState helper returns to
 		// us which player actually provided the input. We pass that through to
 		// OnSelectEntry and OnCancel, so they can tell which player triggered them.
-		PlayerIndex playerIndex = PlayerIndex::Null;
+		int playerIndex = PlayerIndex::Null;
 
-		if (input->IsMenuSelect(m_controllingPlayer,playerIndex))
+		if (input->IsMenuSelect(m_controllingPlayer))
 		{
 			OnSelectedEntry(m_SelectedEntry,playerIndex);
 		}
-		else if(input->IsMenuCancel(m_controllingPlayer,playerIndex))
+		else if(input->IsMenuCancel(m_controllingPlayer))
 		{
 			OnCancel(this,playerIndex);
 		}
 	}
 
-	void MenuScreen::OnSelectedEntry(int entryIndex,PlayerIndex playerIndex)
+	void MenuScreen::OnSelectedEntry(int entryIndex,int playerIndex)
 	{
 		std::vector<MenuEntry*>::iterator it = m_MenuEntries.begin();
 		std::advance(it,entryIndex);
@@ -67,7 +67,7 @@ namespace Engine
 	}
 
 
-	void MenuScreen::OnCancel(void* sender,PlayerIndex playerIndex)
+	void MenuScreen::OnCancel(void* sender,int playerIndex)
 	{
 		ExitScreen();
 	}
@@ -99,7 +99,7 @@ namespace Engine
 				position.x += transitionOffset * 512;
 
 			// set the entry's position
-			menuEntry->Position(position);
+			menuEntry->SetPosition(position);
 
 			// move down for the next entry the size of this entry
 			position.y += menuEntry->GetHeight(this);

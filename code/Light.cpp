@@ -3,6 +3,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 #include "light.h"
 #include <memory>
+#include <iostream>
 
 namespace Engine
 {
@@ -38,6 +39,7 @@ namespace Engine
 			}
 			catch(LuaException const& e)
 			{
+				std::cout << "Light::LoadScript() LuaException!\n " << e.what() << std::endl;
 				return;
 			}
 		}

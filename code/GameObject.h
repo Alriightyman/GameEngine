@@ -11,9 +11,10 @@ namespace Engine
 		std::string m_name;
 		DirectX::SimpleMath::Vector3 m_position;
 		DirectX::SimpleMath::Vector3 m_velocity;
+		DirectX::SimpleMath::Vector3 m_direction;
 		
 	public:
-		IGameObject(void) : m_name("NULL"), m_position(0.0f),m_velocity(0.0f) { } 
+		IGameObject(void) : m_name("NULL"), m_position(0.0f),m_velocity(0.0f),m_direction(DirectX::SimpleMath::Vector3::UnitY) { } 
 		virtual ~IGameObject(void) {};
 
 		virtual bool Initialize(Graphics* graphics,Script* script) = 0;

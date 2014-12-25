@@ -51,7 +51,7 @@ namespace Engine
 		UINT count = 1;
 		m_ScreenManager->GetGraphicsDevice()->GetImmediateContex()->RSGetViewports(&count,&viewport);
 
-		RECT fullscreen = {0, 0, viewport.Width, viewport.Height};
+		RECT fullscreen = {0, 0, static_cast<LONG>(viewport.Width), static_cast<LONG>(viewport.Height)};
 
 		spriteBatch->Begin();
 		float colorValue = TransitionAlpha();

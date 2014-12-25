@@ -20,30 +20,32 @@ Keys =
 }
 
 -- Handles Camera Control -> WASD
-function HandleInput(Camera,Input)
+function HandleInput(camera,input)
+	
+    local move = 0.01;
 
-    local move = 0.1;
+	 -- zoom camera in/out
+    if(input:IsKeyDown(Keys.DIK_EQUALS)) then
+        camera.position = Vector3(camera.position.x,camera.position.y,camera.position.z + move* 10);
+    elseif(input:IsKeyDown(Keys.DIK_MINUS)) then
+        camera.position = Vector3(camera.position.x,camera.position.y,camera.position.z - move *10);
+    end
+
     -- move camera up/down
-    if (Input:IsKeyDown(Keys.DIK_W)) then       
-        Camera.position = Vector3(Camera.position.x, Camera.position.y + move,Camera.position.z);
-    elseif (Input:IsKeyDown(Keys.DIK_S)) then
-        Camera.position = Vector3(Camera.position.x,Camera.position.y - move,Camera.position.z);
+    if (input:IsKeyDown(Keys.DIK_W)) then       
+        camera.position = Vector3(camera.position.x, camera.position.y + move,camera.position.z);
+    elseif (input:IsKeyDown(Keys.DIK_S)) then
+        camera.position = Vector3(camera.position.x,camera.position.y - move,camera.position.z);
     end
     -- move camera left/right
-    if (Input:IsKeyDown(Keys.DIK_A)) then
-        Camera.position = Vector3(Camera.position.x - move,Camera.position.y,Camera.position.z);
-    elseif (Input:IsKeyDown(Keys.DIK_D)) then
-        Camera.position = Vector3(Camera.position.x + move,Camera.position.y,Camera.position.z);
-    end
-    -- zoom camera in/out
-    if(Input:IsKeyDown(Keys.DIK_EQUALS)) then
-        Camera.position = Vector3(Camera.position.x,Camera.position.y,Camera.position.z + move);
-    elseif(Input:IsKeyDown(Keys.DIK_MINUS)) then
-        Camera.position = Vector3(Camera.position.x,Camera.position.y,Camera.position.z - move);
+    if (input:IsKeyDown(Keys.DIK_A)) then
+        camera.position = Vector3(camera.position.x - move,camera.position.y,camera.position.z);
+    elseif (input:IsKeyDown(Keys.DIK_D)) then
+        camera.position = Vector3(camera.position.x + move,camera.position.y,camera.position.z);
     end
 
-    if(Input:IsKeyDown(Keys.DIK_R)) then
-        Camera.reloadScript = true;
+    if(input:IsKeyDown(Keys.DIK_R)) then
+        camera.reloadScript = true;
     end
 
 end

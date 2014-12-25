@@ -2,10 +2,11 @@
 #include "BackgroundScreen.h"
 #include "MainMenuScreen.h"
 #include "GameplayScreen.h"
-
+#include <exception>
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
 #include <crtdbg.h>
+#include <iostream>
 
 using namespace DirectX;
 
@@ -154,12 +155,17 @@ namespace Engine
 					m_isActive = false;
 			}
 			break;
+		case WM_DESTROY:
+			DestroyWindow(m_hwnd);
+			PostQuitMessage(0);
+			break;
 		}
 
 		return DefWindowProc(hwnd,msg,wparam,lparam);
 	} 
 }
 #pragma endregion
+
 #pragma region Entry Point
 // main entry point of the application
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev,LPSTR cmdLine,int showCmd)
@@ -170,7 +176,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev,LPSTR cmdLine,int showCmd)
 	Engine::Game game;
 
 	// Initialize the application object
-	if(!game.Init(hInst,1280,720,true))
+	if(!game.Init(hInst,800,600,true))
 		return 0;
 
 	// used for windows messages
@@ -192,17 +198,19 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev,LPSTR cmdLine,int showCmd)
 		}
 		else // otherwise, run game
 		{
+			
 			// delta time between frames in milliseconds
 			int t = timeGetTime();
 			float deltaTime = (t - startTime) * 0.001f;
-
+			
 			// update application
 			game.Update(deltaTime);
-
+			
 			// render application
 			game.Draw(deltaTime);
 			// copy the old time
 			startTime = t;
+			
 		}
 	}
 

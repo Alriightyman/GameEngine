@@ -18,6 +18,7 @@ namespace Engine
 	public:
 		static void Bind(luabridge::lua_State* L);
 	private:
+		bool m_useGamepad;
 		const int MAXINPUTS;
 		LPDIRECTINPUT8 m_DInput;
 		LPDIRECTINPUTDEVICE8 m_Keyboard;
@@ -30,6 +31,8 @@ namespace Engine
 	public:
 		DirectX::GamePad::State CurrentGamePadState(int index) { return m_currentGamepadState[index]; }
 		bool GamePadWasConnected(int index);
+		void SetGamepadUse(bool value) { m_useGamepad = value;}
+		bool UseGamepad() const { return m_useGamepad; }
 	public:
 		InputState(HWND hwnd);
 		~InputState(void);
@@ -40,29 +43,29 @@ namespace Engine
 		bool IsNewKeyPress(int key);
 		// gamepad functions
 		// button presses
-		bool IsNewAButtonPress(PlayerIndex controllingPlayer,PlayerIndex& playerIndex);
-		bool IsNewBButtonPress(PlayerIndex controllingPlayer,PlayerIndex& playerIndex);
-		bool IsNewXButtonPress(PlayerIndex controllingPlayer,PlayerIndex& playerIndex);
-		bool IsNewYButtonPress(PlayerIndex controllingPlayer,PlayerIndex& playerIndex);
-		bool IsNewStartButtonPress(PlayerIndex controllingPlayer,PlayerIndex& playerIndex);
-		bool IsNewBackButtonPress(PlayerIndex controllingPlayer,PlayerIndex& playerIndex);
-		bool IsNewDPADLeftButtonPress(PlayerIndex controllingPlayer,PlayerIndex& playerIndex);
-		bool IsNewDPADRightButtonPress(PlayerIndex controllingPlayer,PlayerIndex& playerIndex);
-		bool IsNewDPADUpButtonPress(PlayerIndex controllingPlayer,PlayerIndex& playerIndex);
-		bool IsNewDPADDownButtonPress(PlayerIndex controllingPlayer,PlayerIndex& playerIndex);
-		bool IsNewLTriggerPress(PlayerIndex controllingPlayer,PlayerIndex& playerIndex);
-		bool IsNewRTriggerPress(PlayerIndex controllingPlayer,PlayerIndex& playerIndex);
-		bool IsNewLButtonPress(PlayerIndex controllingPlayer,PlayerIndex& playerIndex);
-		bool IsNewRButtonPress(PlayerIndex controllingPlayer,PlayerIndex& playerIndex);
-		bool IsNewLeftStickUpPress(PlayerIndex controllingPlayer,PlayerIndex& playerIndex);
-		bool IsNewLeftStickDownPress(PlayerIndex controllingPlayer,PlayerIndex& playerIndex);
+		bool IsNewAButtonPress(int controllingPlayer);
+		bool IsNewBButtonPress(int controllingPlayer);
+		bool IsNewXButtonPress(int controllingPlayer);
+		bool IsNewYButtonPress(int controllingPlayer);
+		bool IsNewStartButtonPress(int controllingPlayer);
+		bool IsNewBackButtonPress(int controllingPlayer);
+		bool IsNewDPADLeftButtonPress(int controllingPlayer);
+		bool IsNewDPADRightButtonPress(int controllingPlayer);
+		bool IsNewDPADUpButtonPress(int controllingPlayer);
+		bool IsNewDPADDownButtonPress(int controllingPlayer);
+		bool IsNewLTriggerPress(int controllingPlayer);
+		bool IsNewRTriggerPress(int controllingPlayer);
+		bool IsNewLButtonPress(int controllingPlayer);
+		bool IsNewRButtonPress(int controllingPlayer);
+		bool IsNewLeftStickUpPress(int controllingPlayer);
+		bool IsNewLeftStickDownPress(int controllingPlayer);
 
 		//
-		bool IsMenuSelect(PlayerIndex controllingPlayer,PlayerIndex& playerIndex);
-		bool IsMenuCancel(PlayerIndex controllingPlayer,PlayerIndex& playerIndex);
-		bool IsMenuUp(PlayerIndex& controllingPlayer);
-		bool IsMenuDown(PlayerIndex& controllingPlayer);
-		bool IsPauseGame(PlayerIndex& controllingPlayer);
+		bool IsMenuSelect(int controllingPlayer);
+		bool IsMenuCancel(int controllingPlayer);
+		bool IsMenuUp(int& controllingPlayer);
+		bool IsMenuDown(int& controllingPlayer);
+		bool IsPauseGame(int& controllingPlayer);
 	};
 
 

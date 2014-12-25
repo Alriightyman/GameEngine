@@ -38,7 +38,7 @@ namespace Engine
 
 	public:
 		~LoadingScreen(void);
-		static void Load(Engine::ScreenManager* screenManager,bool loadingIsSlow,PlayerIndex& playerIndex,std::vector<GameScreen*>& screensToLoad);
+		static void Load(Engine::ScreenManager* screenManager,bool loadingIsSlow,int& playerIndex,std::vector<GameScreen*>& screensToLoad);
 #pragma endregion
 
 #pragma region Update and Draw

@@ -54,6 +54,7 @@
     <ClInclude Include="code\Light.h" />
     <ClInclude Include="code\LightMapShader.h" />
     <ClInclude Include="code\LightShader.h" />
+    <ClInclude Include="code\LuaEnum.h" />
     <ClInclude Include="code\MultiTextureShader.h" />
     <ClInclude Include="code\NormalMapShader.h" />
     <ClInclude Include="code\Script.h" />
@@ -253,7 +254,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;dxgi.lib;winmm.lib;xinput.lib;dinput8.lib;DirectXTK.lib;lua52.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;dxgi.lib;dxguid.lib;winmm.lib;xinput.lib;dinput8.lib;DirectXTK.lib;lua52.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>xcopy  "$(ProjectDir)Content\Models\*.rtx" "$(OutDir)Content\Models\" /e /y /i /r
@@ -278,7 +279,8 @@ xcopy  "$(ProjectDir)Content\Textures\*.*" "$(OutDir)Content\Textures\" /e /y /i
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;dxgi.lib;winmm.lib;xinput.lib;dinput8.lib;DirectXTK.lib;lua52.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;dxgi.lib;dxguid.lib;winmm.lib;dinput8.lib;xinput.lib;DirectXTK.lib;lua52.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ShowProgress>NotSet</ShowProgress>
     </Link>
     <PostBuildEvent>
       <Command>xcopy  "$(ProjectDir)Content\Models\*.rtx" "$(OutDir)Content\Models\" /e /y /i /r

@@ -237,7 +237,7 @@ namespace Engine
 		Vector3 vector1,vector2;
 		Vector3 tuVector, tvVector;
 		float den;
-		float length;
+		//float length;
 
 
 		// Calculate the two vectors for this face.
@@ -306,7 +306,7 @@ namespace Engine
 		RenderBuffers(graphics);
 
 		// render all meshes in the model
-		for(int i = 0; i < m_meshes.size(); i++)
+		for(unsigned int i = 0; i < m_meshes.size(); i++)
 		{
 			// get the shader for this mesh
 			Shader* shader = graphics->GetShader(m_meshes[i]->Material.ShaderType);

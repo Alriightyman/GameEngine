@@ -41,9 +41,9 @@ namespace Engine
 		void LoadScript(Script* script);
 	private:
 		Vector3 m_position;
-		float m_posx;
 		Vector3 m_rotation;
 		Matrix m_viewMatrix;
+
 		std::shared_ptr<luabridge::LuaRef> func;
 	}; 
 }

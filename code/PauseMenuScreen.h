@@ -9,8 +9,8 @@ namespace Engine
 		PauseMenuScreen(void);
 		~PauseMenuScreen(void);
 
-		void QuitGameMenuEntrySelected(void* sender,PlayerIndex playerIndex);
-		void ConfirmQuitMessageBoxAccepted(void* sender,PlayerIndex playerIndex);
+		void QuitGameMenuEntrySelected(void* sender,int playerIndex);
+		void ConfirmQuitMessageBoxAccepted(void* sender,int playerIndex);
 	};
 
 }

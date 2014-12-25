@@ -2,10 +2,41 @@
 #include "ScreenManager.h"
 #include "Debug.h"
 #include <functional>
+#include "Script.h"
+#include <vector>
+
 namespace Engine
 {
+	bool OptionsMenuScreen::isInitialized = false;
 
-	OptionsMenuScreen::OptionsMenuScreen(void) : MenuScreen("Options")
+	void OptionsMenuScreen::Bind(Script* script)
+	{
+		using namespace luabridge;
+		if(!isInitialized)
+		{
+			isInitialized = true;
+			getGlobalNamespace(script->GetState())
+				.beginClass<OptionsMenuScreen>("OptionsMenuScreen")
+					.addFunction("Push",&OptionsMenuScreen::Push)
+					.addData<std::string>("MenuTitle",&OptionsMenuScreen::m_Name)
+					// not finished...
+				.endClass();
+
+		}
+	}
+
+	void OptionsMenuScreen::Push(MenuEntry* entry)
+	{
+		m_MenuEntries.push_back(entry);
+	}
+
+	void OptionsMenuScreen::AddSelected(MenuEntry* entry)
+	{
+		
+	}
+
+
+	OptionsMenuScreen::OptionsMenuScreen(Script* script) : MenuScreen("Options")
 	{
 		m_CurrentUngulate = Ungulate::Dromedary;
 		m_Languages[0] = "C++";
@@ -23,6 +54,7 @@ namespace Engine
 		m_ElfMenuEntry = new MenuEntry("");
 
 		MenuEntry* back = new MenuEntry("Back");
+
 		using namespace std::placeholders;
 
 		m_UngulateMenuEntry->Selected = std::bind(&OptionsMenuScreen::UngulateMenuEntrySelected,this,_1,_2);
@@ -60,13 +92,13 @@ namespace Engine
 
 		script->RunFunction("SetMenuText");
 		// use normal stuff for this for now.
-		m_UngulateMenuEntry->Text("Preferred ungulate: " + script->GetGlobalString("Ungulate"));
-		m_LanguageMenuEntry->Text("Language: " + script->GetGlobalString("Language"));
-		m_FrobnicateMenuEntry->Text("Frobnicate: " + (std::string)(m_Frobnicate ? "On" : "Off"));
-		m_ElfMenuEntry->Text("Elf: " + std::to_string(m_Elf));
+		m_UngulateMenuEntry->SetText("Preferred ungulate: " + script->GetGlobalString("Ungulate"));
+		m_LanguageMenuEntry->SetText("Language: " + script->GetGlobalString("Language"));
+		m_FrobnicateMenuEntry->SetText("Frobnicate: " + (std::string)(m_Frobnicate ? "On" : "Off"));
+		m_ElfMenuEntry->SetText("Elf: " + std::to_string(m_Elf));
 	}
 
-	void OptionsMenuScreen::UngulateMenuEntrySelected(void* sender,PlayerIndex playerIndex)
+	void OptionsMenuScreen::UngulateMenuEntrySelected(void* sender,int playerIndex)
 	{
 		switch(m_CurrentUngulate)
 		{
@@ -84,21 +116,21 @@ namespace Engine
 		SetMenuEntryText();
 	}
 
-	void OptionsMenuScreen::LanguageMenuEntrySelected(void* sender,PlayerIndex playerIndex)
+	void OptionsMenuScreen::LanguageMenuEntrySelected(void* sender,int playerIndex)
 	{
 		m_CurrentLanguage = (m_CurrentLanguage + 1) % 3;
 
 		SetMenuEntryText();
 	}
 
-	void OptionsMenuScreen::FrobnicateMenuEntrySelected(void* sender,PlayerIndex playerIndex)
+	void OptionsMenuScreen::FrobnicateMenuEntrySelected(void* sender,int playerIndex)
 	{
 		m_Frobnicate = !m_Frobnicate;
 
 		SetMenuEntryText();
 	}
 
-	void OptionsMenuScreen::ElfMenuEntrySelected(void* sender,PlayerIndex playerIndex)
+	void OptionsMenuScreen::ElfMenuEntrySelected(void* sender,int playerIndex)
 	{
 		m_Elf++;
 

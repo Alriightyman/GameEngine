@@ -19,7 +19,7 @@ namespace Engine
 
 		float m_PauseAlpha;
 		std::unique_ptr<Camera> m_camera;
-		DemoObject* obj;
+		std::unique_ptr<DemoObject> obj;
 
 		Light m_light;
 		Frustum m_frustum;

@@ -45,16 +45,16 @@ namespace Engine
 
 	void MessageBoxScreen::HandleInput(InputState* input)
 	{
-		PlayerIndex index;
+		int index;
 
-		if(input->IsMenuSelect(m_controllingPlayer,index))
+		if(input->IsMenuSelect(m_controllingPlayer))
 		{
 			if(Accepted != nullptr)
 				Accepted(this,index);
 
 			ExitScreen();
 		}
-		else if(input->IsMenuCancel(m_controllingPlayer,index))
+		else if(input->IsMenuCancel(m_controllingPlayer))
 		{
 			if(Cancelled != nullptr)
 				Cancelled(this,index);

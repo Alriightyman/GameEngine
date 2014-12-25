@@ -29,7 +29,7 @@ namespace Engine
 	}
 
 
-	void PauseMenuScreen::QuitGameMenuEntrySelected(void* sender,PlayerIndex playerIndex)
+	void PauseMenuScreen::QuitGameMenuEntrySelected(void* sender,int playerIndex)
 	{
 		const std::string message = "Are you sure you want to quit this game?";
 		MessageBoxScreen* confirmQuitMessageBox = new MessageBoxScreen(message);
@@ -39,7 +39,7 @@ namespace Engine
 
 		m_ScreenManager->AddScreen(confirmQuitMessageBox,playerIndex);
 	}
-	void PauseMenuScreen::ConfirmQuitMessageBoxAccepted(void* sender,PlayerIndex playerIndex)
+	void PauseMenuScreen::ConfirmQuitMessageBoxAccepted(void* sender,int playerIndex)
 	{
 		std::vector<GameScreen*> screensToLoad; 
 		screensToLoad.push_back( new BackgroundScreen());

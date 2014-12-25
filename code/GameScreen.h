@@ -28,7 +28,7 @@ namespace Engine
 		bool m_DeleteScreen;
 		bool m_OtherScreenHasFocus;
 		ScreenManager* m_ScreenManager;
-		PlayerIndex m_controllingPlayer;
+		int m_controllingPlayer;
 
 	public:
 		bool IsPopup() { return m_IsPopup; }
@@ -49,8 +49,8 @@ namespace Engine
 
 		std::string ToString() { return m_Name; }
 		bool DeleteScreen() { return m_DeleteScreen;}
-		PlayerIndex ContollingPlayer() { return m_controllingPlayer; }
-		void ControllingPlayer(PlayerIndex value) { m_controllingPlayer = value; }
+		int ContollingPlayer() { return m_controllingPlayer; }
+		void ControllingPlayer(int value) { m_controllingPlayer = value; }
 	public:
 		GameScreen(void);
 		virtual ~GameScreen(void);

@@ -5,8 +5,8 @@ Data:
 MeshCount: 1
 Start: 0
 Size: 36
-DiffuseMap: cube_diffuse.dds
-NormalMap: cube_normal.dds
+DiffuseMap: stone01.dds
+NormalMap: bump01.dds
 SpecularMap: n
 
 

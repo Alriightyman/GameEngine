@@ -93,22 +93,22 @@
     <Filter Include="Engine\Script">
       <UniqueIdentifier>{0de5a4ca-830a-44aa-b328-c2674eac60d9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Script\scripts">
-      <UniqueIdentifier>{d760489c-d4b9-405f-b9fa-8bc573786cad}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Script\scripts\Camera">
-      <UniqueIdentifier>{7ae9c4b3-932b-48b1-8661-2085f1448386}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Script\scripts\Light">
-      <UniqueIdentifier>{923cf7b2-e3b9-4977-a22d-7726e49848d3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game">
       <UniqueIdentifier>{30995030-684a-46a4-8997-86ade05ac54c}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\GameObject">
       <UniqueIdentifier>{72e38fd4-530d-4abf-84f5-19ccb1d57e5d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Script\scripts\GameObjects">
+    <Filter Include="Game\scripts">
+      <UniqueIdentifier>{d760489c-d4b9-405f-b9fa-8bc573786cad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\scripts\Camera">
+      <UniqueIdentifier>{7ae9c4b3-932b-48b1-8661-2085f1448386}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\scripts\Light">
+      <UniqueIdentifier>{923cf7b2-e3b9-4977-a22d-7726e49848d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\scripts\GameObjects">
       <UniqueIdentifier>{b1262fff-5aab-4454-a45f-e6a26fc9d404}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -319,6 +319,9 @@
     <ClInclude Include="DemoObject.h">
       <Filter>Engine\GameObject</Filter>
     </ClInclude>
+    <ClInclude Include="code\LuaEnum.h">
+      <Filter>Engine\Script</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Content\Shaders\ToonPS.hlsl">
@@ -372,22 +375,22 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\Scripts\Options.lua">
-      <Filter>Engine\Script\scripts</Filter>
+      <Filter>Game\scripts</Filter>
     </None>
     <None Include="Content\Scripts\DemoInput.lua">
-      <Filter>Engine\Script\scripts</Filter>
+      <Filter>Game\scripts</Filter>
     </None>
     <None Include="Content\Scripts\LevelData.lua">
-      <Filter>Engine\Script\scripts</Filter>
+      <Filter>Game\scripts</Filter>
     </None>
     <None Include="Content\Scripts\Camera\Control.lua">
-      <Filter>Engine\Script\scripts\Camera</Filter>
+      <Filter>Game\scripts\Camera</Filter>
     </None>
     <None Include="Content\Scripts\Light\Light.lua">
-      <Filter>Engine\Script\scripts\Light</Filter>
+      <Filter>Game\scripts\Light</Filter>
     </None>
     <None Include="Content\Scripts\GameObjects\DemoObject.lua">
-      <Filter>Engine\Script\scripts\GameObjects</Filter>
+      <Filter>Game\scripts\GameObjects</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

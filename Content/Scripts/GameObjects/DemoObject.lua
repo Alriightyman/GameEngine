@@ -1,5 +1,8 @@
 
--- DemoObject
+-- DemoObject script
+-- ---------------------------------------------------------------
+-- Keyboard keys
+-- --------------------------------------------------------------
 Keys = 
 { 
     DIK_ESCAPE  = 0x01, DIK_1 = 0x02, DIK_2 = 0x03, DIK_3 = 0x04, DIK_4 = 0x05, DIK_5 = 0x06, DIK_6 = 0x07, DIK_7 = 0x08, DIK_8 = 0x09, DIK_9 = 0x0A, DIK_0 = 0x0B, DIK_MINUS  = 0x0C,   
@@ -21,42 +24,100 @@ Keys =
     DIK_DOWNARROW = DIK_DOWN, DIK_PGDN = DIK_NEXT 
 }
 
+-- ======================================================
 -- Set some initial values and return the model filename
+-- ======================================================
 function Init(object)
 
     object.name = "Player";
     object.position = Vector3(0.0,0.0,0.0);
     object.velocity = Vector3(0.0,0.0,0.0);
+	object.direction = Vector3(0.0,-1.0,0.0);
 
-    return "Content/Models/Cube.rtx";
+    return "Content/Models/sphere.rtx";
 end
-
-function Input(object,input)
-
+-- =========================================
+-- handle the input for the game object
+-- =========================================
+function Input(object, input,currentIndex,playerIndex)
+	
     local x = 0.0
     local y = 0.0
     local z = 0.0
     local speed = 5.0
+	local dir = Vector3.Zero;
+	
+	if (input:IsKeyDown(Keys.DIK_Z)) then
+		speed = speed * 2
+	end
+
     if (input:IsKeyDown(Keys.DIK_UP)) then
+		dir = Vector3(dir.x,MathHelper.Pi/2,dir.z);
         y = speed
-    end
-    if (input:IsKeyDown(Keys.DIK_DOWN)) then
+    elseif (input:IsKeyDown(Keys.DIK_DOWN)) then
+		dir = Vector3(dir.x,-MathHelper.Pi/2,dir.z);
         y = -speed
     end
+
     if (input:IsKeyDown(Keys.DIK_LEFT)) then
+		dir = Vector3(-MathHelper.Pi/2,dir.y,dir.z);
         x = -speed
-    end
-    if (input:IsKeyDown(Keys.DIK_RIGHT)) then
+    elseif (input:IsKeyDown(Keys.DIK_RIGHT)) then
+		dir = Vector3(MathHelper.Pi/2,dir.y,dir.z);
         x = speed
     end
+	-- -------------------------------
+	-- gamepad functions
+	-- -------------------------------
+	input.UseGamepad = true
+	if(input.UseGamepad == true) then
+		if(input:CurrentGamePadState(currentIndex).dpad.up) then
+			dir = Vector3(dir.x,MathHelper.Pi/2,dir.z);
+			y = speed
+		end
+	end
 
+	if(dir:Length() > 0 or dir:Length() < 0) then
+		object.direction = Vector3(dir.x,dir.y,dir.z);
+	end
+	
     object.velocity = Vector3(x,y,z);
     
 end
-
+-- =====================================
+-- update the game object
+-- =====================================
 function Update(object,dt)
-    local x = object.position.x + object.velocity.x * dt;
-    local y = object.position.y + object.velocity.y * dt;
-    local z = object.position.z + object.velocity.z * dt;
-    object.position = Vector3(x,y,z);
+	
+	-- Update position
+    UpdatePosition(object,dt)
+
+
+end
+-- =====================================
+-- update the game objects postion
+-- =====================================
+function UpdatePosition(object,dt)
+	-- Update position
+    local posx = object.position.x + object.velocity.x * dt;
+    local posy = object.position.y + object.velocity.y * dt;
+    local posz = object.position.z + object.velocity.z * dt;
+    object.position = Vector3(posx,posy,posz);
+
+	local dirPos = Vector3(object.position.x + object.direction.x,object.position.y + object.direction.y,0.0)
+	local direction = Vector3(object.position.x - dirPos.x,object.position.y - dirPos.y,0.0)
+
+	-- update world matrix
+	local angle = MathHelper.ATan2(direction.y,direction.x);
+
+	local scale = MathHelper.CreateScale(0.02)
+	local roty = Matrix.CreateRotationY(MathHelper.Pi/2)
+	local rotx = Matrix.CreateRotationX(-MathHelper.Pi /2)
+	local rotz = Matrix.CreateRotationZ(angle)
+	local rotxy = MathHelper.MatrixMultiply(roty,rotx)
+	local rot = MathHelper.MatrixMultiply(rotxy,rotz)
+	local translate = MathHelper.CreateTranslation(object.position)
+	local scaleRot = MathHelper.MatrixMultiply(scale,rot)
+	object.worldMatrix = MathHelper.MatrixMultiply(scaleRot,translate )
+
 end

@@ -12,10 +12,10 @@ namespace Engine
 #pragma endregion
 
 #pragma region Handle Input
-		void PlayGameMenuEntrySelected(void* sender,PlayerIndex playerIndex);
-		void OptionsMenuSelected(void* sender,PlayerIndex playerIndex);
-		void OnCancel(void* sender,PlayerIndex playerIndex);
-		void ConfirmExitMessageBoxAccepted(void* sender,PlayerIndex playerIndex);
+		void PlayGameMenuEntrySelected(void* sender,int playerIndex);
+		void OptionsMenuSelected(void* sender,int playerIndex);
+		void OnCancel(void* sender,int playerIndex);
+		void ConfirmExitMessageBoxAccepted(void* sender,int playerIndex);
 #pragma endregion
 	};
 

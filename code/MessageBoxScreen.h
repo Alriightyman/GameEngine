@@ -13,8 +13,8 @@ namespace Engine
 		ID3D11ShaderResourceView* m_GradientTexture;
 
 	public:
-		std::function<void (void*,PlayerIndex)> Accepted;
-		std::function<void (void*,PlayerIndex)> Cancelled;
+		std::function<void (void*,int)> Accepted;
+		std::function<void (void*,int)> Cancelled;
 
 	public:
 		MessageBoxScreen(std::string message,bool includeUsageText = true);

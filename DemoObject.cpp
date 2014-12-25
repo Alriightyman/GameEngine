@@ -1,9 +1,11 @@
 #include "DemoObject.h"
+#include <iostream>
 #include "code/Model.h"
 #include "code/InputState.h"
 #include "code/Script.h"
 #include "code\NormalMapShader.h"
-#include <iostream>
+#include "code/MathHelper.h"
+
 namespace Engine
 {
 	bool DemoObject::isInitialized = false;
@@ -18,8 +20,11 @@ namespace Engine
 				.beginClass<DemoObject>("DemoObject")
 					.addProperty("position",&DemoObject::GetPosition,&DemoObject::SetPosition)
 					.addProperty("velocity",&DemoObject::GetVelocity,&DemoObject::SetVelocity)
+					.addProperty("desiredDirection",&DemoObject::GetDesiredDirection,&DemoObject::SetDesiredDirection)					
 					.addData<Model*>("model",&DemoObject::m_model)
-					.addData<std::string>("name",&IGameObject::m_name)					
+					.addData<std::string>("name",&IGameObject::m_name)
+					.addData<DirectX::SimpleMath::Matrix>("worldMatrix",&DemoObject::m_worldMatrix)
+					.addData<DirectX::SimpleMath::Vector3>("direction",&DemoObject::m_direction)
 				.endClass();
 		}
 	}
@@ -31,6 +36,12 @@ namespace Engine
 
 	DemoObject::~DemoObject(void)
 	{
+		if(m_model)
+		{
+			m_model->Shutdown();
+			delete m_model;
+			m_model = 0;
+		}
 	}
 
 #ifdef _DEBUG
@@ -44,30 +55,31 @@ namespace Engine
 #endif
 		script->LoadScript("Content/Scripts/GameObjects/DemoObject.lua");
 		luabridge::lua_State* L = script->GetState();
-		LuaRef f = getGlobal(L,"Init");
+		luabridge::LuaRef f = getGlobal(L,"Init");
 
 		if (f.isFunction())
-			functions["Init"] = std::make_shared<LuaRef>(f);
+			functions["Init"] = std::make_shared<luabridge::LuaRef>(f);
 
-		LuaRef a = getGlobal(L,"Input");
+		luabridge::LuaRef a = getGlobal(L,"Input");
 
 		if (a.isFunction())
-			functions["Input"] = std::make_shared<LuaRef>(a);
+			functions["Input"] = std::make_shared<luabridge::LuaRef>(a);
 
-		LuaRef u = getGlobal(L,"Update");
+		luabridge::LuaRef u = getGlobal(L,"Update");
 
 		if (u.isFunction())
-			functions["Update"] = std::make_shared<LuaRef>(u);
+			functions["Update"] = std::make_shared<luabridge::LuaRef>(u);
 
 		try
 		{
-			LuaRef r = (*functions["Init"])(this);
+			luabridge::LuaRef r = (*functions["Init"])(this);
 			std::string s(r.cast<std::string>());
 			m_model = graphics->CreateModel(std::wstring(s.begin(),s.end()));
 
 		}
 		catch( LuaException const& e)
 		{
+			std::cout << "DemoObject::Initialize() LuaException!\n" << e.what() << std::endl;
 			return false;
 		}
 
@@ -75,7 +87,7 @@ namespace Engine
 		return true;
 	}
 
-	void DemoObject::Input(InputState* input)
+	void DemoObject::Input(InputState* input,int currentIndex)
 	{
 #ifdef _DEBUG
 		if(input->IsNewKeyPress(DIK_R))
@@ -83,30 +95,32 @@ namespace Engine
 			using namespace luabridge;
 			dScript->LoadScript("Content/Scripts/GameObjects/DemoObject.lua");
 			luabridge::lua_State* L = dScript->GetState();
-			LuaRef f = getGlobal(L,"Init");
+			luabridge::LuaRef f = getGlobal(L,"Init");
 
 			if (f.isFunction())
-				functions["Init"] = std::make_shared<LuaRef>(f);
+				functions["Init"] = std::make_shared<luabridge::LuaRef>(f);
 
-			LuaRef a = getGlobal(L,"Input");
+			luabridge::LuaRef a = getGlobal(L,"Input");
 
 			if (a.isFunction())
-				functions["Input"] = std::make_shared<LuaRef>(a);
+				functions["Input"] = std::make_shared<luabridge::LuaRef>(a);
 
-			LuaRef u = getGlobal(L,"Update");
+			luabridge::LuaRef u = getGlobal(L,"Update");
 
 			if (u.isFunction())
-				functions["Update"] = std::make_shared<LuaRef>(u);
+				functions["Update"] = std::make_shared<luabridge::LuaRef>(u);
 			std::cout << "Reload!\n";
 		}
 #endif
+		int playerIndex = 0;
 
 		try
 		{
-			(*functions["Input"])(this,input);
+			(*functions["Input"])(this, input,currentIndex,playerIndex);
 		}
 		catch(luabridge::LuaException const &e)
 		{
+			std::cout << "DemoObject::Input LuaException!\n" << e.what() << std::endl;
 			return;
 		}
 	}
@@ -119,11 +133,9 @@ namespace Engine
 		}
 		catch(luabridge::LuaException const &e)
 		{
+			std::cout << "DemoObject::Update LuaException!\n" << e.what() << std::endl;
 			return;
-		}
-
-		m_worldMatrix = DirectX::SimpleMath::Matrix::CreateTranslation(m_position);
-		
+		}		
 	}
 
 	DirectX::SimpleMath::Matrix DemoObject::GetWorldMatrix() const

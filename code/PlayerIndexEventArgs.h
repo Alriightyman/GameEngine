@@ -1,16 +1,16 @@
 #pragma once
-#include "PlayerIndex.h"
+#include "playerIndex.h"
 namespace Engine
 {
 
 	class PlayerIndexEventArgs
 	{
 	private:
-		PlayerIndex m_playerIndex;
+		int m_playerIndex;
 	public:
-		PlayerIndex GetPlayerIndex() const { return m_playerIndex; }
+		int Getint() const { return m_playerIndex; }
 	public:
-		PlayerIndexEventArgs(PlayerIndex playerIndex);
+		PlayerIndexEventArgs(int playerIndex);
 	};
 
 

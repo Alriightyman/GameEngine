@@ -3,9 +3,30 @@
 #include "ScreenManager.h"
 #include "MathHelper.h"
 #include "Debug.h"
+#include "Script.h"
+
 using namespace DirectX;
 namespace Engine
 {
+	bool MenuEntry::isInitialized = false;
+	// bind MenuEntry to Lua
+	void MenuEntry::Bind(Script* script)
+	{
+		using namespace luabridge;
+		if(!isInitialized)
+		{
+			isInitialized = true;
+			getGlobalNamespace(script->GetState())
+				.beginClass<MenuEntry>("MenuEntry")
+					.addConstructor<void (*) (std::string text)> ()
+					.addProperty("Text",&MenuEntry::GetText,&MenuEntry::SetText)
+					.addProperty("Position",&MenuEntry::GetPosition,&MenuEntry::SetPosition)
+					.addFunction("GetHeight",&MenuEntry::GetHeight)
+					.addFunction("GetWidth",&MenuEntry::GetWidth)
+					.addData<std::function<void (void*,int)> >("Selected",&MenuEntry::Selected)
+				.endClass();
+		}
+	}
 
 	MenuEntry::MenuEntry(std::string text)
 	{
@@ -22,7 +43,7 @@ namespace Engine
 
 	}
 
-	void MenuEntry::OnSelectedEntry(PlayerIndex playerIndex)
+	void MenuEntry::OnSelectedEntry(int playerIndex)
 	{
 		if (Selected != nullptr)
 			Selected(this,playerIndex);
@@ -47,7 +68,7 @@ namespace Engine
 		// pulsate the size of the selected menu entry
 		double time = (timeGetTime() / 1000.0f);
 
-		float pulsate = sinf(time * 6) + 1.0f;
+		float pulsate = sinf(static_cast<float>(time) * 6.0f) + 1.0f;
 
 		// Modify the alpha to fade m_Text out during transitions
 		float transitionAlpha = screen->TransitionAlpha();
@@ -78,7 +99,7 @@ namespace Engine
 	int MenuEntry::GetWidth(MenuScreen* screen)
 	{
 		std::wstring s(m_Text.begin(),m_Text.end());
-		return screen->ScreenManager()->Font()->MeasureString(s.c_str()).m128_f32[0] / 2.0f;
+		return static_cast<int>(screen->ScreenManager()->Font()->MeasureString(s.c_str()).m128_f32[0] / 2.0f);
 	}
 
 }

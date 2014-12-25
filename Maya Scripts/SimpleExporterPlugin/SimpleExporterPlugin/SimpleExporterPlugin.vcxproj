@@ -73,6 +73,7 @@
     <TargetExt>.mll</TargetExt>
     <OutDir>Debug\</OutDir>
     <IntDir>Debug\</IntDir>
+    <TargetName>RTXExporter</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>Release\</OutDir>
@@ -117,7 +118,7 @@
       <AdditionalIncludeDirectories>C:\Program Files\Autodesk\Maya2015\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <OutputFile>RTXExporter.mll</OutputFile>
+      <OutputFile>$(TargetPath)</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)SimpleExporterPlugin.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
@@ -125,7 +126,7 @@
       <AdditionalLibraryDirectories>C:\Program Files\Autodesk\Maya2015\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(ProjectDir)$(Platform)\$(Configuration)\RTXExporter.mll" "C:\Users\$(USERNAME)\Documents\maya\2015-x64\plug-ins" /e /y /i /r
+      <Command>xcopy "$(TargetPath)" "C:\Users\$(USERNAME)\Documents\maya\2015-x64\plug-ins" /e /y /i /r
 xcopy "$(ProjectDir)MayaFileExportScript.mel" "C:\Users\$(USERNAME)\Documents\maya\2015-x64\scripts" /e /y /i /r</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>

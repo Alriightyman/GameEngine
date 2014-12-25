@@ -20,7 +20,7 @@ namespace Engine
 {
 
 	GameplayScreen::GameplayScreen(void)
-		: m_Font(0),obj(0)//,m_camera(0),
+		: m_Font(0)//,m_camera(0),
 		//m_light(0),m_frustum(0)//,m_model(0)
 	{
 		rotationX = rotationZ = rotation = 0.0f;
@@ -66,7 +66,7 @@ namespace Engine
 
 		// create the model object
 		//m_model = graphics->CreateModel(modelData[0]);
-		obj = new DemoObject();
+		obj.reset( new DemoObject());
 		obj->Initialize(graphics,script);
 
 		m_light.LoadScript(script);
@@ -91,12 +91,7 @@ namespace Engine
 
 	void GameplayScreen::UnLoad()
 	{
-		if(obj)
-		{
-			//obj->Shutdown();
-			delete obj;
-			obj = 0;
-		}
+
 		if(m_Font)
 		{
 			delete m_Font;
@@ -124,7 +119,7 @@ namespace Engine
 	void GameplayScreen::HandleInput(InputState* input)
 	{
 
-		PlayerIndex playerIndex = m_controllingPlayer;
+		int playerIndex = m_controllingPlayer;
 
 		// don't need to get the keyboard state, but retrieve the
 		// gamepad state
@@ -144,7 +139,7 @@ namespace Engine
 			Script* script = m_ScreenManager->GetScript();
 			
 			
-			obj->Input(input);
+			obj->Input(input,playerIndex);
 
 			script->LoadScript("Content/Scripts/DemoInput.lua");
 			// light controls
@@ -186,9 +181,73 @@ namespace Engine
 
 			}
 
-			if(input->IsKeyDown(DIK_U))
-				rotationX += 1.0;
+			if (input->IsKeyDown(DIK_L))
+			{
+				Vector3 dir = m_light.GetDirection();
+				float x = dir.x;
 
+				x = x + 0.1f;
+				if(x > 1.0f)
+					x = 1.0f;
+				dir.x = x;
+				m_light.SetDirection(dir);
+			}
+			else if (input->IsKeyDown(DIK_J))
+			{
+				Vector3 dir = m_light.GetDirection();
+				float x = dir.x;
+				
+				x = x + -0.1f;
+				if(x < -1.0f)
+					x = -1.0f;
+				dir.x = x;
+				m_light.SetDirection(dir);
+			}
+			if (input->IsKeyDown(DIK_K))
+			{
+				Vector3 dir = m_light.GetDirection();
+				float y = dir.y;
+
+				y = y + -0.1f;
+				if(y < -1.0f)
+					y = -1.0f;
+				dir.y = y;
+				m_light.SetDirection(dir);
+			}
+			else if (input->IsKeyDown(DIK_I))
+			{
+				Vector3 dir = m_light.GetDirection();
+				float y = dir.y;
+
+				y= y + 0.1f;
+				if(y > 1.0f)
+					y = 1.0f;
+				dir.y = y;
+				m_light.SetDirection(dir);
+			}
+
+			if (input->IsKeyDown(DIK_U))
+			{
+				Vector3 dir = m_light.GetDirection();
+				float z = dir.z;
+
+				z = z + 0.1f;
+				if(z > 1.0f)
+					z = 1.0f;
+				dir.z = z;
+				m_light.SetDirection(dir);
+			}
+			else if (input->IsKeyDown(DIK_H))
+			{
+				Vector3 dir = m_light.GetDirection();
+				float z = dir.z;
+
+				z = z + -0.1f;;
+				if(z < -1.0f)
+					z = -1.0f;
+				dir.z = z;
+				m_light.SetDirection(dir);
+			}
 			if(input->IsKeyDown(DIK_B))
 			{
 				Color c = m_light.GetDiffuseColor();
@@ -242,10 +301,10 @@ namespace Engine
 			obj->Update(deltaTime);
 
 //			m_light.SetDirection(Vector3(rotationX,rotationY,rotationZ));
-			Vector3 v = m_light.GetDirection();
-			Color c = m_light.GetDiffuseColor();
-			printf("Direction (%f,%f,%f)\n",v.x,v.y,v.z);
-			printf("Diffuse (%f,%f,%f)\n",c.x,c.y,c.z);
+			//Vector3 v = m_light.GetDirection();
+			//Color c = m_light.GetDiffuseColor();
+			//printf("Direction (%f,%f,%f)\n",v.x,v.y,v.z);
+			//printf("Diffuse (%f,%f,%f)\n",c.x,c.y,c.z);
 		}
 	}
 
@@ -287,9 +346,14 @@ namespace Engine
 		//graphics->Render(m_model);
 		obj->Render(graphics);
 
-//		spriteBatch->Begin();
-
-//		spriteBatch->End();
+		spriteBatch->Begin();
+		std::wstring str = L"Move Light: Up - I, Down - K,Left - J,Right - L\nLightDirection: (" + std::to_wstring( m_light.GetDirection().x) 
+			+ L"," + std::to_wstring(m_light.GetDirection().y) + L"," + std::to_wstring(m_light.GetDirection().z) + L")\n" ;
+		font->DrawString(spriteBatch,
+			str.c_str(),
+			Vector2(10.0f),
+			Colors::Yellow,0.0f,g_XMZero,0.5f);
+		spriteBatch->End();
 
 		// If the game is transitioning on or off, fade it out to black.
 		if (m_TransitionPosition > 0 || m_PauseAlpha > 0)

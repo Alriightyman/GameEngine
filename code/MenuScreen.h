@@ -35,8 +35,8 @@ namespace Engine
 		/// <summary>
 		/// Handler for when the user has chosen a menu entry.
 		/// </summary>
-		virtual void OnSelectedEntry(int entryIndex,PlayerIndex playerIndex);
-		virtual void OnCancel(void* sender,PlayerIndex playerIndex);
+		virtual void OnSelectedEntry(int entryIndex,int playerIndex);
+		virtual void OnCancel(void* sender,int playerIndex);
 
 #pragma endregion
 

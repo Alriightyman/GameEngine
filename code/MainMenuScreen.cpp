@@ -35,19 +35,19 @@ namespace Engine
 
 	}
 
-	void MainMenuScreen::PlayGameMenuEntrySelected(void* sender,PlayerIndex playerIndex)
+	void MainMenuScreen::PlayGameMenuEntrySelected(void* sender,int playerIndex)
 	{
 		std::vector<GameScreen*> gameplayScreen;
 		gameplayScreen.push_back(new GameplayScreen());
 		LoadingScreen::Load(m_ScreenManager,true,playerIndex,gameplayScreen);
 	}
 
-	void MainMenuScreen::OptionsMenuSelected(void* sender,PlayerIndex playerIndex)
+	void MainMenuScreen::OptionsMenuSelected(void* sender,int playerIndex)
 	{
-		m_ScreenManager->AddScreen(new OptionsMenuScreen(),playerIndex);
+		m_ScreenManager->AddScreen(new OptionsMenuScreen(m_ScreenManager->GetScript()),playerIndex);
 	}
 
-	void MainMenuScreen::OnCancel(void* sender,PlayerIndex playerIndex)
+	void MainMenuScreen::OnCancel(void* sender,int playerIndex)
 	{
 		const std::string message = "Are you sure you want to exit this sample?";
 		MessageBoxScreen* confirmExitMessageBox = new MessageBoxScreen(message);
@@ -58,7 +58,7 @@ namespace Engine
 		m_ScreenManager->AddScreen(confirmExitMessageBox,playerIndex);
 	}
 
-	void MainMenuScreen::ConfirmExitMessageBoxAccepted(void* sender,PlayerIndex playerIndex)
+	void MainMenuScreen::ConfirmExitMessageBoxAccepted(void* sender,int playerIndex)
 	{
 		m_ScreenManager->Exit();
 	}

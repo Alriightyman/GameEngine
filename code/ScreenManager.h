@@ -57,7 +57,7 @@ namespace Engine
 		void TraceScreens();
 		void Draw(float deltaTime);
 
-		void AddScreen(GameScreen* screen, PlayerIndex playerIndex);
+		void AddScreen(GameScreen* screen, int playerIndex);
 		void RemoveScreen(GameScreen* screen);
 		void CleanUpScreens();
 		std::vector<GameScreen*> GetScreens();
