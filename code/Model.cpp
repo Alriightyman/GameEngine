@@ -98,7 +98,7 @@ namespace Engine
 		// get the mesh count
 		int meshCount = 0;
 		fin >> ignore >> ignore >> meshCount;
-
+		this->m_shaderType =  ShaderType::NORMALMAP; ;
 		// create the mesh data
 		for (int m = 0; m < meshCount; m++)
 		{
@@ -121,7 +121,6 @@ namespace Engine
 			// create and set the texture
 			mesh->Textures = graphics->CreateTexture(std::wstring(diffuse.begin(),diffuse.end()),std::wstring(normal.begin(),normal.end()),std::wstring(spec.begin(),spec.end()));
 			// set a default shader type
-			mesh->Material.ShaderType = ShaderType::NORMALMAP; 
 			m_meshes.push_back(mesh);
 		}
 
@@ -149,6 +148,7 @@ namespace Engine
 
 	}
 
+#pragma region Vertex Calculation Methods
 	void Model::CalculateModelVectors()
 	{
 
@@ -285,7 +285,8 @@ namespace Engine
 		// normalize the normal
 		normal.Normalize();
 	}
-
+#pragma endregion
+	
 	void Model::Shutdown()
 	{
 		while(!m_meshes.empty())
@@ -309,7 +310,7 @@ namespace Engine
 		for(unsigned int i = 0; i < m_meshes.size(); i++)
 		{
 			// get the shader for this mesh
-			Shader* shader = graphics->GetShader(m_meshes[i]->Material.ShaderType);
+			Shader* shader = graphics->GetShader(m_shaderType);
 
 			if(shader != nullptr)
 			{

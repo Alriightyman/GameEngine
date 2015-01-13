@@ -6,9 +6,9 @@
 namespace Engine
 {
 
-	Texture::Texture()
+	Texture::Texture() : m_count(3)
 	{
-		for(int i = 0; i < 3; i++)
+		for(int i = 0; i < m_count; i++)
 			m_textures[i] = 0;
 	}
 
@@ -57,4 +57,34 @@ namespace Engine
 	{
 		return m_textures;
 	} 
+
+	int Texture::GetHeight(int index) const
+	{
+		ID3D11Resource* resource;
+		ID3D11Texture2D* texture2d;
+		D3D11_TEXTURE2D_DESC desc;
+		if (index >= m_count || !m_textures[index])
+			return 0;
+
+		m_textures[index]->GetResource(&resource);
+		resource->QueryInterface(__uuidof(ID3D11Texture2D),(void**)&texture2d);
+		texture2d->GetDesc(&desc);
+
+		return desc.Height;
+	}
+
+	int Texture::GetWidth(int index) const
+	{
+		ID3D11Resource* resource;
+		ID3D11Texture2D* texture2d;
+		D3D11_TEXTURE2D_DESC desc;
+		if (index >= m_count || !m_textures[index])
+			return 0;
+
+		m_textures[index]->GetResource(&resource);
+		resource->QueryInterface(__uuidof(ID3D11Texture2D),(void**)&texture2d);
+		texture2d->GetDesc(&desc);
+
+		return desc.Width;
+	}
 }

@@ -11,6 +11,8 @@
 #include <SimpleMath.h>
 #include "InputState.h"
 #include "Script.h"
+#include <map>
+
 using namespace DirectX::SimpleMath;
 
 
@@ -20,7 +22,7 @@ namespace Engine
 	class Camera
 	{
 	public:
-		static void BindLua(luabridge::lua_State* L);
+		static void BindLua(Script* script);
 		static bool isInitialized;
 	public:
 		Camera(Script* script);
@@ -33,8 +35,8 @@ namespace Engine
 		Vector3 GetPosition() const;
 		Vector3 GetRotation() const;
 
-		void Render();
-		Matrix GetViewMatrix();
+		void Update();
+		static Matrix GetViewMatrix();
 		void MoveCamera(Script* script,InputState* input);
 	private:
 		bool loadScript;
@@ -42,9 +44,8 @@ namespace Engine
 	private:
 		Vector3 m_position;
 		Vector3 m_rotation;
-		Matrix m_viewMatrix;
-
-		std::shared_ptr<luabridge::LuaRef> func;
+		static Matrix m_viewMatrix;
+		std::map<std::string, std::shared_ptr<luabridge::LuaRef> > funcs;
 	}; 
 }
 

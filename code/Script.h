@@ -9,6 +9,7 @@ private:
 	luabridge::lua_State* m_luaState;
 
 public:
+	static const std::string ScriptRoot;
 	Script(void);
 	Script(const char* scriptfile);
 	~Script(void);

@@ -3,7 +3,7 @@
 #include "code/Model.h"
 #include "code/InputState.h"
 #include "code/Script.h"
-#include "code\NormalMapShader.h"
+#include "code/NormalMapShader.h"
 #include "code/MathHelper.h"
 
 namespace Engine
@@ -13,6 +13,7 @@ namespace Engine
 	{
 		using namespace luabridge;
 		luabridge::lua_State* L = script->GetState();
+
 		if(!isInitialized)
 		{
 			isInitialized = true;
@@ -20,18 +21,20 @@ namespace Engine
 				.beginClass<DemoObject>("DemoObject")
 					.addProperty("position",&DemoObject::GetPosition,&DemoObject::SetPosition)
 					.addProperty("velocity",&DemoObject::GetVelocity,&DemoObject::SetVelocity)
+					.addProperty("rotation",&DemoObject::GetRotation,&DemoObject::SetRotation)
 					.addProperty("desiredDirection",&DemoObject::GetDesiredDirection,&DemoObject::SetDesiredDirection)					
 					.addData<Model*>("model",&DemoObject::m_model)
-					.addData<std::string>("name",&IGameObject::m_name)
 					.addData<DirectX::SimpleMath::Matrix>("worldMatrix",&DemoObject::m_worldMatrix)
 					.addData<DirectX::SimpleMath::Vector3>("direction",&DemoObject::m_direction)
+					.addProperty("name",&DemoObject::GetName,&DemoObject::SetName)
+					.addProperty("isAlive",&DemoObject::IsAlive,&DemoObject::SetAlive)
 				.endClass();
 		}
 	}
 
-	DemoObject::DemoObject(void) : IGameObject(),m_worldMatrix(Matrix::Identity)
+	DemoObject::DemoObject(std::wstring name) : GameObject(name)
 	{
-
+		m_worldMatrix = Matrix::Identity;
 	}
 
 	DemoObject::~DemoObject(void)
@@ -47,13 +50,14 @@ namespace Engine
 #ifdef _DEBUG
 	Script* dScript;
 #endif
-	bool DemoObject::Initialize(Graphics* graphics, Script* script)
+	bool DemoObject::Initialize(Graphics* graphics,std::string scriptfilename, Script* script)
 	{
 		using namespace luabridge;
 #ifdef _DEBUG
 		dScript = script;
 #endif
-		script->LoadScript("Content/Scripts/GameObjects/DemoObject.lua");
+		scriptfilename = "Content/Scripts/GameObjects/" + scriptfilename;
+		script->LoadScript(scriptfilename.c_str());
 		luabridge::lua_State* L = script->GetState();
 		luabridge::LuaRef f = getGlobal(L,"Init");
 
@@ -117,6 +121,7 @@ namespace Engine
 		try
 		{
 			(*functions["Input"])(this, input,currentIndex,playerIndex);
+
 		}
 		catch(luabridge::LuaException const &e)
 		{
@@ -138,15 +143,12 @@ namespace Engine
 		}		
 	}
 
-	DirectX::SimpleMath::Matrix DemoObject::GetWorldMatrix() const
-	{
-		//using namespace DirectX::SimpleMath;
-		return m_worldMatrix;
-	}
 
 	void DemoObject::Render(Graphics* graphics)
 	{
 		
 		graphics->Render(m_model);
 	}
+
+	ShaderType DemoObject::GetShaderType() { return m_model->GetShaderType(); }
 }

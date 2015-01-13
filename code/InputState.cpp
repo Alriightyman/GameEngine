@@ -55,7 +55,7 @@ namespace Engine
 				.addFunction("IsPauseGame",&InputState::IsPauseGame)
 				.addFunction("CurrentGamePadState",&InputState::CurrentGamePadState)
 				.addProperty("UseGamepad",&InputState::UseGamepad,&InputState::SetGamepadUse)
-
+				.addFunction("GamePadWasConnected",&InputState::GamePadWasConnected)
 			.endClass();
 	}
 
@@ -437,7 +437,6 @@ namespace Engine
 			IsNewDPADUpButtonPress(controllingPlayer) ||
 			IsNewLeftStickUpPress(controllingPlayer);
 	}
-
 	bool InputState::IsMenuDown(int& controllingPlayer)
 	{
 		int playerIndex;

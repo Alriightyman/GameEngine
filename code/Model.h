@@ -109,7 +109,6 @@ namespace Engine
 		Color Diffuse;
 		Color Specular;
 		float SpecularPower;
-		ShaderType ShaderType;
 	};
 
 
@@ -169,15 +168,15 @@ namespace Engine
 			Mesh();
 			~Mesh();
 		};
-
-		
+	
 	private:
-
 		int m_vertexCount;
 		int m_indexCount;
 		ModelData* m_model;
 		ID3D11Buffer *m_vertexBuffer, *m_indexBuffer;
 		std::vector<Mesh*> m_meshes;
+		ShaderType m_shaderType;
+
 	public:
 		static void Bind(Script* script);
 		static bool isInitialized;
@@ -185,13 +184,10 @@ namespace Engine
 		Model();
 		Model(const Model&);
 		~Model();
-
 		void Shutdown();
-	public:
-		
-	protected:
 		bool Initialize(Graphics* graphics,std::wstring modelFilename);
 		void Render(Graphics* graphics);
+		ShaderType GetShaderType() { return m_shaderType; }
 	private:
 		bool InitializeBuffers(Graphics*);
 		void ShutdownBuffers();

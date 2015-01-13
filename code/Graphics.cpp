@@ -15,6 +15,7 @@
 using namespace DirectX;
 namespace Engine
 {
+	D3D11_VIEWPORT Graphics::Viewport = {0,0,0,0,0,0};
 
 	Graphics::Graphics()
 	{
@@ -376,23 +377,23 @@ namespace Engine
 
 
 		// Setup the viewport for rendering.
-		m_viewport.Width = (float)width;
-		m_viewport.Height = (float)height;
-		m_viewport.MinDepth = 0.0f;
-		m_viewport.MaxDepth = 1.0f;
-		m_viewport.TopLeftX = 0.0f;
-		m_viewport.TopLeftY = 0.0f;
+		Graphics::Viewport.Width = (float)width;
+		Graphics::Viewport.Height = (float)height;
+		Graphics::Viewport.MinDepth = 0.0f;
+		Graphics::Viewport.MaxDepth = 1.0f;
+		Graphics::Viewport.TopLeftX = 0.0f;
+		Graphics::Viewport.TopLeftY = 0.0f;
 
 		// Create the viewport.
-		m_deviceContext->RSSetViewports(1, &m_viewport);
+		m_deviceContext->RSSetViewports(1, &Graphics::Viewport);
 
 		// Setup the projection matrix.
 		float fieldOfView = (float)XM_PI / 4.0f;
 		float screenAspect = (float)width / (float)height;
 
 		// Create the projection matrix for 3D rendering.
-		m_screenDepth = 1000.0f;
-		m_projectionMatrix = XMMatrixPerspectiveFovLH( fieldOfView, screenAspect, 0.1f, m_screenDepth );
+		m_screenDepth = 10000.0f;
+		m_projectionMatrix = XMMatrixPerspectiveFovLH( fieldOfView, screenAspect, 0.0001f, m_screenDepth );
 
 		// Initialize the world matrix to the identity matrix.
 		m_worldMatrix =XMMatrixIdentity();

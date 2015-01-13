@@ -31,7 +31,7 @@ namespace Engine
 		bool m_vsync_enabled;
 		int m_videoCardMemory;
 		char m_videoCardDescription[128];
-		D3D11_VIEWPORT m_viewport;
+		static D3D11_VIEWPORT Viewport;
 		IDXGISwapChain* m_swapChain;
 		ID3D11Device* m_device;
 		ID3D11DeviceContext* m_deviceContext;
@@ -70,7 +70,7 @@ namespace Engine
 		Matrix GetProjectionMatrix() const { return m_projectionMatrix; }
 		Matrix GetWorldMatrix() const { return m_worldMatrix; }
 		Matrix GetOrthoMatrix() const { return m_orthoMatrix; }
-		D3D11_VIEWPORT* GetViewPort() { return &m_viewport; }
+		static D3D11_VIEWPORT GetViewPort() { return Viewport; }
 
 		Shader* GetShader(ShaderType shaderType);
 		LightShader* GetLightShader(); 
@@ -80,7 +80,6 @@ namespace Engine
 		LightMapShader* GetLightMapShader();
 		AlphaMapShader* GetAlphaMapShader();
 		NormalMapShader* GetNormalMapShader();
-
 	public:
 		Graphics();
 		~Graphics();

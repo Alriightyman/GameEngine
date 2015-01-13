@@ -110,6 +110,8 @@ namespace Engine
 		
 		// initialize lua
 		m_script = new Script();
+		m_objectManager.reset( new ObjectManager(m_graphics));
+		
 		InputState::Bind(m_script->GetState());
 	}
 
@@ -292,6 +294,10 @@ namespace Engine
 				.addStaticData<Vector3>("Left",const_cast<Vector3*>(&Vector3::Left))
 				.addStaticData<Vector3>("Forward",const_cast<Vector3*>(&Vector3::Forward))
 				.addStaticData<Vector3>("Backward",const_cast<Vector3*>(&Vector3::Backward))
+				.addStaticFunction("Normalize",&MathHelper::NormalizeVector3)
+				.addStaticFunction("Cross",&MathHelper::CrossVector3)
+				.addStaticFunction("Lerp",&MathHelper::LerpVector3)
+				.addStaticFunction("Slerp",&MathHelper::SlerpVector3)
 			.endClass()
 
 		// Vector2
@@ -381,21 +387,19 @@ namespace Engine
 				.addStaticFunction("CreateShadow",&Matrix::CreateShadow)
 				.addStaticFunction("CreateReflection",&Matrix::CreateReflection)
 				.addStaticData<Matrix>("Identity",const_cast<Matrix*>(&Matrix::Identity))
+				.addStaticFunction("Multiply",&MathHelper::MatrixMultiply)
+				.addStaticFunction("CreateTranslation",&MathHelper::CreateTranslation)
+				.addStaticFunction("CreateScale",&MathHelper::CreateScale)
+
 			.endClass()
 			
 			.beginClass<MathHelper>("MathHelper")
-				//.addStaticFunction("AngleFromXY",&MathHelper::AngleFromXY)
+				.addStaticFunction("AngleFromXY",&MathHelper::AngleFromXY)
 				.addStaticFunction("InverseTranspose",&MathHelper::InverseTranspose)
-				.addStaticFunction("CreateTranslation",&MathHelper::CreateTranslation)
-				.addStaticFunction("MatrixMultiply",&MathHelper::MatrixMultiply)
-				.addStaticFunction("CreateScale",&MathHelper::CreateScale)
 				.addStaticData<float>("Infinity",const_cast<float*>(&MathHelper::Infinity))
 				.addStaticData<float>("Pi",const_cast<float*>(&MathHelper::Pi))
-				.addStaticFunction("Vector3Cross",&MathHelper::CrossVector3)
-				.addStaticFunction("Vector3Normalize",&MathHelper::NormalizeVector3)
 				.addStaticFunction("ATan2",&MathHelper::ATan2)
 				
-			.endClass();
-				
+			.endClass();	
 	}
 }

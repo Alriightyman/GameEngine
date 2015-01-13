@@ -24,9 +24,11 @@ namespace Engine
 		void Shutdown();
 
 		ID3D11ShaderResourceView** GetTextures();
+		int GetHeight(int index) const;
+		int GetWidth(int index) const;
 
 	private:
-		int count;
+		int m_count;
 		ID3D11ShaderResourceView* m_textures[3];
 	};
 

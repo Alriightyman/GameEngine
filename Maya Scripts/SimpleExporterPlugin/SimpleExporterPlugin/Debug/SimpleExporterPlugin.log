@@ -1,5 +1,38 @@
-﻿Build started 12/25/2014 12:38:07 PM.
+﻿Build started 1/3/2015 11:27:09 AM.
+     1>Project "C:\Users\Alriighytman\Documents\GitHub\GameEngine\Maya Scripts\SimpleExporterPlugin\SimpleExporterPlugin\SimpleExporterPlugin.vcxproj" on node 3 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\x86_amd64\CL.exe /c /I"C:\Program Files\Autodesk\Maya2015\include" /Zi /nologo /W3 /WX- /Od /D WIN32 /D _DEBUG /D _WINDOWS /D _USRDLL /D SIMPLEEXPORTERPLUGIN_EXPORTS /D NT_PLUGIN /D REQUIRE_IOSTREAM /D _WINDLL /D _MBCS /Gm- /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /errorReport:prompt MayaFileTranslator.cpp
+         MayaFileTranslator.cpp
+     1>MayaFileTranslator.cpp(234): warning C4267: '+=' : conversion from 'size_t' to 'int', possible loss of data
+     1>MayaFileTranslator.cpp(470): warning C4244: 'initializing' : conversion from 'int' to 'float', possible loss of data
+     1>MayaFileTranslator.cpp(471): warning C4244: 'initializing' : conversion from 'int' to 'float', possible loss of data
+     1>MayaFileTranslator.cpp(472): warning C4244: 'initializing' : conversion from 'int' to 'float', possible loss of data
+     1>MayaFileTranslator.cpp(474): warning C4244: 'argument' : conversion from 'float' to 'unsigned __int64', possible loss of data
+     1>MayaFileTranslator.cpp(475): warning C4244: 'argument' : conversion from 'float' to 'unsigned __int64', possible loss of data
+     1>MayaFileTranslator.cpp(476): warning C4244: 'argument' : conversion from 'float' to 'unsigned __int64', possible loss of data
+     1>MayaFileTranslator.cpp(495): warning C4244: 'initializing' : conversion from 'int' to 'float', possible loss of data
+     1>MayaFileTranslator.cpp(496): warning C4244: 'initializing' : conversion from 'int' to 'float', possible loss of data
+     1>MayaFileTranslator.cpp(497): warning C4244: 'initializing' : conversion from 'int' to 'float', possible loss of data
+     1>MayaFileTranslator.cpp(499): warning C4244: 'argument' : conversion from 'float' to 'unsigned __int64', possible loss of data
+     1>MayaFileTranslator.cpp(500): warning C4244: 'argument' : conversion from 'float' to 'unsigned __int64', possible loss of data
+     1>MayaFileTranslator.cpp(501): warning C4244: 'argument' : conversion from 'float' to 'unsigned __int64', possible loss of data
+     1>MayaFileTranslator.cpp(516): warning C4267: '+=' : conversion from 'size_t' to 'int', possible loss of data
+     1>MayaFileTranslator.cpp(542): warning C4267: '+=' : conversion from 'size_t' to 'int', possible loss of data
+     1>MayaFileTranslator.cpp(570): warning C4018: '<' : signed/unsigned mismatch
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Alriighytman\Documents\GitHub\GameEngine\Maya Scripts\SimpleExporterPlugin\SimpleExporterPlugin\Debug\RTXExporter.mll" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Program Files\Autodesk\Maya2015\lib" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"Debug\SimpleExporterPlugin.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"Debug\SimpleExporterPlugin.lib" /MACHINE:X64 /DLL Debug\MayaFileTranslator.obj
+         Debug\MayaMain.obj
+         SimpleExporterPlugin.vcxproj -> C:\Users\Alriighytman\Documents\GitHub\GameEngine\Maya Scripts\SimpleExporterPlugin\SimpleExporterPlugin\Debug\RTXExporter.mll
+       PostBuildEvent:
+         xcopy "C:\Users\Alriighytman\Documents\GitHub\GameEngine\Maya Scripts\SimpleExporterPlugin\SimpleExporterPlugin\Debug\RTXExporter.mll" "C:\Users\Alriighytman\Documents\maya\2015-x64\plug-ins" /e /y /i /r
+         xcopy "C:\Users\Alriighytman\Documents\GitHub\GameEngine\Maya Scripts\SimpleExporterPlugin\SimpleExporterPlugin\MayaFileExportScript.mel" "C:\Users\Alriighytman\Documents\maya\2015-x64\scripts" /e /y /i /r
+         :VCEnd
+         C:\Users\Alriighytman\Documents\GitHub\GameEngine\Maya Scripts\SimpleExporterPlugin\SimpleExporterPlugin\Debug\RTXExporter.mll
+         1 File(s) copied
+         C:\Users\Alriighytman\Documents\GitHub\GameEngine\Maya Scripts\SimpleExporterPlugin\SimpleExporterPlugin\MayaFileExportScript.mel
+         1 File(s) copied
+     1>Done Building Project "C:\Users\Alriighytman\Documents\GitHub\GameEngine\Maya Scripts\SimpleExporterPlugin\SimpleExporterPlugin\SimpleExporterPlugin.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.14
+Time Elapsed 00:00:01.66

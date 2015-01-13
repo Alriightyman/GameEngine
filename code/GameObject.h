@@ -1,25 +1,30 @@
 #pragma once
-#include <SimpleMath.h>
-class Script;
+
+#include "IObject.h"
+
 namespace Engine
 {
-	class Graphics;
+	class InputState;
 
-	class IGameObject
+	class GameObject : public IObject
 	{
-	public:
-		std::string m_name;
-		DirectX::SimpleMath::Vector3 m_position;
+	protected:
 		DirectX::SimpleMath::Vector3 m_velocity;
 		DirectX::SimpleMath::Vector3 m_direction;
-		
+		bool m_isAlive, m_isOnScreen;
+		DirectX::SimpleMath::Matrix m_worldMatrix;
 	public:
-		IGameObject(void) : m_name("NULL"), m_position(0.0f),m_velocity(0.0f),m_direction(DirectX::SimpleMath::Vector3::UnitY) { } 
-		virtual ~IGameObject(void) {};
+		GameObject(std::wstring name) : IObject(name),m_velocity(0.0f),m_direction(0.0f),m_isAlive(true) {}
+		virtual ~GameObject() {}
+		void SetAlive(bool value) { m_isAlive = value; }
+		bool IsAlive() const { return m_isAlive; }
+		void SetOnScreenFlag(bool value) { m_isOnScreen = value; }
+		bool IsOnScreen() const { return m_isOnScreen; }
 
-		virtual bool Initialize(Graphics* graphics,Script* script) = 0;
-		virtual void Update(float dt) = 0;
-		virtual void Render(Graphics* graphics) = 0;
+		virtual bool Initialize(Graphics* graphics,std::string filename, Script* script) override { return true;}
+		virtual void Update(float deltaTime) override {}
+		virtual void Render(Graphics* graphics) {}
+		virtual ShaderType GetShaderType() override { return (ShaderType)0; }
+		DirectX::SimpleMath::Matrix GetWorldMatrix() const { return m_worldMatrix;	}
 	};
-
 }

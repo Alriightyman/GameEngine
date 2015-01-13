@@ -6,12 +6,23 @@
 
 namespace Engine
 {
+	Matrix Camera::m_viewMatrix = Matrix::Identity;
+
 	bool Camera::isInitialized = false;
-	void Camera::BindLua(luabridge::lua_State* L)
+	void Camera::BindLua(Script* script)
 	{
+		
+	}
+
+	Camera::Camera(Script* script) : loadScript(false)
+	{
+		// set up lua binding
+		luabridge::lua_State* L = script->GetState();
+
 		if (!isInitialized)
 		{
 			isInitialized = true;
+
 			try 
 			{
 				using namespace luabridge;
@@ -27,10 +38,7 @@ namespace Engine
 				std::cout << "ERR: " << e.what() << std::endl;
 			}
 		}
-	}
 
-	Camera::Camera(Script* script) : loadScript(false)
-	{
 		m_position = Vector3::Zero;
 		m_rotation = Vector3::Zero;
 		LoadScript(script);
@@ -39,13 +47,21 @@ namespace Engine
 	void Camera::LoadScript(Script* script)
 	{
 		using namespace luabridge;
-		script->LoadScript("Content/Scripts/Camera/Control.lua");
+		script->LoadScript("Content/Scripts/Camera/Camera.lua");
 		LuaRef function = getGlobal(script->GetState(),"HandleInput");
 
 		if (function.isFunction())
-			func = std::make_shared<LuaRef>(function);
-		else
-			func.reset();
+		{
+			funcs["Input"] = std::make_shared<LuaRef>(function);
+		}
+
+		function = getGlobal(script->GetState(),"Initialize");
+
+		if (function.isFunction())
+		{
+			funcs["Initialize"] = std::make_shared<LuaRef>(function);
+			(*funcs["Initialize"])(this);
+		}
 	}
 
 	Camera::Camera(const Camera& other)
@@ -84,7 +100,7 @@ namespace Engine
 	}
 
 
-	void Camera::Render()
+	void Camera::Update()
 	{
 		Vector3 up, position, lookAt;
 		float yaw, pitch, roll;
@@ -114,22 +130,22 @@ namespace Engine
 		lookAt = position + lookAt;
 
 		// Finally create the view matrix from the three updated vectors.
-		m_viewMatrix = Matrix::CreateLookAt( position, lookAt, up );
+		Camera::m_viewMatrix = Matrix::CreateLookAt( position, lookAt, up );
 	}
 
 
 	Matrix Camera::GetViewMatrix( )
 	{
-		return m_viewMatrix;
+		return Camera::m_viewMatrix;
 	} 
 
 	void Camera::MoveCamera(Script* script,InputState* input)
 	{
-		if(func)
+		if(funcs["Input"])
 		{
 			try
 			{
-				(*func)(this,input);
+				(*funcs["Input"])(this,input);
 				//std::cout << "C++ Position: (" << m_position.x << "," << m_position.y << ","<<m_position.z << ")\n"; 
 			}
 			catch (luabridge::LuaException const& e)

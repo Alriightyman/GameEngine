@@ -111,6 +111,9 @@
     <Filter Include="Game\scripts\GameObjects">
       <UniqueIdentifier>{b1262fff-5aab-4454-a45f-e6a26fc9d404}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\ObjectManager">
+      <UniqueIdentifier>{5db65e07-46ab-4f1f-b680-f4810dbd4615}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="code\BackgroundScreen.cpp">
@@ -208,6 +211,9 @@
     </ClCompile>
     <ClCompile Include="DemoObject.cpp">
       <Filter>Engine\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="code\ObjectManager.cpp">
+      <Filter>Engine\ObjectManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -313,14 +319,20 @@
     <ClInclude Include="code\NormalMapShader.h">
       <Filter>Rendering\Shaders\NormalMapShader</Filter>
     </ClInclude>
-    <ClInclude Include="code\GameObject.h">
-      <Filter>Engine\GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="DemoObject.h">
       <Filter>Engine\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="code\LuaEnum.h">
       <Filter>Engine\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="code\ObjectManager.h">
+      <Filter>Engine\ObjectManager</Filter>
+    </ClInclude>
+    <ClInclude Include="code\IObject.h">
+      <Filter>Engine\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="code\GameObject.h">
+      <Filter>Engine\GameObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -383,14 +395,17 @@
     <None Include="Content\Scripts\LevelData.lua">
       <Filter>Game\scripts</Filter>
     </None>
-    <None Include="Content\Scripts\Camera\Control.lua">
-      <Filter>Game\scripts\Camera</Filter>
-    </None>
     <None Include="Content\Scripts\Light\Light.lua">
       <Filter>Game\scripts\Light</Filter>
     </None>
     <None Include="Content\Scripts\GameObjects\DemoObject.lua">
       <Filter>Game\scripts\GameObjects</Filter>
+    </None>
+    <None Include="Content\Scripts\CreateGlobals.lua">
+      <Filter>Game\scripts</Filter>
+    </None>
+    <None Include="Content\Scripts\Camera\Camera.lua">
+      <Filter>Game\scripts\Camera</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

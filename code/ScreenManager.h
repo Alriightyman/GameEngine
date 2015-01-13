@@ -6,6 +6,7 @@
 #include <SpriteBatch.h>
 #include <SpriteFont.h>
 #include "Script.h"
+#include "ObjectManager.h"
 
 namespace Engine
 {
@@ -27,6 +28,7 @@ namespace Engine
 		ID3D11ShaderResourceView* blankTexture;
 
 		Engine::Graphics* m_graphics;
+		std::unique_ptr<ObjectManager> m_objectManager;
 
 		static bool isInitialized;
 		bool traceEnabled;
@@ -40,6 +42,7 @@ namespace Engine
 		DirectX::SpriteFont* Font()const { return font; }	
 		Engine::Graphics* GetGraphicsDevice() const { return m_graphics; }
 		Script* GetScript() const { return m_script; }
+		ObjectManager* GetObjectManager() const { return m_objectManager.get(); }
 		bool TraceEnabeld()const { return traceEnabled; }
 		void TraceEnabled(bool value) { traceEnabled = value; }
 		bool Quit()const { return quit;}

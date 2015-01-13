@@ -2,6 +2,8 @@
 #include <Windows.h>
 #include <iostream>
 
+const std::string Script::ScriptRoot = "Content/Scripts/";
+
 Script::Script(void)
 {
 	using namespace luabridge;

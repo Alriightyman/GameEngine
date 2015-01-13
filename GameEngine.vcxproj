@@ -20,6 +20,7 @@
     <ClCompile Include="code\LightShader.cpp" />
     <ClCompile Include="code\MultiTextureShader.cpp" />
     <ClCompile Include="code\NormalMapShader.cpp" />
+    <ClCompile Include="code\ObjectManager.cpp" />
     <ClCompile Include="code\Script.cpp" />
     <ClCompile Include="code\Shader.cpp" />
     <ClCompile Include="code\Texture.cpp" />
@@ -50,6 +51,7 @@
     <ClInclude Include="code\Camera.h" />
     <ClInclude Include="code\ConstantBuffer.h" />
     <ClInclude Include="code\Frustum.h" />
+    <ClInclude Include="code\IObject.h" />
     <ClInclude Include="code\GameObject.h" />
     <ClInclude Include="code\Light.h" />
     <ClInclude Include="code\LightMapShader.h" />
@@ -57,6 +59,7 @@
     <ClInclude Include="code\LuaEnum.h" />
     <ClInclude Include="code\MultiTextureShader.h" />
     <ClInclude Include="code\NormalMapShader.h" />
+    <ClInclude Include="code\ObjectManager.h" />
     <ClInclude Include="code\Script.h" />
     <ClInclude Include="code\Shader.h" />
     <ClInclude Include="code\Texture.h" />
@@ -190,7 +193,8 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Content\Scripts\Camera\Control.lua" />
+    <None Include="Content\Scripts\Camera\Camera.lua" />
+    <None Include="Content\Scripts\CreateGlobals.lua" />
     <None Include="Content\Scripts\DemoInput.lua" />
     <None Include="Content\Scripts\GameObjects\DemoObject.lua" />
     <None Include="Content\Scripts\LevelData.lua" />
@@ -235,6 +239,7 @@
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(DXTK_DIR)\Inc;$(IncludePath)</IncludePath>
     <LibraryPath>code\Lua;$(DXTK_DIR)\Bin\Desktop_2012\Win32\Debug\;$(LibraryPath)</LibraryPath>
+    <ExtensionsToDeleteOnClean>*spritefont;*rtx;*lua;*nut;*cso;*dds;*png;$(ExtensionsToDeleteOnClean)</ExtensionsToDeleteOnClean>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>

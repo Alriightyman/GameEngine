@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <crtdbg.h>
 #include <iostream>
+#include "Script.h"
 
 using namespace DirectX;
 
@@ -91,6 +92,18 @@ namespace Engine
 		// initialize the screenmanager
 		m_screenManager->Load();
 		ScreenManager::LuaBindings(m_screenManager->GetScript()->GetState());
+
+		Script* script = m_screenManager->GetScript();
+		script->LoadScript("Content/Scripts/CreateGlobals.lua");
+
+		luabridge::LuaRef func = getGlobal(script->GetState(),"LoadGlobals");
+
+		if (func.isFunction())
+		{
+			std::shared_ptr<luabridge::LuaRef> f = std::make_shared<luabridge::LuaRef>(func);
+			(*f)();
+		}
+
 		return true;
 	}
 

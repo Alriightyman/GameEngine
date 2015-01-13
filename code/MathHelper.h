@@ -10,6 +10,31 @@ public:
 	{
 		return atan2f(y,x);
 	}
+	static DirectX::SimpleMath::Vector3 LerpVector3(DirectX::SimpleMath::Vector3& start, DirectX::SimpleMath::Vector3& end, float percent)
+	{
+		using namespace DirectX::SimpleMath;
+		return Vector3::Lerp(start,end,percent);
+	}
+	static DirectX::SimpleMath::Vector3 SlerpVector3(DirectX::SimpleMath::Vector3& start, DirectX::SimpleMath::Vector3& end, float percent)
+	{
+		using namespace DirectX::SimpleMath;
+		 // Dot product - the cosine of the angle between 2 vectors.
+		 float dot = start.Dot(end);     
+		 // Clamp it to be in the range of Acos()
+		 // This may be unnecessary, but floating point
+		 // precision can be a fickle mistress.
+		 dot = Clamp(dot, -1.0f, 1.0f);
+		 // Acos(dot) returns the angle between start and end,
+		 // And multiplying that by percent returns the angle between
+		 // start and the final result.
+		 float theta = acos(dot) * percent;
+		 Vector3 RelativeVec = end - start * dot;
+		 RelativeVec.Normalize();     // Orthonormal basis
+		 // The final result.
+		 Vector3 result = ((start* cos(theta)) + (RelativeVec * sin(theta)));
+		 return result;
+
+	}
 	static DirectX::SimpleMath::Matrix CreateScale( const  float scale)
 	{
 		return  DirectX::SimpleMath::Matrix::CreateScale(scale);
@@ -25,9 +50,10 @@ public:
 		return v1.Cross(v2);
 	}
 
-	static void NormalizeVector3(DirectX::SimpleMath::Vector3& v)
+	static DirectX::SimpleMath::Vector3 NormalizeVector3(DirectX::SimpleMath::Vector3& v)
 	{
 		v.Normalize();
+		return v;
 	}
 
 	static DirectX::SimpleMath::Matrix MatrixMultiply(DirectX::SimpleMath::Matrix& mat1,DirectX::SimpleMath::Matrix mat2)

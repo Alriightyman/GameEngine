@@ -1,6 +1,11 @@
 #pragma once
 #include "InputState.h"
 #include <string>
+#include <vector>
+#include <SimpleMath.h>
+using namespace DirectX::SimpleMath;
+
+
 
 namespace Engine
 {

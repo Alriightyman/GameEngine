@@ -147,10 +147,14 @@ private:
 
 	struct Material
 	{
+		MFloatVector Ambient;
+		MFloatVector Diffuse;
+		MFloatVector Specular;
+		float SpecPower;
+		// filenames
 		std::string DiffuseMap;
 		std::string NormalMap;
 		std::string SpecularMap;
-
 	};
 
 	struct Mesh
@@ -168,7 +172,7 @@ private:
 		Material mat;
 	};
 
-	bool m_bShort;
+	bool m_isBinary;
 
 	std::vector<Mesh*> m_meshes;
 	std::vector<std::string> m_diffuseMaps;

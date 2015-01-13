@@ -83,7 +83,7 @@ MMatrix MayaFileTranslator::BuildTransform(MObject& obj)
 MayaFileTranslator::MayaFileTranslator(void) 
 	: m_totalVertexCount(0)
 {
-	m_bShort = false;
+	m_isBinary = false;
 }
 
 //-------------------------------------------------------------------	~MayaFileTranslator
@@ -129,7 +129,7 @@ MStatus	MayaFileTranslator::writer( const MFileObject& file,
 	//	set initial default flags incase something has 
 	//	gone wrong on the maya side
 	//
-	m_bShort		= true;
+	m_isBinary	= false;
 
 	//	process the option string passed in from the option script
 	//
@@ -163,9 +163,9 @@ MStatus	MayaFileTranslator::writer( const MFileObject& file,
             if( theOption[0] == namesonlyFlag && theOption.length() > 1 ) 
 			{
                 if(theOption[1].asInt()>0) 
-					m_bShort = true;
+					m_isBinary = true;
 				else 
-					m_bShort = false;
+					m_isBinary = false;
             }
         }
 	}
@@ -205,18 +205,43 @@ MStatus	MayaFileTranslator::writer( const MFileObject& file,
 			switch (item.apiType())
 			{
 			case MFn::kMesh:
-				LoadMesh(item);
+				try
+				{
+					LoadMesh(item);
+					
+				}
+				catch (std::exception& e)
+				{
+					std::cerr << "Error Loading Mesh: " << e.what() << std::endl;
+				}
 				break;
 			}
 		}
-
-		BuildTextureData();
-
-		for(int i = 0; i < m_meshes.size(); i++)
+		try
 		{
-			m_totalVertexCount += m_meshes[i]->m_vertexIndices.size();
-			m_meshes[i]->mat.DiffuseMap = m_diffuseMaps[m_diffuseMaps.size() - i - 1];
-			m_meshes[i]->mat.NormalMap = m_normalMaps[m_normalMaps.size() - i - 1];
+			BuildTextureData();
+			std::cerr << "Built texture\n";
+		}
+		catch (std::exception& e)
+		{
+			std::cerr << "Error Building Textures: " << e.what() << std::endl;
+		}
+		try
+		{
+			std::cerr << "mesh size: " << m_meshes.size();
+			for(int i = 0; i < m_meshes.size(); i++)
+			{
+				m_totalVertexCount += m_meshes[i]->m_vertexIndices.size();
+				
+				m_meshes[i]->mat.DiffuseMap = m_diffuseMaps[m_diffuseMaps.size() - i - 1];
+				m_meshes[i]->mat.NormalMap = m_normalMaps[m_normalMaps.size() - i - 1];
+				std::cerr << "mesh #" <<i+1 << std::endl;
+			}
+		
+		}
+		catch (std::exception& e)
+		{
+			std::cerr << "Error getting total vertex count: " << e.what() << std::endl;
 		}
 
 		WriteRasterTekFormatAscii(ofs);
@@ -431,10 +456,13 @@ void MayaFileTranslator::WriteRasterTekFormatAscii(std::ofstream& fout)
 	fout << endl;
 	fout << "Data:" << endl;
 	fout << endl;
-
+	try
+	{
 	CreateSubsetTable(fout);
+	std::cerr << "Created Subset Table\n";
 	fout << endl;
 
+	
 	for(int m = 0; m < m_meshes.size(); m++)
 	{
 		for (int i = 0; i < m_meshes[m]->m_vertexIndices.size(); i++)
@@ -448,33 +476,86 @@ void MayaFileTranslator::WriteRasterTekFormatAscii(std::ofstream& fout)
 				 << m_meshes[m]->m_normals[nIndex].x << ' ' << m_meshes[m]->m_normals[nIndex].y << ' ' << -m_meshes[m]->m_normals[nIndex].z << endl;
 		}
 	}
+	}
+	catch (std::exception& e)
+	{
+		std::cerr << "Error: " << e.what() << std::endl;
+	}
 }
+void MayaFileTranslator::WriteRasterTekFormatBinary(std::ofstream& fout)
+{
+	using namespace std;
+	fout << m_totalVertexCount;
+	CreateSubsetTable(fout);
 
+	for (int m = 0; m < m_meshes.size(); m++)
+	{
+		for (int i = 0; i < m_meshes[m]->m_vertexIndices.size(); i++)
+		{
+			float vIndex = m_meshes[m]->m_vertexIndices[i];
+			float tIndex = m_meshes[m]->m_uvIndices[i];
+			float nIndex = m_meshes[m]->m_normalIndices[i];
+
+			fout << m_meshes[m]->m_vertices[vIndex].x << m_meshes[m]->m_vertices[vIndex].y << -m_meshes[m]->m_vertices[vIndex].z
+				 << m_meshes[m]->m_uvs[tIndex].x << 1.0f - m_meshes[m]->m_uvs[tIndex].y
+				 << m_meshes[m]->m_normals[nIndex].x << m_meshes[m]->m_normals[nIndex].y << -m_meshes[m]->m_normals[nIndex].z;
+		}
+	}
+}
 void MayaFileTranslator::CreateSubsetTable(std::ofstream& fout)
 {
 	using namespace std;
 	int startCount = 0, oldCount = 0;
-
-	fout << "MeshCount: " << m_meshes.size() << endl;
-
-	for (int m = 0; m < m_meshes.size(); m++)
+	if(!m_isBinary)
 	{
-		fout << "Start: " << startCount << endl;
-		oldCount = startCount;
-		startCount += m_meshes[m]->m_vertexIndices.size();
-		fout << "Size: " << (startCount - oldCount) << endl;
-		std::string DiffuseMap = m_meshes[m]->mat.DiffuseMap;;
-		std::string NormalMap = m_meshes[m]->mat.NormalMap;
-		std::string SpecularMap = m_meshes[m]->mat.SpecularMap;
-		if (NormalMap.size() < 2)
-			NormalMap = "n";
-		if (SpecularMap.size() < 2)
-			SpecularMap = "n";
+		fout << "MeshCount: " << m_meshes.size() << endl;
+		for (int m = 0; m < m_meshes.size(); m++)
+		{
+			fout << "Start: " << startCount << endl;
+			oldCount = startCount;
+			startCount += m_meshes[m]->m_vertexIndices.size();
+			fout << "Size: " << (startCount - oldCount) << endl;
+			std::string DiffuseMap = m_meshes[m]->mat.DiffuseMap;;
+			std::string NormalMap = m_meshes[m]->mat.NormalMap;
+			std::string SpecularMap = m_meshes[m]->mat.SpecularMap;
 
-		fout << "DiffuseMap: " << DiffuseMap.c_str() << std::endl;
-		fout << "NormalMap: " << NormalMap.c_str() << std::endl;
-		fout << "SpecularMap: " << SpecularMap.c_str() << std::endl << std::endl;
-		//startCount++;
+			if (NormalMap.size() < 2)
+				NormalMap = "n";
+			if (SpecularMap.size() < 2)
+				SpecularMap = "n";
+
+			fout << "DiffuseMap: " << DiffuseMap.c_str() << std::endl;
+			fout << "NormalMap: " << NormalMap.c_str() << std::endl;
+			fout << "SpecularMap: " << SpecularMap.c_str() << std::endl << std::endl;
+
+			//startCount++;
+		}
+	}
+	else
+	{
+		fout << m_meshes.size();
+		for (int m = 0; m < m_meshes.size(); m++)
+		{
+			fout << startCount;
+			oldCount = startCount;
+
+			startCount += m_meshes[m]->m_vertexIndices.size();
+			fout << (startCount - oldCount);
+			std::string DiffuseMap = m_meshes[m]->mat.DiffuseMap;;
+			std::string NormalMap = m_meshes[m]->mat.NormalMap;
+			std::string SpecularMap = m_meshes[m]->mat.SpecularMap;
+
+			if (NormalMap.size() < 2)
+				NormalMap = "n";
+			if (SpecularMap.size() < 2)
+				SpecularMap = "n";
+			fout << DiffuseMap.size();
+			fout << DiffuseMap.c_str();
+			fout << NormalMap.size();
+			fout << NormalMap.c_str();
+			fout << SpecularMap.size();
+			fout << SpecularMap.c_str();
+		}
 	}
 }
 void MayaFileTranslator::LoadMesh(MObject& item)
@@ -580,7 +661,7 @@ void MayaFileTranslator::LoadMesh(MObject& item)
 ///	\brief  returns true if the file translator supports importing 
 ///	\return	false
 ///
-bool  MayaFileTranslator::haveReadMethod	 () const {
+bool  MayaFileTranslator::haveReadMethod() const {
 	return false;
 }
 
