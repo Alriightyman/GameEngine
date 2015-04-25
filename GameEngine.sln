@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameEngine", "GameEngine.vcxproj", "{0624E1B6-66CD-42F2-90A3-FF26EB09B3E4}"
 EndProject
-Project("{5697748A-77EF-44CA-8824-4F5637E5945B}") = "temp_GameEngine", "..\..\..\..\..\Users\Alriightyman\Documents\BabeLua\Project\temp_GameEngine\temp_GameEngine.luaproj", "{E439935D-B2A2-46AE-856D-2AA408428F33}"
+Project("{5697748A-77EF-44CA-8824-4F5637E5945B}") = "temp_GameEngine", "..\..\..\..\Users\Alriightyman\Documents\BabeLua\Project\temp_GameEngine\temp_GameEngine.luaproj", "{E439935D-B2A2-46AE-856D-2AA408428F33}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RC4", "RC4\RC4.vcxproj", "{D30453BB-466C-4291-953E-9DB55F77DD2B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +37,16 @@ Global
 		{E439935D-B2A2-46AE-856D-2AA408428F33}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{E439935D-B2A2-46AE-856D-2AA408428F33}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{E439935D-B2A2-46AE-856D-2AA408428F33}.Release|Win32.ActiveCfg = Release|Any CPU
+		{D30453BB-466C-4291-953E-9DB55F77DD2B}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{D30453BB-466C-4291-953E-9DB55F77DD2B}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{D30453BB-466C-4291-953E-9DB55F77DD2B}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{D30453BB-466C-4291-953E-9DB55F77DD2B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D30453BB-466C-4291-953E-9DB55F77DD2B}.Debug|Win32.Build.0 = Debug|Win32
+		{D30453BB-466C-4291-953E-9DB55F77DD2B}.Release|Any CPU.ActiveCfg = Release|Win32
+		{D30453BB-466C-4291-953E-9DB55F77DD2B}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{D30453BB-466C-4291-953E-9DB55F77DD2B}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{D30453BB-466C-4291-953E-9DB55F77DD2B}.Release|Win32.ActiveCfg = Release|Win32
+		{D30453BB-466C-4291-953E-9DB55F77DD2B}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
