@@ -5,88 +5,9 @@
 #include <cmath>
 #include <string>
 #include "Script.h"
-#include <sstream>
 
 namespace Engine
 {
-// this was taken from the RC4 program that is part of the GameEngine Solution.
-#pragma region RC4
-
-	// helper function
-	static void Swap(int* S, int a, int b)
-	{
-		int tmp = S[a];
-		S[a] = S[b];
-		S[b] = tmp;
-	}
-	// rC4 decryption algorithm
-	class RC4
-	{
-	private:
-		int S[256];
-		int K[256];
-		int i,j;
-
-	public:
-		RC4(void) : j(0),i(0)
-		{
-		}
-
-		~RC4(void)
-		{
-		}
-
-		void KeySchedulingAlgorithm(std::string key)
-		{
-			int length = key.size();
-			int a = 0;
-
-			for(int x = 0; x < 256; x++)
-			{
-				S[x] = x;
-				K[x] = key[a];
-				a++;
-				if (a > length-1)
-					a = 0;
-			}
-
-			for(int x = 0; x < 256; x++)
-			{
-				a = (a + S[x] + K[x]) % 256;
-				Swap(S,x,a);
-			}
-		}
-
-		char PseudoRandomGenerationAlgorithm()
-		{
-			i = (i + 1) % 256;
-			j = (j + S[i]) % 256;
-
-			Swap(S,i,j);
-
-			int index = (S[i] + S[j]) % 256;
-			char c = S[index];
-			return c;
-		}
-
-		std::string Decrypt(std::string plainText)
-		{
-			int length = plainText.size();
-			std::string cipher = plainText;
-			char c;
-			for(int x = 0; x <= length; x++)
-			{
-				c = PseudoRandomGenerationAlgorithm();
-				cipher[x] = cipher[x] ^ c;
-			}
-
-			return cipher;
-		}
-	};
-
-
-#pragma endregion
-
 
 	#pragma region Mesh
 
@@ -165,55 +86,34 @@ namespace Engine
 	{
 		std::ifstream fin;
 		std::string ignore;
-		// open the model file in binary mode
-		fin.open(filename,std::ios_base::binary);
+		// open the model file
+		fin.open(filename);
 
 		// if it could not open the file then exit
 		if(fin.fail())
 			return false;
-		// data holds the cipher text
-		std::string data;
-		// get file size
-		fin.seekg(0,fin.end);
-		int length = fin.tellg();
-		fin.seekg(0,fin.beg);
-		data.resize(length);
-
-		// read cipher data and close the file
-		fin.read(&data[0],length);
-		fin.close();
-		// create the rc4
-		RC4 rc4;
-		// set the key
-		rc4.KeySchedulingAlgorithm("Asset");
-		
-		// decrypt the model data
-		data = rc4.Decrypt(data);
-		// create a stringstream to hold the file contents
-		std::stringstream sin;
-		sin << data;
 
 		// read the vertex count
-		sin >> ignore >> ignore >> m_vertexCount;
+		fin >> ignore >> ignore >> m_vertexCount;
 		// get the mesh count
 		int meshCount = 0;
-		sin >> ignore >> ignore >> meshCount;
+		fin >> ignore >> ignore >> meshCount;
 		this->m_shaderType =  ShaderType::NORMALMAP; ;
 		// create the mesh data
 		for (int m = 0; m < meshCount; m++)
 		{
 			Mesh* mesh = new Mesh();
 			// get the vertex start location
-			sin >> ignore >> mesh->Start;
+			fin >> ignore >> mesh->Start;
 			// get the vertex count
-			sin >> ignore >> mesh->Count;
+			fin >> ignore >> mesh->Count;
 
 			// get the diffuse/normal/specular maps
 			std::string diffuse,normal,spec;
 
-			sin >> ignore >> diffuse;
-			sin >> ignore >> normal;
-			sin >> ignore >> spec;
+			fin >> ignore >> diffuse;
+			fin >> ignore >> normal;
+			fin >> ignore >> spec;
 			std::string path = "Content/Textures/";
 			diffuse = path + diffuse;
 			normal = path + normal;
@@ -236,10 +136,13 @@ namespace Engine
 		// read the vertex data
 		for(int i = 0; i <  m_vertexCount; i++)
 		{
-			sin >> m_model[i].x >> m_model[i].y >> m_model[i].z;
-			sin >> m_model[i].tu >> m_model[i].tv;
-			sin >> m_model[i].nx >> m_model[i].ny >> m_model[i].nz;
+			fin >> m_model[i].x >> m_model[i].y >> m_model[i].z;
+			fin >> m_model[i].tu >> m_model[i].tv;
+			fin >> m_model[i].nx >> m_model[i].ny >> m_model[i].nz;
 		}
+
+
+		fin.close();
 
 		return true;
 
